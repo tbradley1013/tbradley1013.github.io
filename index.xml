@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>goonR blog</title>
+    <link>/</link>
+    <description>Recent content on goonR blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 10 Aug 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Exploring English Premier League Historical Match Results</title>
+      <link>/2017/08/10/epl-opening-weekend/</link>
+      <pubDate>Thu, 10 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/2017/08/10/epl-opening-weekend/</guid>
+      <description>IntroductionI was listening to Jeff Atwood’s interview on the podcast Developer on Fire and he said something that struck home with me. It was along the lines of, “The best time to start blogging is yesterday.” I have been considering starting a blog about #rstats but had been putting it off because of any number of reasons. But after listening to his interview, I decided now was as good of a time as any.</description>
+    </item>
+    
+    <item>
+      <title>About</title>
+      <link>/about/</link>
+      <pubDate>Thu, 05 May 2016 21:48:51 -0700</pubDate>
+      
+      <guid>/about/</guid>
+      <description>My Name is Tyler Bradley and I am Environmental Engineer for the Philadelphia Water Department. I work mostly with drinking water distribution system water quality data. Most of my day to day work is focused on data science. I am a PhD student at Drexel University studying Environmental Engineering, more specifically using data science to solve distribution system water quality issues. I am huge fan of R and the tidyverse and all that it includes.</description>
+    </item>
+    
+  </channel>
+</rss>
