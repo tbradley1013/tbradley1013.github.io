@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Rstats on goonR blog</title>
-    <link>/tags/rstats/</link>
-    <description>Recent content in Rstats on goonR blog</description>
+    <title>Dbi on goonR blog</title>
+    <link>/tags/dbi/</link>
+    <description>Recent content in Dbi on goonR blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 26 Aug 2017 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/rstats/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/dbi/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -18,15 +18,6 @@
       
       <guid>/2017/08/26/sql-management-in-r/</guid>
       <description>IntroductionRecently, I have been building shiny apps for work. The app that I am currently working on is an interface to a database for storing information about sanitary release samples being taken from new water distribution pipelines. In addition to building the shiny app for my coworkers to interact with the database, I also was tasked with creating and building the database. I have never build a SQL database from scratch, but luckily the (https://github.</description>
-    </item>
-    
-    <item>
-      <title>Exploring English Premier League Historical Match Results</title>
-      <link>/2017/08/10/epl-opening-weekend/</link>
-      <pubDate>Thu, 10 Aug 2017 00:00:00 +0000</pubDate>
-      
-      <guid>/2017/08/10/epl-opening-weekend/</guid>
-      <description>IntroductionI was listening to Jeff Atwood’s interview on the podcast Developer on Fire and he said something that struck home with me. It was along the lines of, “The best time to start blogging is yesterday.” I have been considering starting a blog about #rstats but had been putting it off because of any number of reasons. But after listening to his interview, I decided now was as good of a time as any.</description>
     </item>
     
   </channel>
