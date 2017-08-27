@@ -17,7 +17,7 @@
       <pubDate>Sat, 26 Aug 2017 00:00:00 +0000</pubDate>
       
       <guid>/2017/08/26/sql-management-in-r/</guid>
-      <description>IntroductionRecently, I have been building shiny apps for work. The app that I am currently working on is an interface to a database for storing information about sanitary release samples being taken from new water distribution pipelines. In addition to building the shiny app for my coworkers to interact with the database, I also was tasked with creating and building the database. I have never build a SQL database from scratch, but luckily the (https://github.</description>
+      <description>IntroductionRecently, I have been building shiny apps for work. The app that I am currently working on is an interface to a database for storing information about sanitary release samples being taken from new water distribution pipelines. In addition to building the shiny app for my coworkers to interact with the database, I also was tasked with creating and building the database. I have never build a SQL database from scratch, but luckily the odbc and the DBI packages make it fairly straight foreward.</description>
     </item>
     
     <item>
