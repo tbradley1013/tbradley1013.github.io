@@ -23,7 +23,9 @@
     <item>
       <title>Dplyr</title>
       <link>/tags/dplyr/</link>
+
       <pubDate>Thu, 01 Feb 2018 00:00:00 +0000</pubDate>
+
       
       <guid>/tags/dplyr/</guid>
       <description></description>
@@ -48,6 +50,7 @@
     </item>
     
     <item>
+
       <title>Pca</title>
       <link>/tags/pca/</link>
       <pubDate>Thu, 01 Feb 2018 00:00:00 +0000</pubDate>
@@ -69,6 +72,9 @@
       <title>Rstats</title>
       <link>/tags/rstats/</link>
       <pubDate>Thu, 01 Feb 2018 00:00:00 +0000</pubDate>
+      <title>Rstats</title>
+      <link>/tags/rstats/</link>
+
       
       <guid>/tags/rstats/</guid>
       <description></description>
@@ -86,7 +92,9 @@
     <item>
       <title>Tidyverse</title>
       <link>/tags/tidyverse/</link>
+
       <pubDate>Thu, 01 Feb 2018 00:00:00 +0000</pubDate>
+
       
       <guid>/tags/tidyverse/</guid>
       <description></description>

@@ -6,27 +6,33 @@
     <description>Recent content on goonR blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
+
     <lastBuildDate>Thu, 01 Feb 2018 00:00:00 +0000</lastBuildDate>
+
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
+
       <title>PCA in a tidy(verse) framework</title>
       <link>/2018/02/01/pca-in-a-tidy-verse-framework/</link>
       <pubDate>Thu, 01 Feb 2018 00:00:00 +0000</pubDate>
       
       <guid>/2018/02/01/pca-in-a-tidy-verse-framework/</guid>
-      <description>IntroductionThe other day, a question was posted on RStudio Community about performing Principle Component Analysis (PCA) in a tidyverse workflow. Conveniently, I had literally just worked through this process the day before and was able to post an answer. While most questions and answers are good as they are on forum sites, I thought this one might be worth exploring a little more since using the tidyverse framework makes PCA much easier, in my opinion.</description>
+      <description>Introduction
+The other day, a question was posted on RStudio Community about performing Principle Component Analysis (PCA) in a tidyverse workflow. Conveniently, I had literally just worked through this process the day before and was able to post an answer. While most questions and answers are good as they are on forum sites, I thought this one might be worth exploring a little more since using the tidyverse framework makes PCA much easier, in my opinion.</description>
     </item>
     
     <item>
+
       <title>Creating, Writing, Querying, and Modifying SQL Database from R using odbc, dbplyr, and DBI</title>
       <link>/2017/08/26/sql-management-in-r/</link>
       <pubDate>Sat, 26 Aug 2017 00:00:00 +0000</pubDate>
       
       <guid>/2017/08/26/sql-management-in-r/</guid>
-      <description>IntroductionRecently, I have been building shiny apps for work. The app that I am currently working on is an interface to a database for storing information about laboratory samples being collected. In addition to building the shiny app for my coworkers to interact with the database, I also was tasked with creating and building the database. I have never build a SQL database from scratch, but luckily the odbc and the DBI packages make it fairly straight foreward.</description>
+      <description>Introduction
+Recently, I have been building shiny apps for work. The app that I am currently working on is an interface to a database for storing information about laboratory samples being collected. In addition to building the shiny app for my coworkers to interact with the database, I also was tasked with creating and building the database. I have never build a SQL database from scratch, but luckily the odbc and the DBI packages make it fairly straight foreward.</description>
     </item>
     
     <item>
@@ -35,7 +41,8 @@
       <pubDate>Thu, 10 Aug 2017 00:00:00 +0000</pubDate>
       
       <guid>/2017/08/10/epl-opening-weekend/</guid>
-      <description>IntroductionI was listening to Jeff Atwood’s interview on the podcast Developer on Fire and he said something that struck home with me. It was along the lines of, “The best time to start blogging is yesterday.” I have been considering starting a blog about #rstats but had been putting it off because of any number of reasons. But after listening to his interview, I decided now was as good of a time as any.</description>
+      <description>Introduction
+I was listening to Jeff Atwood’s interview on the podcast Developer on Fire and he said something that struck home with me. It was along the lines of, “The best time to start blogging is yesterday.” I have been considering starting a blog about #rstats but had been putting it off because of any number of reasons. But after listening to his interview, I decided now was as good of a time as any.</description>
     </item>
     
     <item>
