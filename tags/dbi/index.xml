@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Dbi on goonR blog</title>
+    <link>/tags/dbi/</link>
+    <description>Recent content in Dbi on goonR blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 26 Aug 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/dbi/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Creating, Writing, Querying, and Modifying SQL Database from R using odbc, dbplyr, and DBI</title>
+      <link>/2017/08/26/sql-management-in-r/</link>
+      <pubDate>Sat, 26 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/2017/08/26/sql-management-in-r/</guid>
+      <description>IntroductionRecently, I have been building shiny apps for work. The app that I am currently working on is an interface to a database for storing information about laboratory samples being collected. In addition to building the shiny app for my coworkers to interact with the database, I also was tasked with creating and building the database. I have never build a SQL database from scratch, but luckily the odbc and the DBI packages make it fairly straight foreward.</description>
+    </item>
+    
+  </channel>
+</rss>
