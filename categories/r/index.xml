@@ -6,10 +6,19 @@
     <description>Recent content in R on goonR blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 01 Feb 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 19 Jun 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/r/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Subsetting Phylogenetic Trees</title>
+      <link>/2018/06/19/subsetting-phylogenetic-trees/</link>
+      <pubDate>Tue, 19 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/06/19/subsetting-phylogenetic-trees/</guid>
+      <description>IntroductionIn the past few months, I have been introduced to and started working with phylogenetic trees. The trees I have been working with contain the entire tree of life for bacteria. Needless to say, they are huge. At first, I was told that I could download a program that would let me view the tree and search for particular species on the tree, but of course, I immediately looked for a better solution using R.</description>
+    </item>
     
     <item>
       <title>PCA in a tidy(verse) framework</title>
