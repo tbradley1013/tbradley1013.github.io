@@ -19,11 +19,34 @@
 <guid>/about/</guid>
   <description>&lt;p&gt;&lt;img src=&#34;/images/headshot-tyler-bradley-small.jpg&#34;, width=&#34;250px&#34;, height=&#34;200px&#34;, align = &#34;right&#34;/&gt;&lt;/p&gt;
 
-&lt;p&gt;My Name is Tyler Bradley and I am Environmental Engineer for the Philadelphia Water Department. I work mostly with drinking water distribution system water quality data. Most of my day to day work is focused on data science. I am a PhD student at Drexel University studying Environmental Engineering, more specifically using data science to solve distribution system water quality issues. I am huge fan of R and the tidyverse and all that it includes. I am also a huge Arsenal fan!&lt;/p&gt;
+&lt;p&gt;My Name is Tyler Bradley and I am Environmental Engineer for the Philadelphia Water Department. I work mostly with drinking water distribution system water quality data. Most of my day to day work is focused on data science. Some of my responsibilites include:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Manage and maintain an Ubuntu server used to host &lt;a href=&#34;https://www.rstudio.com/products/connect/&#34;&gt;RStudio Connect&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Create and maintain an internal R package used to connect to and query data from multiple internal databases. The functions used to query data allow for quick and structured queries to be run against these databases programmatically. This package also contains several functions to be used in accordance with the data that is queried from the databases.&lt;/li&gt;
+&lt;li&gt;Develop and maintain a PostgreSQL database&lt;/li&gt;
+&lt;li&gt;Develop and deploy shiny apps and dashboards that allow for quick access to water quality data.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I am a PhD student at Drexel University studying Environmental Engineering, more specifically using data science to solve distribution system water quality issues. Some of my specific reseach interests include:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Nitrification in drinking water distribution systems&lt;/li&gt;
+&lt;li&gt;Drinking water distribution system microbiome and its impact on things such as nitrification&lt;/li&gt;
+&lt;li&gt;Using data science to evaluate drinking water quality&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I am huge fan of R and the tidyverse and all that it includes. Currently, I am a sustainer/moderator on the &lt;a href=&#34;http://community.rstudio.com/&#34;&gt;RStudio Community&lt;/a&gt; discourse site.&lt;/p&gt;
+
+&lt;p&gt;Last, but certainly not least, I am a huge Arsenal fan (aka gooner, hence the name of the blog)!&lt;/p&gt;
 
 &lt;p&gt;Please feel free to follow me on  &lt;a href=&#34;https://twitter.com/tycbrad&#34;&gt;twitter&lt;/a&gt; and connect with me on &lt;a href=&#34;https://www.linkedin.com/in/tyler-bradley-68707292/&#34;&gt;LinkedIn&lt;/a&gt;. Please check out my blog posts on &lt;a href=&#34;https://www.r-bloggers.com/&#34;&gt;R-Bloggers&lt;/a&gt; along with tons of other great R related blogs.&lt;/p&gt;
 
 &lt;p&gt;This website was built with the &lt;a href=&#34;https://github.com/rstudio/blogdown&#34;&gt;blogdown&lt;/a&gt; R package.&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;iframe src=&#34;https://giphy.com/embed/z2pppDya3mrXa&#34; width=&#34;480&#34; height=&#34;270&#34; frameBorder=&#34;0&#34; class=&#34;giphy-embed&#34; allowFullScreen&gt;&lt;/iframe&gt;&lt;p&gt;&lt;a href=&#34;https://giphy.com/gifs/arsenal-football-club-dennis-bergkamp-z2pppDya3mrXa&#34;&gt;Enjoy this classic goal!&lt;/a&gt;&lt;/p&gt;
+&lt;/center&gt;&lt;/p&gt;
 </description>
   </item>
   
