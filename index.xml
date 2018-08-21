@@ -19,7 +19,7 @@
 <guid>/about/</guid>
   <description>&lt;p&gt;&lt;img src=&#34;/images/headshot-tyler-bradley-small.jpg&#34;, width=&#34;250px&#34;, height=&#34;200px&#34;, align = &#34;right&#34;/&gt;&lt;/p&gt;
 
-&lt;p&gt;My Name is Tyler Bradley and I am Environmental Engineer for the Philadelphia Water Department. I work mostly with drinking water distribution system water quality data. Most of my day to day work is focused on data science. Some of my responsibilites include:&lt;/p&gt;
+&lt;p&gt;My Name is Tyler Bradley and I am an Environmental Engineer for the Philadelphia Water Department. I work mostly with drinking water distribution system water quality data. Most of my day to day work is focused on data science. Some of my responsibilites include:&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Manage and maintain an Ubuntu server used to host &lt;a href=&#34;https://www.rstudio.com/products/connect/&#34;&gt;RStudio Connect&lt;/a&gt;&lt;/li&gt;
