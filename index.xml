@@ -6,11 +6,27 @@
   <description>Recent content on goonR blog</description>
   <generator>Hugo -- gohugo.io</generator>
 <language>en-us</language>
-<lastBuildDate>Fri, 10 Aug 2018 00:00:00 +0000</lastBuildDate>
+<lastBuildDate>Tue, 21 Aug 2018 00:00:00 +0000</lastBuildDate>
 
 <atom:link href="/index.xml" rel="self" type="application/rss+xml" />
 
 
+<item>
+  <title>About</title>
+  <link>/about/</link>
+  <pubDate>Tue, 21 Aug 2018 00:00:00 +0000</pubDate>
+  
+<guid>/about/</guid>
+  <description>&lt;p&gt;&lt;img src=&#34;/images/headshot-tyler-bradley-small.jpg&#34;, width=&#34;250px&#34;, height=&#34;200px&#34;, align = &#34;right&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;My Name is Tyler Bradley and I am Environmental Engineer for the Philadelphia Water Department. I work mostly with drinking water distribution system water quality data. Most of my day to day work is focused on data science. I am a PhD student at Drexel University studying Environmental Engineering, more specifically using data science to solve distribution system water quality issues. I am huge fan of R and the tidyverse and all that it includes. I am also a huge Arsenal fan!&lt;/p&gt;
+
+&lt;p&gt;Please feel free to follow me on  &lt;a href=&#34;https://twitter.com/tycbrad&#34;&gt;twitter&lt;/a&gt; and connect with me on &lt;a href=&#34;https://www.linkedin.com/in/tyler-bradley-68707292/&#34;&gt;LinkedIn&lt;/a&gt;. Please check out my blog posts on &lt;a href=&#34;https://www.r-bloggers.com/&#34;&gt;R-Bloggers&lt;/a&gt; along with tons of other great R related blogs.&lt;/p&gt;
+
+&lt;p&gt;This website was built with the &lt;a href=&#34;https://github.com/rstudio/blogdown&#34;&gt;blogdown&lt;/a&gt; R package.&lt;/p&gt;
+</description>
+  </item>
+  
 <item>
   <title>Create a dynamic number of UI elements in Shiny with purrr</title>
   <link>/2018/08/10/create-a-dynamic-number-of-ui-elements-in-shiny-with-purrr/</link>
@@ -1550,22 +1566,6 @@ home_adv_team&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;It looks like the odds are in favor of several of the typical powerhouse teams to perform well this weekend, if history has anything to say about it. There is much more that can be done with this data set and I hope to revisit it at a later date. I hope you all enjoyed reading this, I hope to put out more blog posts in the future!&lt;/p&gt;
 &lt;p&gt;And of course, COYG!!&lt;/p&gt;
 &lt;/div&gt;
-</description>
-  </item>
-  
-<item>
-  <title>About</title>
-  <link>/about/</link>
-  <pubDate>Thu, 05 May 2016 21:48:51 -0700</pubDate>
-  
-<guid>/about/</guid>
-  <description>&lt;p&gt;&lt;img src=&#34;/images/headshot-tyler-bradley-small.jpg&#34;, width=&#34;250px&#34;, height=&#34;200px&#34;, align = &#34;right&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;My Name is Tyler Bradley and I am Environmental Engineer for the Philadelphia Water Department. I work mostly with drinking water distribution system water quality data. Most of my day to day work is focused on data science. I am a PhD student at Drexel University studying Environmental Engineering, more specifically using data science to solve distribution system water quality issues. I am huge fan of R and the tidyverse and all that it includes. I am also a huge Arsenal fan!&lt;/p&gt;
-
-&lt;p&gt;Please feel free to follow me on  &lt;a href=&#34;https://twitter.com/tycbrad&#34;&gt;twitter&lt;/a&gt; and connect with me on &lt;a href=&#34;https://www.linkedin.com/in/tyler-bradley-68707292/&#34;&gt;LinkedIn&lt;/a&gt;. Please check out my blog posts on &lt;a href=&#34;https://www.r-bloggers.com/&#34;&gt;R-Bloggers&lt;/a&gt; along with tons of other great R related blogs.&lt;/p&gt;
-
-&lt;p&gt;This website was built with the &lt;a href=&#34;https://github.com/rstudio/blogdown&#34;&gt;blogdown&lt;/a&gt; R package.&lt;/p&gt;
 </description>
   </item>
   

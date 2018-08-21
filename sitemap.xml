@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/about/</loc>
+    <lastmod>2018-08-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/2018/08/10/create-a-dynamic-number-of-ui-elements-in-shiny-with-purrr/</loc>
     <lastmod>2018-08-10T00:00:00+00:00</lastmod>
   </url>
@@ -30,16 +35,6 @@
   <url>
     <loc>/2017/08/10/epl-opening-weekend/</loc>
     <lastmod>2017-08-10T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/about/</loc>
-    <lastmod>2016-05-05T21:48:51-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/categories/</loc>
-    <priority>0</priority>
   </url>
   
   <url>
@@ -97,19 +92,7 @@
   </url>
   
   <url>
-    <loc>/categories/r/</loc>
-    <lastmod>2018-08-10T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>/tags/rstats/</loc>
-    <lastmod>2018-08-10T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/categories/shiny/</loc>
     <lastmod>2018-08-10T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -117,12 +100,6 @@
   <url>
     <loc>/tags/shiny/</loc>
     <lastmod>2018-08-10T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/categories/sql/</loc>
-    <lastmod>2017-08-26T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -145,6 +122,11 @@
   </url>
   
   <url>
+    <loc>/topics/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/tags/treeio/</loc>
     <lastmod>2018-06-19T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -152,7 +134,7 @@
   
   <url>
     <loc>/</loc>
-    <lastmod>2018-08-10T00:00:00+00:00</lastmod>
+    <lastmod>2018-08-21T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

@@ -1,82 +1,256 @@
 <!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.46" />
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="generator" content="Hugo 0.46" />
+
+  <title>Exploring English Premier League Historical Match Results &middot; goonR blog</title>
+
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css">
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-old-ie-min.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-min.css">
+  <!--<![endif]-->
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="/css/side-menu-old-ie.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="/css/side-menu.css">
+  <!--<![endif]-->
+
+  <link rel="stylesheet" href="/css/blackburn.css">
+
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+ 
+  
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/androidstudio.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+  <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon" />
+
+  
+  
+
+</head>
 
 
-<title>Exploring English Premier League Historical Match Results - goonR blog</title>
-<meta property="og:title" content="Exploring English Premier League Historical Match Results - goonR blog">
+<body>
+<div id="layout">
 
-
+  
+<a href="#menu" id="menuLink" class="menu-link">
+  
+  <span></span>
+</a>
+<div id="menu">
 
   
 
+  <div class="pure-menu">
+    <ul class="pure-menu-list">
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="/"><i class='fa fa-home fa-fw'></i>Home</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="/post/"><i class='fa fa-list fa-fw'></i>Posts</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="/about/"><i class='fa fa-user fa-fw'></i>About</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://community.rstudio.com/u/tbradley/summary">RStudio Community</a>
+      
+        </li>
+      
+    </ul>
+  </div>
 
-
-
-
-
-
-
-<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
-
-
-
-<link rel="stylesheet" href="/css/fonts.css" media="all">
-<link rel="stylesheet" href="/css/main.css" media="all">
-
-
+  <div class="pure-menu social">
+  <ul class="pure-menu-list">
 
     
-    </head>
-  <body>
-    <div class="wrapper">
-      <header class="header">
-        <nav class="nav">
-  <a href="/" class="nav-logo">
-    <img src="/images/arsenal-buttton.jpg"
-         width="30"
-         height="50"
-         alt="Logo">
-  </a>
 
-  <ul class="nav-links">
     
-    <li><a href="/about/">About</a></li>
+
     
-    <li><a href="https://github.com/tbradley1013">GitHub</a></li>
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://twitter.com/tycbrad" target="_blank"><i class="fa fa-twitter-square fa-fw"></i>Twitter</a>
+    </li>
     
-    <li><a href="https://twitter.com/tycbrad">Twitter</a></li>
+
     
-    <li><a href="https://community.rstudio.com/u/tbradley/summary">RStudio Community</a></li>
+
     
-    <li><a href="https://www.linkedin.com/in/tyler-bradley-68707292/">LinkedIn</a></li>
+
     
-    <li><a href="https://www.r-bloggers.com/"> R-Bloggers</a></li>
+
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://linkedin.com/in/tyler-bradley-68707292/" target="_blank"><i class="fa fa-linkedin-square fa-fw"></i>LinkedIn</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://github.com/tbradley1013" target="_blank"><i class="fa fa-github-square fa-fw"></i>GitHub</a>
+    </li>
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://stackoverflow.com/users/7133355" target="_blank"><i class="fa fa-stack-overflow fa-fw"></i>Stack Overflow</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
   </ul>
-</nav>
-
-      </header>
+</div>
 
 
-<main class="content" role="main">
+  <div>
+  <div class="small-print">
+    <small></small>
+  </div>
+  <div class="small-print">
+    <small>Built with&nbsp;<a href="https://gohugo.io/" target="_blank">Hugo</a></small>
+    <small>Theme&nbsp;<a href="https://github.com/yoshiharuyamashita/blackburn" target="_blank">Blackburn</a></small>
+  </div>
+</div>
 
-  <article class="article">
+</div>
+
+
+  <div id="main">
+
+
+<div class="header">
+  <h1>Exploring English Premier League Historical Match Results</h1>
+  <h2></h2>
+</div>
+<div class="content">
+
+  <div class="post-meta">
+
+  <div>
+    <i class="fa fa-calendar fa-fw"></i>
+    <time>10 Aug 2017</time>
+  </div>
+
+  
+
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-tags fa-fw"></i>
     
-    <span class="article-duration">19 min read</span>
+      <a class="post-taxonomy-tag" href="/tags/tidyverse">tidyverse</a>&nbsp;&#47;
     
-
-    <h1 class="article-title">Exploring English Premier League Historical Match Results</h1>
-
+      <a class="post-taxonomy-tag" href="/tags/epl">EPL</a>&nbsp;&#47;
     
-    <span class="article-date">2017/08/10</span>
+      <a class="post-taxonomy-tag" href="/tags/rstats">rstats</a>
     
+  </div>
+  
+  
 
-    <div class="article-content">
-      <div id="introduction" class="section level1">
+</div>
+
+  <div id="introduction" class="section level1">
 <h1>Introduction</h1>
 <p>I was listening to <a href="https://twitter.com/codinghorror">Jeff Atwood’s</a> interview on the podcast <a href="http://developeronfire.com/">Developer on Fire</a> and he said something that struck home with me. It was along the lines of, “The best time to start blogging is yesterday.” I have been considering starting a blog about <a href="https://twitter.com/hashtag/rstats">#rstats</a> but had been putting it off because of any number of reasons. But after listening to his interview, I decided now was as good of a time as any. With the help of Yihui Xie’s <a href="https://github.com/rstudio/blogdown">blogdown</a>, I was able to set up the basic webpage pretty easily too.</p>
 <p>So In honor of the start of a new season for the English Premier League (EPL), I put together this exploratory data analysis of historical EPL data to see how teams typically do to start a season. I would love any feed back and suggestions! Please feel free to follow me on <a href="twitter%20https://twitter.com/tb_goonR">twitter</a> (I just created it this past week to better keep up with #rstats rather than just continually googling it as I have been for the last year.)</p>
@@ -529,68 +703,65 @@ home_adv_team</code></pre>
 <p>And of course, COYG!!</p>
 </div>
 
-    </div>
-  </article>
 
   
-<section id="comments">
-  <div id="disqus_thread"></div>
-  <script>
-  var disqus_config = function () {
+<div class="prev-next-post pure-g">
+  <div class="pure-u-1-24" style="text-align: left;">
+    
+  </div>
+  <div class="pure-u-10-24">
+    
+  </div>
+  <div class="pure-u-2-24">
+    &nbsp;
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="next">
+      <a href="/2017/08/26/sql-management-in-r/">Creating, Writing, Querying, and Modifying SQL Database from R using odbc, dbplyr, and DBI</a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-1-24" style="text-align: right;">
+    
+    <a href="/2017/08/26/sql-management-in-r/"><i class="fa fa-chevron-right"></i></a>
+    
+  </div>
+</div>
+
+
+
   
-  };
-  (function() {
-    var inIFrame = function() {
-      var iframe = true;
-      try { iframe = window.self !== window.top; } catch (e) {}
-      return iframe;
-    };
-    if (inIFrame()) return;
-    var d = document, s = d.createElement('script');
-    s.src = '//goonR-blog.disqus.com/embed.js'; s.async = true;
-    s.setAttribute('data-timestamp', +new Date());
-    (d.head || d.body).appendChild(s);
-  })();
-  </script>
-  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</section>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
 
-
-
-</main>
-
-      <footer class="footer">
-        <ul class="footer-links">
-          <li>
-            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
-          </li>
-          <li>
-            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" width="22" height="22"></a>
-          </li>
-        </ul>
-      </footer>
-
-    </div>
+(function() {
     
-
-
-
-<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
-
-
-
-<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
-<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
-<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
-
-
-
     
-<script src="/js/math-code.js"></script>
-<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'goonR-blog';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
 
-    
-  </body>
+</div>
+
+</div>
+</div>
+<script src="/js/ui.js"></script>
+
+
+
+
+
+
+</body>
 </html>
 
