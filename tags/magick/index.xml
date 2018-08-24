@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Magick on goonR blog</title>
+    <link>/tags/magick/</link>
+    <description>Recent content in Magick on goonR blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 24 Aug 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/magick/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Add RStudio Community to your blogs social links - Blackburn Theme</title>
+      <link>/2018/08/24/add-rstudio-community-to-your-blogs-social-links/</link>
+      <pubDate>Fri, 24 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/08/24/add-rstudio-community-to-your-blogs-social-links/</guid>
+      <description>IntroductionRecently, I switched themes for my blog to the blackburn theme and I love it! Luckily, the blogdown package makes this super easy to do within R! If you haven’t used blogdown, I highly recommend you take a look at it for setting up your blog. One of the nice features of the blackburn theme, is that it provides easy to add “social” tags that can be configured in your config.</description>
+    </item>
+    
+  </channel>
+</rss>
