@@ -19,7 +19,8 @@
 <guid>/2018/09/06/tracking-joey-wendle-rookie-season-with-gganimate/</guid>
   <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Introduction&lt;/h1&gt;
-This past weekend I got the chance to go to the Tampa Bay Rays vs Cleveland Indians game. This game was a ton of fun, made even more exciting for me - and by the end of the game, the people in my section - because my brother-in-law’s brother (does that make him my brother-in-law too? No one ever knows for sure…), Joey Wendle, plays for the Rays! In case you haven’t been paying attention, Joey has been having a &lt;strong&gt;&lt;em&gt;MASSIVE&lt;/em&gt;&lt;/strong&gt; rookie season. Just take a look at some of the tweets from the Ray’s organization in the last few days.
+&lt;p&gt;This past weekend I got the chance to go to the Tampa Bay Rays vs Cleveland Indians game. This game was a ton of fun, made even more exciting for me - and by the end of the game, the people in my section - because my brother-in-law’s brother (does that make him my brother-in-law too? No one ever knows for sure…), Joey Wendle, plays for the Rays! In case you haven’t been paying attention, Joey has been having a &lt;strong&gt;&lt;em&gt;MASSIVE&lt;/em&gt;&lt;/strong&gt; rookie season. Just take a look at some of the tweets from the Ray’s organization in the last few days.&lt;/p&gt;
+&lt;center&gt;
 &lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;en&#34;&gt;
 &lt;p lang=&#34;en&#34; dir=&#34;ltr&#34;&gt;
 The AL&#39;s top-hitting rookie is on a record pace.&lt;a href=&#34;https://twitter.com/hashtag/RaysUp?src=hash&amp;amp;ref_src=twsrc%5Etfw&#34;&gt;#RaysUp&lt;/a&gt; &lt;a href=&#34;https://t.co/2oo88IXS2f&#34;&gt;pic.twitter.com/2oo88IXS2f&lt;/a&gt;
@@ -34,7 +35,9 @@ How many ways can one man impact a game?&lt;a href=&#34;https://twitter.com/hash
 — Tampa Bay Rays (&lt;span class=&#34;citation&#34;&gt;@RaysBaseball&lt;/span&gt;) &lt;a href=&#34;https://twitter.com/RaysBaseball/status/1036398948502695937?ref_src=twsrc%5Etfw&#34;&gt;September 2, 2018&lt;/a&gt;
 &lt;/blockquote&gt;
 &lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;
 &lt;p&gt;As you can see, the man has been getting it done at the plate and in the field. This has led some to call for his inclusion in the AL Rookie of the Year conversation.&lt;/p&gt;
+&lt;center&gt;
 &lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;en&#34;&gt;
 &lt;p lang=&#34;en&#34; dir=&#34;ltr&#34;&gt;
 &lt;a href=&#34;https://twitter.com/hashtag/Rays?src=hash&amp;amp;ref_src=twsrc%5Etfw&#34;&gt;#Rays&lt;/a&gt; Joey Wendle put on a show on Sunday and it’s time to start talking about him as a legit AL Rookie of the Year contender: &lt;a href=&#34;https://t.co/G9sFvLLeLq&#34;&gt;https://t.co/G9sFvLLeLq&lt;/a&gt;
@@ -42,6 +45,7 @@ How many ways can one man impact a game?&lt;a href=&#34;https://twitter.com/hash
 — Juan Toribio (&lt;span class=&#34;citation&#34;&gt;@juanctoribio&lt;/span&gt;) &lt;a href=&#34;https://twitter.com/juanctoribio/status/1036449226732064773?ref_src=twsrc%5Etfw&#34;&gt;September 3, 2018&lt;/a&gt;
 &lt;/blockquote&gt;
 &lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;
 &lt;p&gt;I have been looking for a good excuse to play around with &lt;a href=&#34;https://www.data-imaginist.com/&#34;&gt;Thomas Pedersen’s&lt;/a&gt; &lt;a href=&#34;https://github.com/thomasp85/gganimate&#34;&gt;&lt;code&gt;gganimate&lt;/code&gt;&lt;/a&gt; package, and what better way then by taking a look at Joey’s rookie season.&lt;/p&gt;
 &lt;p&gt;Before we start, let’s load the R packages that we will use.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
@@ -293,7 +297,7 @@ animate(joey_spray, width = 800, height = 800)&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Let’s take a look at how Joey’s batting average has changed over time. We can use the daily statistics we calculated earlier to see how it changes over time using the &lt;code&gt;transition_reveal&lt;/code&gt; function.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;joey_rbi &amp;lt;- joey_bsvnt_daily %&amp;gt;% 
   ggplot(aes(game_date, ba_to_date)) + 
-  geom_step(line = 2) + 
+  geom_step(size = 1.5) + 
   theme_bw() + 
   labs(
     y = &amp;quot;Batting Average&amp;quot;,
@@ -326,7 +330,7 @@ animate(joey_rbi, width = 800, height = 600)&lt;/code&gt;&lt;/pre&gt;
     metric == &amp;quot;obp_to_date&amp;quot; ~ &amp;quot;On-base Percentage&amp;quot;
   )) %&amp;gt;% 
   ggplot(aes(game_date, value)) + 
-  geom_step(size = 2) + 
+  geom_step(size = 1.5) + 
   facet_wrap(vars(metric), scales = &amp;quot;free_y&amp;quot;, ncol = 1) + 
   theme_bw() + 
   scale_x_date(date_breaks = &amp;quot;2 week&amp;quot;, date_labels = &amp;quot;%B %d, %Y&amp;quot;) + 
