@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Gganimate on goonR blog</title>
+    <link>/tags/gganimate/</link>
+    <description>Recent content in Gganimate on goonR blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 06 Sep 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/gganimate/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Tracking Joey Wendle&#39;s rookie season with gganimate</title>
+      <link>/2018/09/06/tracking-joey-wendle-rookie-season-with-gganimate/</link>
+      <pubDate>Thu, 06 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/09/06/tracking-joey-wendle-rookie-season-with-gganimate/</guid>
+      <description>IntroductionThis past weekend I got the chance to go to the Tampa Bay Rays vs Cleveland Indians game. This game was a ton of fun, made even more exciting for me - and by the end of the game, the people in my section - because my brother-in-law’s brother (does that make him my brother-in-law too? No one ever knows for sure…), Joey Wendle, plays for the Rays! In case you haven’t been paying attention, Joey has been having a MASSIVE rookie season.</description>
+    </item>
+    
+  </channel>
+</rss>
