@@ -138,6 +138,14 @@
   </url>
   
   <url>
+    <loc>/presentations/</loc>
+  </url>
+  
+  <url>
+    <loc>/publications/</loc>
+  </url>
+  
+  <url>
     <loc>/tags/purrr/</loc>
     <lastmod>2018-08-10T00:00:00+00:00</lastmod>
     <priority>0</priority>

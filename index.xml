@@ -581,7 +581,7 @@ the left padding from 2 to 2.5 for .header and .content
   <pubDate>Tue, 21 Aug 2018 00:00:00 +0000</pubDate>
   
 <guid>/about/</guid>
-  <description>&lt;p&gt;&lt;img src=&#34;/images/headshot-tyler-bradley-small.jpg&#34;, width=&#34;250px&#34;, height=&#34;200px&#34;, align = &#34;right&#34;/&gt;&lt;/p&gt;
+  <description>&lt;p&gt;&lt;img src=&#34;/images/headshot-tyler-bradley-small.png&#34;, align = &#34;right&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;My Name is Tyler Bradley and I am an Environmental Engineer for the Philadelphia Water Department. I work mostly with drinking water distribution system water quality data. Most of my day to day work is focused on data science. Some of my responsibilites include:&lt;/p&gt;
 
@@ -2153,6 +2153,47 @@ home_adv_team&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;It looks like the odds are in favor of several of the typical powerhouse teams to perform well this weekend, if history has anything to say about it. There is much more that can be done with this data set and I hope to revisit it at a later date. I hope you all enjoyed reading this, I hope to put out more blog posts in the future!&lt;/p&gt;
 &lt;p&gt;And of course, COYG!!&lt;/p&gt;
 &lt;/div&gt;
+</description>
+  </item>
+  
+<item>
+  <title>Presentations</title>
+  <link>/presentations/</link>
+  <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+  
+<guid>/presentations/</guid>
+  <description>&lt;p&gt;&lt;strong&gt;Developing a New Approach for Proactive Nitrification Monitoring in a Chloraminated Drinking Water Distribution System&lt;/strong&gt;&lt;br/&gt;
+&lt;em&gt;AWWA Water Quality Technology Conference&lt;/em&gt;&lt;br/&gt;
+Toronto, ON, Canada - November 2018&lt;br/&gt;
+&lt;strong&gt;Abstract&lt;/strong&gt;&lt;br/&gt;
+This abstract presents a proactive approach to managing nitrification in a chloraminated drinking water distribution system. This deals with an issue that is relevant in most drinking water systems that use chloramines as a primary or secondary disinfectant. The authors will present ways in which Philadelphia are implementing these proactive approaches.&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;
+&lt;br/&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://apps.nelac-institute.org/nemc/2016/docs/presentations/Thu-Use%20of%20Continuous%20Monitoring%20for%20possible%20uses%20in%20Compliance%20Monitoring-21.6-Bradley.pdf&#34;&gt;&lt;strong&gt;Effective Use of Real-Time Water Quality Data&lt;/strong&gt;&lt;/a&gt;&lt;br/&gt;
+&lt;em&gt;National Environmental Monitoring Conference&lt;/em&gt;&lt;br/&gt;
+Orange County, CA - August 2016&lt;br/&gt;
+&lt;strong&gt;Abstract&lt;/strong&gt;&lt;br/&gt;
+Online sensor data, whether in drinking water production and delivery or elsewhere, require significant care and handling. Required care and handling of the data are dictated by the sensor precision and accuracy, the intended use of the sensor (event detection, process control, research, compliance monitoring or other purposes), and the sensor context (their placement in the water production system, the variability in a monitored parameter at the sensor location, the difference between average conditions at a particular sensor location and a regulatory level or level of concern). This study presents an analysis of real-time water quality monitoring data management and analysis for sensors deployed in Philadelphia Water’s distribution system and used for event detection. First, the data collection, management and analysis tools are described and difficulties encountered and overcome while developing the system are highlighted. Those difficulties include both the complexity of collecting large volumes of data from a dispersed network of sensors and steps required to ensure data conform to requirements of event detection tools. Second, analyses are presented that quantify the required precision and accuracy of sensors deployed in the Philadelphia Water distribution system. Analyses include assessment in the variability of water quality data at several time scales and establishment of sensor performance metrics consistent with their use as part of an early warning system. In general, sensors in current use in Philadelphia Water’s sensor network were shown to meet required precision and accuracy for use as components in an event detection system. As shown in a companion paper to this paper, meeting the requirements was only possible after significant efforts to improve sensor installations and establish a rigorous operations and maintenance (O&amp;amp;M) effort. Finally, analyses for establishing sensor control limits are presented. Control limits are a critical input to event detection algorithms. To establish control limits, long time series of water quality data were analyzed and variability in the observations at the global, seasonal and daily time scales was characterized. Results indicate that control limits that optimize event detection performance (maximize detection of true events and minimize false positive and false negative detections) vary seasonally or possibly at shorter time scales.&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;
+&lt;br/&gt;&lt;/p&gt;
+</description>
+  </item>
+  
+<item>
+  <title>Publications</title>
+  <link>/publications/</link>
+  <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+  
+<guid>/publications/</guid>
+  <description>&lt;p&gt;&lt;a href=&#34;https://awwa.onlinelibrary.wiley.com/doi/abs/10.1002/awwa.1143&#34;&gt;&lt;strong&gt;Using Historical LCR and Water Quality Data to Evaluate Corrosion Control Treatment&lt;/strong&gt;&lt;/a&gt;&lt;br/&gt;
+&lt;em&gt;Journal - American Water Works Association&lt;/em&gt; - October 2018&lt;br/&gt;
+Tyler Bradley and Nicola Horscroft&lt;br/&gt;
+&lt;strong&gt;DOI:&lt;/strong&gt; 10.1002/awwa.1143&lt;br/&gt;
+&lt;strong&gt;Abstract&lt;/strong&gt;&lt;br/&gt;
+Historical Lead and Copper Rule (LCR) regulatory sampling data from the Philadelphia Water Department were examined to explore their potential value for guiding a water utility&amp;rsquo;s progress with regard to optimal corrosion control treatment (OCCT). If a system has established a stable water treatment process with consistent corrosion control treatment (CCT) and has achieved continued decreases in lead levels during regulatory sampling, then the information collected during LCR monitoring can be used as an important data set of a broader OCCT evaluation and will help inform the benefit of additional changes in CCT. Since water utilities have LCR data dating back to 1992, these data should be used to make informed decisions. This research also showed that the addition of orthophosphate has resulted in a significant decrease in lead levels at the customer tap. Additionally, profile sampling was performed to show that first‐draw 1 L samples following a 6 h stagnation period provide a good representation of the lead concentrations measured from lead service line and home plumbing samples at the same sites and may be used to indicate overall changes in lead concentrations at the tap resulting from CCT for this system.&lt;/p&gt;
 </description>
   </item>
   
