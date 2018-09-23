@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="generator" content="Hugo 0.47.1" />
+
+  <title>Paper Published, Using Historical LCR and Water Quality Data to Evaluate Corrosion Control Treatment in JAWWA &middot; goonR blog</title>
+  
+  
+  <meta property="og:title" content="Paper Published, Using Historical LCR and Water Quality Data to Evaluate Corrosion Control Treatment in JAWWA - goonR blog">
+  <meta property="og:type" content="article">
+
+    
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:image" content="http://xvrdm.github.io/images/headshot-tyler-bradley-small.jpg" >
+    
+  
+  
+  <meta property="description" content="Article posted by Tyler Bradley, on Sunday, September 23nd, 2018">
+  <meta property="og:description" content="Article posted by Tyler Bradley, on Sunday, September 23nd, 2018">
+  
+
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css">
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-old-ie-min.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-min.css">
+  <!--<![endif]-->
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="/css/side-menu-old-ie.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="/css/side-menu.css">
+  <!--<![endif]-->
+
+  <link rel="stylesheet" href="/css/blackburn.css">
+
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+ 
+  
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/androidstudio.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+  <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon" />
+
+  
+  
+
+</head>
+
+
+<body>
+<div id="layout">
+
+  
+<a href="#menu" id="menuLink" class="menu-link">
+  
+  <span></span>
+</a>
+<div id="menu">
+
+  
+
+  <div class="pure-menu">
+    <ul class="pure-menu-list">
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="/"><i class='fa fa-home fa-fw'></i>Home</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="/post/"><i class='fa fa-list fa-fw'></i>Posts</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="/publications/"><i class='fa fa-list fa-fw'></i>Publications</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="/presentations/"><i class='fa fa-list fa-fw'></i>Presentations</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="/about/"><i class='fa fa-user fa-fw'></i>About</a>
+      
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="pure-menu social">
+  <ul class="pure-menu-list">
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://twitter.com/tycbrad" target="_blank"><i class="fa fa-twitter-square fa-fw"></i>Twitter</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://linkedin.com/in/tyler-bradley-68707292/" target="_blank"><i class="fa fa-linkedin-square fa-fw"></i>LinkedIn</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://github.com/tbradley1013" target="_blank"><i class="fa fa-github-square fa-fw"></i>GitHub</a>
+    </li>
+    
+
+    
+
+    
+    
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://community.rstudio.com/u/tbradley/summary" target="_blank"><img src = "/images/community-icon.png" id = "community-icon">RStudio Community</a>
+    </li>
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://stackoverflow.com/users/7133355" target="_blank"><i class="fa fa-stack-overflow fa-fw"></i>Stack Overflow</a>
+    </li>
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://www.r-bloggers.com/"><i class="fa fa-rss fa-fw"></i>R-Bloggers</a>
+    </li>
+    
+
+  </ul>
+</div>
+
+
+  <div>
+  <div class="small-print">
+    <small></small>
+  </div>
+  <div class="small-print">
+    <small>Built with&nbsp;<a href="https://gohugo.io/" target="_blank">Hugo</a></small>
+    <small>Theme&nbsp;<a href="https://github.com/yoshiharuyamashita/blackburn" target="_blank">Blackburn</a></small>
+  </div>
+</div>
+
+</div>
+
+
+  <div id="main">
+
+
+<div class="header">
+  <h1>Paper Published, Using Historical LCR and Water Quality Data to Evaluate Corrosion Control Treatment in JAWWA</h1>
+  <h2></h2>
+</div>
+<div class="content">
+
+  <div class="post-meta">
+
+  <div>
+    <i class="fa fa-calendar fa-fw"></i>
+    <time>23 Sep 2018</time>
+  </div>
+
+  
+
+  
+  
+  
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-tags fa-fw"></i>
+    
+      <a class="post-taxonomy-tag" href="/tags/water-quality">water-quality</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="/tags/lcr">LCR</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="/tags/occt">OCCT</a>
+    
+  </div>
+  
+  
+
+</div>
+
+  
+
+<p>I am pleased to announce that my manuscript entitled &ldquo;Using Historical LCR and Water Quality Data to Evaluate Corrosion Control Treatment&rdquo; has been published in the upcoming issue of <a href="https://awwa.onlinelibrary.wiley.com/journal/15518833">Journal - American Water Works Association</a> (<a href="https://awwa.onlinelibrary.wiley.com/toc/15518833/0/0">JAWWA October 2018</a>). This article is a case study that explores the utility of historical LCR and water quality data to assess a drinking water distribution system&rsquo;s corrosion control treatment progress.</p>
+
+<p>I would like to thank my co-author, Nicola Horscroft, who is the lead Project Engineer for the LCR sampling program for the Philadelphia Water Department (PWD).</p>
+
+<p>The article can be found from <a href="https://doi.org/10.1002/awwa.1143">JAWWA</a>. This article demonstrates that a drinking water system that is in compliance with the Lead and Copper Rule (LCR) can use historical LCR and water quality data to demonstrate the progress of its Corrosion Control Treatment (CCT). This article explores PWD&rsquo;s historical LCR data to demonstrate how treatment changes, primarily the addition of orthophosphate, have helped to reduce lead levels in the distribution system. In addition this article demonstrates several methods to parse through historical LCR data. One of these methods is using ridge plots to see how the distribution of lead levels has changed over the course of LCR regulatory sampling rounds.</p>
+
+<p><center>
+<strong>Distribution of lead results for each LCR sampling round</strong></p>
+
+<p><img src="/images/lcr-article-announcement/lcr-ridge-plot.png" alt="" />
+</center></p>
+
+<p><br/></p>
+
+<h3 id="citation">Citation</h3>
+
+<p>Bradley, Tyler, and Nicola Horscroft. “Using Historical LCR and Water Quality Data to Evaluate Corrosion Control Treatment.” <em>Journal - American Water Works Association</em>, 21 Sept. 2018, <a href="https://doi.org/10.1002/awwa.1143">doi:10.1002/awwa.1143</a>.</p>
+
+<h3 id="abstract">Abstract</h3>
+
+<p>Historical Lead and Copper Rule (LCR) regulatory sampling data from the Philadelphia Water Department were examined to explore their potential value for guiding a water utility&rsquo;s progress with regard to optimal corrosion control treatment (OCCT). If a system has established a stable water treatment process with consistent corrosion control treatment (CCT) and has achieved continued decreases in lead levels during regulatory sampling, then the information collected during LCR monitoring can be used as an important data set of a broader OCCT evaluation and will help inform the benefit of additional changes in CCT. Since water utilities have LCR data dating back to 1992, these data should be used to make informed decisions. This research also showed that the addition of orthophosphate has resulted in a significant decrease in lead levels at the customer tap. Additionally, profile sampling was performed to show that first‐draw 1 L samples following a 6 h stagnation period provide a good representation of the lead concentrations measured from lead service line and home plumbing samples at the same sites and may be used to indicate overall changes in lead concentrations at the tap resulting from CCT for this system.</p>
+
+
+  
+<div class="prev-next-post pure-g">
+  <div class="pure-u-1-24" style="text-align: left;">
+    
+    <a href="/2018/09/06/tracking-joey-wendle-rookie-season-with-gganimate/"><i class="fa fa-chevron-left"></i></a>
+    
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="prev">
+      <a href="/2018/09/06/tracking-joey-wendle-rookie-season-with-gganimate/">Tracking Joey Wendle&#39;s rookie season with gganimate</a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-2-24">
+    &nbsp;
+  </div>
+  <div class="pure-u-10-24">
+    
+  </div>
+  <div class="pure-u-1-24" style="text-align: right;">
+    
+  </div>
+</div>
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'goonR-blog';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+</div>
+
+</div>
+</div>
+<script src="/js/ui.js"></script>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-115670447-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+
+
+</body>
+</html>
+

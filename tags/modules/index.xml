@@ -17,7 +17,7 @@
       <pubDate>Fri, 20 Jul 2018 00:00:00 +0000</pubDate>
       
       <guid>/2018/07/20/r-shiny-modules--using-global-inputs/</guid>
-      <description>IntroductionThis week, I have been working on a new shiny app. This app allows for similar figures to be rendered based on which summary statistic the user is interested in. There are four different figure types for the user to choose from, each of which are placed into their own tabPanel. This means copying the server code used to generate the graphs four different times. Following Hadley’s words of wisdom in R for Data Science, I wanted to abstract this process into functions.</description>
+      <description>Introduction This week, I have been working on a new shiny app. This app allows for similar figures to be rendered based on which summary statistic the user is interested in. There are four different figure types for the user to choose from, each of which are placed into their own tabPanel. This means copying the server code used to generate the graphs four different times. Following Hadley’s words of wisdom in R for Data Science, I wanted to abstract this process into functions.</description>
     </item>
     
   </channel>

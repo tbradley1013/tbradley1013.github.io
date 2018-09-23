@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/2018/09/23/paper-published-using-historical-lcr-and-water-quality-data-to-evaluate-corrosion-control-treatment-in-jawwa/</loc>
+    <lastmod>2018-09-23T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/2018/09/06/tracking-joey-wendle-rookie-season-with-gganimate/</loc>
     <lastmod>2018-09-06T00:00:00+00:00</lastmod>
   </url>
@@ -102,6 +107,12 @@
   </url>
   
   <url>
+    <loc>/tags/lcr/</loc>
+    <lastmod>2018-09-23T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/tags/magick/</loc>
     <lastmod>2018-08-24T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -120,6 +131,12 @@
   </url>
   
   <url>
+    <loc>/tags/occt/</loc>
+    <lastmod>2018-09-23T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/tags/odbc/</loc>
     <lastmod>2017-08-26T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -133,7 +150,7 @@
   
   <url>
     <loc>/post/</loc>
-    <lastmod>2018-09-06T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-23T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -199,8 +216,14 @@
   </url>
   
   <url>
+    <loc>/tags/water-quality/</loc>
+    <lastmod>2018-09-23T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/</loc>
-    <lastmod>2018-09-06T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-23T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

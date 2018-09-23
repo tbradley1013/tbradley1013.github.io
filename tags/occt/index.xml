@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Occt on goonR blog</title>
+    <link>/tags/occt/</link>
+    <description>Recent content in Occt on goonR blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 23 Sep 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/occt/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Paper Published, Using Historical LCR and Water Quality Data to Evaluate Corrosion Control Treatment in JAWWA</title>
+      <link>/2018/09/23/paper-published-using-historical-lcr-and-water-quality-data-to-evaluate-corrosion-control-treatment-in-jawwa/</link>
+      <pubDate>Sun, 23 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/09/23/paper-published-using-historical-lcr-and-water-quality-data-to-evaluate-corrosion-control-treatment-in-jawwa/</guid>
+      <description>I am pleased to announce that my manuscript entitled &amp;ldquo;Using Historical LCR and Water Quality Data to Evaluate Corrosion Control Treatment&amp;rdquo; has been published in the upcoming issue of Journal - American Water Works Association (JAWWA October 2018). This article is a case study that explores the utility of historical LCR and water quality data to assess a drinking water distribution system&amp;rsquo;s corrosion control treatment progress.
+I would like to thank my co-author, Nicola Horscroft, who is the lead Project Engineer for the LCR sampling program for the Philadelphia Water Department (PWD).</description>
+    </item>
+    
+  </channel>
+</rss>
