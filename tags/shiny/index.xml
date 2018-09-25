@@ -17,7 +17,7 @@
       <pubDate>Fri, 10 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>/2018/08/10/create-a-dynamic-number-of-ui-elements-in-shiny-with-purrr/</guid>
-      <description>Introduction purrr is an incredibly powerful package that has greatly enhanced my R programming abilities. purrr has applications in pretty much any situation. One of the most useful situations, IMHO, is in the creation of a dynamic number of shiny UI elements. This can be extremely useful if you want to be able to create a dynamic number of ui elements (whether that be inputs or outputs) based on either user selection or the data being used.</description>
+      <description>Introductionpurrr is an incredibly powerful package that has greatly enhanced my R programming abilities. purrr has applications in pretty much any situation. One of the most useful situations, IMHO, is in the creation of a dynamic number of shiny UI elements. This can be extremely useful if you want to be able to create a dynamic number of ui elements (whether that be inputs or outputs) based on either user selection or the data being used.</description>
     </item>
     
     <item>
@@ -26,7 +26,7 @@
       <pubDate>Fri, 20 Jul 2018 00:00:00 +0000</pubDate>
       
       <guid>/2018/07/20/r-shiny-modules--using-global-inputs/</guid>
-      <description>Introduction This week, I have been working on a new shiny app. This app allows for similar figures to be rendered based on which summary statistic the user is interested in. There are four different figure types for the user to choose from, each of which are placed into their own tabPanel. This means copying the server code used to generate the graphs four different times. Following Hadley’s words of wisdom in R for Data Science, I wanted to abstract this process into functions.</description>
+      <description>IntroductionThis week, I have been working on a new shiny app. This app allows for similar figures to be rendered based on which summary statistic the user is interested in. There are four different figure types for the user to choose from, each of which are placed into their own tabPanel. This means copying the server code used to generate the graphs four different times. Following Hadley’s words of wisdom in R for Data Science, I wanted to abstract this process into functions.</description>
     </item>
     
   </channel>

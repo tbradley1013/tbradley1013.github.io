@@ -2229,5 +2229,123 @@ Historical Lead and Copper Rule (LCR) regulatory sampling data from the Philadel
 </description>
   </item>
   
+<item>
+  <title>Resources</title>
+  <link>/resources/</link>
+  <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+  
+<guid>/resources/</guid>
+  <description>
+
+&lt;p&gt;This is a (far from comprehensive) list of resources that I find useful. This list is mostly here to serve as a place to keep references for myself, but maybe others will benefit from it too!&lt;/p&gt;
+
+&lt;h1 id=&#34;data-science-statistics&#34;&gt;Data Science/Statistics&lt;/h1&gt;
+
+&lt;h3 id=&#34;books&#34;&gt;Books&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://r4ds.had.co.nz/&#34;&gt;R for Data Science&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://adv-r.hadley.nz/&#34;&gt;Advanced R&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://r-pkgs.had.co.nz/&#34;&gt;R packages&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;r-packages&#34;&gt;R Packages&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.tidyverse.org/&#34;&gt;&lt;code&gt;tidyverse&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://rmarkdown.rstudio.com/articles.html&#34;&gt;&lt;code&gt;rmarkdown&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://shiny.rstudio.com/&#34;&gt;&lt;code&gt;shiny&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://deanattali.com/shinyjs/&#34;&gt;&lt;code&gt;shinyjs&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/daattali/shinyalert/&#34;&gt;&lt;code&gt;shinyalert&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/tidyverse/reprex&#34;&gt;&lt;code&gt;reprex&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;blogs&#34;&gt;Blogs&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.r-bloggers.com/&#34;&gt;R-bloggers&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.rstudio.com/&#34;&gt;RStudio blog&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.business-science.io/blog/index.html&#34;&gt;Business Science&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.fromthebottomoftheheap.net/&#34;&gt;From the bottom of the heap&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://varianceexplained.org/&#34;&gt;Variance Explained&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.brodrigues.co/#&#34;&gt;Econometrics and Free Software&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://shirinsplayground.netlify.com/&#34;&gt;Shirin&amp;rsquo;s Playground&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://deanattali.com/&#34;&gt;Dean Attali&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;blog-posts&#34;&gt;Blog Posts&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://eddjberry.netlify.com/post/writing-your-thesis-with-bookdown/&#34;&gt;Writing your thesis with bookdown&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;unix-rstudio-connect&#34;&gt;Unix/RStudio Connect&lt;/h1&gt;
+
+&lt;h3 id=&#34;books-docs&#34;&gt;Books/Docs&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://seankross.com/the-unix-workbench/command-line-basics.html&#34;&gt;Unix Workbench&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://docs.rstudio.com/connect/admin/&#34;&gt;RStudio Connect Admin Guide&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://help.ubuntu.com/lts/serverguide/serverguide.pdf&#34;&gt;Ubuntu Server Guide&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://nginx.org/en/docs/beginners_guide.html&#34;&gt;&lt;code&gt;nginx&lt;/code&gt; Beginner&amp;rsquo;s Guide&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;blog-posts-1&#34;&gt;Blog Posts&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.digitalocean.com/community/tutorials/how-to-set-up-shiny-server-on-ubuntu-16-04&#34;&gt;How to Set Up Shiny Server on Ubuntu 16.04&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.nixtutor.com/freebsd/understanding-symbolic-links/&#34;&gt;Understanding Symbolic Links&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;stack-overflow-https-stackoverflow-com-ask-ubuntu-https-askubuntu-com&#34;&gt;&lt;a href=&#34;https://stackoverflow.com/&#34;&gt;Stack Overflow&lt;/a&gt;/&lt;a href=&#34;https://askubuntu.com/&#34;&gt;Ask Ubuntu&lt;/a&gt;&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://askubuntu.com/questions/175172/how-do-i-configure-proxies-without-gui&#34;&gt;Configure Proxies&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;envionmental-engineering&#34;&gt;Envionmental Engineering&lt;/h1&gt;
+
+&lt;h3 id=&#34;r-packages-1&#34;&gt;R Packages&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/USGS-R/dataRetrieval&#34;&gt;dataRetrieval&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/USGS-R&#34;&gt;USGS-R&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;blogs-1&#34;&gt;Blogs&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://chaasblog.wordpress.com/&#34;&gt;Charles Haas&amp;rsquo; Blog&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://microbes.cae.drexel.edu/&#34;&gt;The Sales Laboratory&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://jacobrprice.github.io/&#34;&gt;Jacob Price&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;biology-bioinformatics&#34;&gt;Biology/Bioinformatics&lt;/h1&gt;
+
+&lt;h3 id=&#34;books-1&#34;&gt;Books&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://web.stanford.edu/class/bios221/book/&#34;&gt;Modern Statistics for Modern Biology&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;r-packages-2&#34;&gt;R Packages&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://guangchuangyu.github.io/software/ggtree/&#34;&gt;&lt;code&gt;ggtree&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://guangchuangyu.github.io/software/treeio/&#34;&gt;&lt;code&gt;treeio&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/GuangchuangYu/tidytree&#34;&gt;&lt;code&gt;tidytree&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://benjjneb.github.io/dada2/index.html&#34;&gt;&lt;code&gt;dada2&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://joey711.github.io/phyloseq/&#34;&gt;&lt;code&gt;phyloseq&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/mhahsler/rBLAST&#34;&gt;&lt;code&gt;rBLAST&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;blogs-2&#34;&gt;Blogs&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.molecularecologist.com/&#34;&gt;The Molecular Ecologist&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+  </item>
+  
 </channel>
   </rss>
