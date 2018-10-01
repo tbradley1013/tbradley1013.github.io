@@ -6,10 +6,20 @@
     <description>Recent content in Purrr on goonR blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 10 Aug 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 01 Oct 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/purrr/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Calculating quantiles for groups with dplyr::summarize and purrr::partial</title>
+      <link>/2018/10/01/calculating-quantiles-for-groups-with-dplyr-summarize-and-purrr-partial/</link>
+      <pubDate>Mon, 01 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/10/01/calculating-quantiles-for-groups-with-dplyr-summarize-and-purrr-partial/</guid>
+      <description>Recently, I was trying to calculate the percentiles of a set of variables within a data set grouped by another variable. However, I quickly ran into the realization that this is not very straight forward when using dplyr’s summarize. Before I demonstrate, let’s load the libraries that we will need.
+library(dplyr)library(purrr)If you don’t believe me when I say that it is not straight forward, go ahead and try to run the following block of code.</description>
+    </item>
     
     <item>
       <title>Create a dynamic number of UI elements in Shiny with purrr</title>

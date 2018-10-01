@@ -6,11 +6,77 @@
   <description>Recent content in Posts on goonR blog</description>
   <generator>Hugo -- gohugo.io</generator>
 <language>en-us</language>
-<lastBuildDate>Sun, 23 Sep 2018 00:00:00 +0000</lastBuildDate>
+<lastBuildDate>Mon, 01 Oct 2018 00:00:00 +0000</lastBuildDate>
 
 <atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
 
 
+<item>
+  <title>Calculating quantiles for groups with dplyr::summarize and purrr::partial</title>
+  <link>/2018/10/01/calculating-quantiles-for-groups-with-dplyr-summarize-and-purrr-partial/</link>
+  <pubDate>Mon, 01 Oct 2018 00:00:00 +0000</pubDate>
+  
+<guid>/2018/10/01/calculating-quantiles-for-groups-with-dplyr-summarize-and-purrr-partial/</guid>
+  <description>&lt;p&gt;Recently, I was trying to calculate the percentiles of a set of variables within a data set grouped by another variable. However, I quickly ran into the realization that this is not very straight forward when using &lt;code&gt;dplyr&lt;/code&gt;’s &lt;code&gt;summarize&lt;/code&gt;. Before I demonstrate, let’s load the libraries that we will need.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(dplyr)
+library(purrr)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If you don’t believe me when I say that it is not straight forward, go ahead and try to run the following block of code.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;mtcars %&amp;gt;% 
+  dplyr::group_by(cyl) %&amp;gt;% 
+  dplyr::summarize(quants = quantile(mpg, probs = c(0.2, 0.5, 0.8)))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If you ran the code, you will see that it throws the following error:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Error in summarise_impl(.data, dots) : 
+  Column `quants` must be length 1 (a summary value), not 3&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This error is telling us that the result is returning an object of length 3 (our three quantiles) when it is expecting to get only one value. A quick Google search comes up with &lt;a href=&#34;https://stackoverflow.com/questions/30488389/using-dplyr-window-functions-to-calculate-percentiles&#34;&gt;numerous&lt;/a&gt; &lt;a href=&#34;https://stackoverflow.com/questions/46935464/dplyr-to-count-means-by-group-and-then-quantiles-for-each&#34;&gt;stack&lt;/a&gt; &lt;a href=&#34;https://stackoverflow.com/questions/46177312/how-to-find-quantile-of-grouped-variable-in-dplyr&#34;&gt;overflow&lt;/a&gt; &lt;a href=&#34;https://stackoverflow.com/questions/37845915/how-to-use-quantile-with-dplyr-and-group-by&#34;&gt;questions&lt;/a&gt; and &lt;a href=&#34;https://groups.google.com/forum/#!topic/manipulatr/jEUIbQi-iuA&#34;&gt;answers&lt;/a&gt; about this. Most of these solutions revolve around using the &lt;code&gt;do&lt;/code&gt; function to calculate the quantiles on each of the groups. However, according to &lt;a href=&#34;https://community.rstudio.com/t/should-i-move-away-from-do-and-rowwise/2857/2&#34;&gt;Hadley&lt;/a&gt;, &lt;code&gt;do&lt;/code&gt; will eventually be “going away”. While there is no definite time frame on this, I try to use it as little as possible. The new recommended practice is a combination of &lt;code&gt;tidyr::nest&lt;/code&gt;, &lt;code&gt;dplyr::mutate&lt;/code&gt; and &lt;code&gt;purrr::map&lt;/code&gt; for most cases of grouping. I love this approach for most things (and it is even the accepted for one of &lt;a href=&#34;https://stackoverflow.com/questions/30488389/using-dplyr-window-functions-to-calculate-percentiles&#34;&gt;the SO questions mentioned above&lt;/a&gt;) but I worked up a new solution that I think is useful for calculating percentiles on multiple groups for any desired number of percentiles.&lt;/p&gt;
+&lt;p&gt;This method uses &lt;code&gt;purrr::map&lt;/code&gt; and a &lt;a href=&#34;http://adv-r.had.co.nz/Function-operators.html&#34;&gt;Function Operator&lt;/a&gt;, &lt;a href=&#34;https://rdrr.io/cran/purrr/man/partial.html&#34;&gt;&lt;code&gt;purrr::partial&lt;/code&gt;&lt;/a&gt;, to create a list of functions that can than be applied to a data set using &lt;code&gt;dplyr::summarize_at&lt;/code&gt; and a little magic from &lt;code&gt;rlang&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Let’s start by creating a vector of the desired percentiles to calculate. In this example, we will calculate the 20&lt;sup&gt;th&lt;/sup&gt;, 50&lt;sup&gt;th&lt;/sup&gt;, and 80&lt;sup&gt;th&lt;/sup&gt; percentiles.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;p &amp;lt;- c(0.2, 0.5, 0.8)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now we can create a list of functions, with one for each quantile, using &lt;code&gt;purrr::map&lt;/code&gt; and &lt;code&gt;purrr::partial&lt;/code&gt;. We can also assign names to each functions (useful for the output of &lt;code&gt;summarize&lt;/code&gt;) using &lt;code&gt;purrr::set_names&lt;/code&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;p_names &amp;lt;- map_chr(p, ~paste0(.x*100, &amp;quot;%&amp;quot;))
+
+p_funs &amp;lt;- map(p, ~partial(quantile, probs = .x, na.rm = TRUE)) %&amp;gt;% 
+  set_names(nm = p_names)
+
+p_funs&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## $`20%`
+## function (...) 
+## quantile(probs = .x, na.rm = TRUE, ...)
+## &amp;lt;environment: 0x00000000190c6fa0&amp;gt;
+## 
+## $`50%`
+## function (...) 
+## quantile(probs = .x, na.rm = TRUE, ...)
+## &amp;lt;environment: 0x00000000190d6638&amp;gt;
+## 
+## $`80%`
+## function (...) 
+## quantile(probs = .x, na.rm = TRUE, ...)
+## &amp;lt;environment: 0x0000000019158818&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Looking at &lt;code&gt;p_funs&lt;/code&gt; we can see that we have a named list with each element containing a function comprised of the &lt;code&gt;quantile&lt;/code&gt; function. The beauty of this is that you can use this list in the same way you would define multiple functions in any other &lt;code&gt;summarize_at&lt;/code&gt; or &lt;code&gt;summarize_all&lt;/code&gt; functions (i.e. &lt;code&gt;funs(mean, sd)&lt;/code&gt;). The only difference is that we will now have to use the “bang-bang-bang” operator (&lt;code&gt;!!!&lt;/code&gt;) from &lt;code&gt;rlang&lt;/code&gt; (it is also exported from &lt;code&gt;dplyr&lt;/code&gt;). The final product looks like this.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;mtcars %&amp;gt;% 
+  group_by(cyl) %&amp;gt;% 
+  summarize_at(vars(mpg), funs(!!!p_funs))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 3 x 4
+##     cyl `20%` `50%` `80%`
+##   &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt;
+## 1     4  22.8  26    30.4
+## 2     6  18.3  19.7  21  
+## 3     8  13.9  15.2  16.8&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I think that this provides a pretty neat way to get the desired output in a format that does not require a large amount of post calculation manipulation. In addition, it is, in my opinion, more straightforward than a lot of the &lt;code&gt;do&lt;/code&gt; methods. This method also allows for quantiles to be calculated for more than one variable, although post-processing would be necessary in that case. Here is an example.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;mtcars %&amp;gt;% 
+  group_by(cyl) %&amp;gt;% 
+  summarize_at(vars(mpg, hp), funs(!!!p_funs)) %&amp;gt;% 
+  select(cyl, contains(&amp;quot;mpg&amp;quot;), contains(&amp;quot;hp&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 3 x 7
+##     cyl `mpg_20%` `mpg_50%` `mpg_80%` `hp_20%` `hp_50%` `hp_80%`
+##   &amp;lt;dbl&amp;gt;     &amp;lt;dbl&amp;gt;     &amp;lt;dbl&amp;gt;     &amp;lt;dbl&amp;gt;    &amp;lt;dbl&amp;gt;    &amp;lt;dbl&amp;gt;    &amp;lt;dbl&amp;gt;
+## 1     4      22.8      26        30.4       65      91        97
+## 2     6      18.3      19.7      21        110     110       123
+## 3     8      13.9      15.2      16.8      175     192.      245&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;partial&lt;/code&gt; is &lt;em&gt;yet another&lt;/em&gt; tool from the &lt;code&gt;purrr&lt;/code&gt; package that can greatly enhance your R coding abilities. While this is surely a basic application of its functionality, one can easily see how powerful this function can be.&lt;/p&gt;
+</description>
+  </item>
+  
 <item>
   <title>Paper Published, Using Historical LCR and Water Quality Data to Evaluate Corrosion Control Treatment in JAWWA</title>
   <link>/2018/09/23/paper-published-using-historical-lcr-and-water-quality-data-to-evaluate-corrosion-control-treatment-in-jawwa/</link>
