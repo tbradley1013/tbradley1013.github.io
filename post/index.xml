@@ -31,7 +31,7 @@ library(purrr)&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;This method uses &lt;code&gt;purrr::map&lt;/code&gt; and a &lt;a href=&#34;http://adv-r.had.co.nz/Function-operators.html&#34;&gt;Function Operator&lt;/a&gt;, &lt;a href=&#34;https://rdrr.io/cran/purrr/man/partial.html&#34;&gt;&lt;code&gt;purrr::partial&lt;/code&gt;&lt;/a&gt;, to create a list of functions that can than be applied to a data set using &lt;code&gt;dplyr::summarize_at&lt;/code&gt; and a little magic from &lt;code&gt;rlang&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;Let’s start by creating a vector of the desired percentiles to calculate. In this example, we will calculate the 20&lt;sup&gt;th&lt;/sup&gt;, 50&lt;sup&gt;th&lt;/sup&gt;, and 80&lt;sup&gt;th&lt;/sup&gt; percentiles.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;p &amp;lt;- c(0.2, 0.5, 0.8)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Now we can create a list of functions, with one for each quantile, using &lt;code&gt;purrr::map&lt;/code&gt; and &lt;code&gt;purrr::partial&lt;/code&gt;. We can also assign names to each functions (useful for the output of &lt;code&gt;summarize&lt;/code&gt;) using &lt;code&gt;purrr::set_names&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Now we can create a list of functions, with one for each quantile, using &lt;code&gt;purrr::map&lt;/code&gt; and &lt;code&gt;purrr::partial&lt;/code&gt;. We can also assign names to each function (useful for the output of &lt;code&gt;summarize&lt;/code&gt;) using &lt;code&gt;purrr::set_names&lt;/code&gt;&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;p_names &amp;lt;- map_chr(p, ~paste0(.x*100, &amp;quot;%&amp;quot;))
 
 p_funs &amp;lt;- map(p, ~partial(quantile, probs = .x, na.rm = TRUE)) %&amp;gt;% 
@@ -41,17 +41,17 @@ p_funs&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## $`20%`
 ## function (...) 
 ## quantile(probs = .x, na.rm = TRUE, ...)
-## &amp;lt;environment: 0x00000000190c6fa0&amp;gt;
+## &amp;lt;environment: 0x7fcf50757430&amp;gt;
 ## 
 ## $`50%`
 ## function (...) 
 ## quantile(probs = .x, na.rm = TRUE, ...)
-## &amp;lt;environment: 0x00000000190d6638&amp;gt;
+## &amp;lt;environment: 0x7fcf50762c30&amp;gt;
 ## 
 ## $`80%`
 ## function (...) 
 ## quantile(probs = .x, na.rm = TRUE, ...)
-## &amp;lt;environment: 0x0000000019158818&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+## &amp;lt;environment: 0x7fcf51148830&amp;gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Looking at &lt;code&gt;p_funs&lt;/code&gt; we can see that we have a named list with each element containing a function comprised of the &lt;code&gt;quantile&lt;/code&gt; function. The beauty of this is that you can use this list in the same way you would define multiple functions in any other &lt;code&gt;summarize_at&lt;/code&gt; or &lt;code&gt;summarize_all&lt;/code&gt; functions (i.e. &lt;code&gt;funs(mean, sd)&lt;/code&gt;). The only difference is that we will now have to use the “bang-bang-bang” operator (&lt;code&gt;!!!&lt;/code&gt;) from &lt;code&gt;rlang&lt;/code&gt; (it is also exported from &lt;code&gt;dplyr&lt;/code&gt;). The final product looks like this.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;mtcars %&amp;gt;% 
   group_by(cyl) %&amp;gt;% 

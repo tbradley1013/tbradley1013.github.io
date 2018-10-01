@@ -18,7 +18,7 @@
       
       <guid>/2018/10/01/calculating-quantiles-for-groups-with-dplyr-summarize-and-purrr-partial/</guid>
       <description>Recently, I was trying to calculate the percentiles of a set of variables within a data set grouped by another variable. However, I quickly ran into the realization that this is not very straight forward when using dplyr’s summarize. Before I demonstrate, let’s load the libraries that we will need.
-library(dplyr)library(purrr)If you don’t believe me when I say that it is not straight forward, go ahead and try to run the following block of code.</description>
+library(dplyr) library(purrr) If you don’t believe me when I say that it is not straight forward, go ahead and try to run the following block of code.</description>
     </item>
     
     <item>
@@ -27,7 +27,7 @@ library(dplyr)library(purrr)If you don’t believe me when I say that it is no
       <pubDate>Thu, 06 Sep 2018 00:00:00 +0000</pubDate>
       
       <guid>/2018/09/06/tracking-joey-wendle-rookie-season-with-gganimate/</guid>
-      <description>IntroductionThis past weekend I got the chance to go to the Tampa Bay Rays vs Cleveland Indians game. This game was a ton of fun, made even more exciting for me - and by the end of the game, the people in my section - because my brother-in-law’s brother (does that make him my brother-in-law too? No one ever knows for sure…), Joey Wendle, plays for the Rays! In case you haven’t been paying attention, Joey has been having a MASSIVE rookie season.</description>
+      <description>Introduction This past weekend I got the chance to go to the Tampa Bay Rays vs Cleveland Indians game. This game was a ton of fun, made even more exciting for me - and by the end of the game, the people in my section - because my brother-in-law’s brother (does that make him my brother-in-law too? No one ever knows for sure…), Joey Wendle, plays for the Rays! In case you haven’t been paying attention, Joey has been having a MASSIVE rookie season.</description>
     </item>
     
     <item>
@@ -36,7 +36,7 @@ library(dplyr)library(purrr)If you don’t believe me when I say that it is no
       <pubDate>Fri, 24 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>/2018/08/24/add-rstudio-community-to-your-blogs-social-links/</guid>
-      <description>IntroductionRecently, I switched themes for my blog to the blackburn theme and I love it! Luckily, the blogdown package makes this super easy to do within R! If you haven’t used blogdown, I highly recommend you take a look at it for setting up your blog. One of the nice features of the blackburn theme, is that it provides easy to add “social” tags that can be configured in your config.</description>
+      <description>Introduction Recently, I switched themes for my blog to the blackburn theme and I love it! Luckily, the blogdown package makes this super easy to do within R! If you haven’t used blogdown, I highly recommend you take a look at it for setting up your blog. One of the nice features of the blackburn theme, is that it provides easy to add “social” tags that can be configured in your config.</description>
     </item>
     
     <item>
@@ -45,7 +45,7 @@ library(dplyr)library(purrr)If you don’t believe me when I say that it is no
       <pubDate>Fri, 10 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>/2018/08/10/create-a-dynamic-number-of-ui-elements-in-shiny-with-purrr/</guid>
-      <description>Introductionpurrr is an incredibly powerful package that has greatly enhanced my R programming abilities. purrr has applications in pretty much any situation. One of the most useful situations, IMHO, is in the creation of a dynamic number of shiny UI elements. This can be extremely useful if you want to be able to create a dynamic number of ui elements (whether that be inputs or outputs) based on either user selection or the data being used.</description>
+      <description>Introduction purrr is an incredibly powerful package that has greatly enhanced my R programming abilities. purrr has applications in pretty much any situation. One of the most useful situations, IMHO, is in the creation of a dynamic number of shiny UI elements. This can be extremely useful if you want to be able to create a dynamic number of ui elements (whether that be inputs or outputs) based on either user selection or the data being used.</description>
     </item>
     
     <item>
@@ -54,7 +54,7 @@ library(dplyr)library(purrr)If you don’t believe me when I say that it is no
       <pubDate>Fri, 20 Jul 2018 00:00:00 +0000</pubDate>
       
       <guid>/2018/07/20/r-shiny-modules--using-global-inputs/</guid>
-      <description>IntroductionThis week, I have been working on a new shiny app. This app allows for similar figures to be rendered based on which summary statistic the user is interested in. There are four different figure types for the user to choose from, each of which are placed into their own tabPanel. This means copying the server code used to generate the graphs four different times. Following Hadley’s words of wisdom in R for Data Science, I wanted to abstract this process into functions.</description>
+      <description>Introduction This week, I have been working on a new shiny app. This app allows for similar figures to be rendered based on which summary statistic the user is interested in. There are four different figure types for the user to choose from, each of which are placed into their own tabPanel. This means copying the server code used to generate the graphs four different times. Following Hadley’s words of wisdom in R for Data Science, I wanted to abstract this process into functions.</description>
     </item>
     
     <item>
@@ -63,7 +63,7 @@ library(dplyr)library(purrr)If you don’t believe me when I say that it is no
       <pubDate>Tue, 19 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>/2018/06/19/subsetting-phylogenetic-trees/</guid>
-      <description>IntroductionIn the past few months, I have been introduced to and started working with phylogenetic trees. The trees I have been working with contain the entire tree of life for bacteria. Needless to say, they are huge. At first, I was told that I could download a program that would let me view the tree and search for particular species on the tree, but of course, I immediately looked for a better solution using R.</description>
+      <description>Introduction In the past few months, I have been introduced to and started working with phylogenetic trees. The trees I have been working with contain the entire tree of life for bacteria. Needless to say, they are huge. At first, I was told that I could download a program that would let me view the tree and search for particular species on the tree, but of course, I immediately looked for a better solution using R.</description>
     </item>
     
     <item>
@@ -72,7 +72,7 @@ library(dplyr)library(purrr)If you don’t believe me when I say that it is no
       <pubDate>Thu, 01 Feb 2018 00:00:00 +0000</pubDate>
       
       <guid>/2018/02/01/pca-in-a-tidy-verse-framework/</guid>
-      <description>IntroductionThe other day, a question was posted on RStudio Community about performing Principal Component Analysis (PCA) in a tidyverse workflow. Conveniently, I had literally just worked through this process the day before and was able to post an answer. While most questions and answers are good as they are on forum sites, I thought this one might be worth exploring a little more since using the tidyverse framework makes PCA much easier, in my opinion.</description>
+      <description>Introduction The other day, a question was posted on RStudio Community about performing Principal Component Analysis (PCA) in a tidyverse workflow. Conveniently, I had literally just worked through this process the day before and was able to post an answer. While most questions and answers are good as they are on forum sites, I thought this one might be worth exploring a little more since using the tidyverse framework makes PCA much easier, in my opinion.</description>
     </item>
     
     <item>
@@ -81,7 +81,7 @@ library(dplyr)library(purrr)If you don’t believe me when I say that it is no
       <pubDate>Sat, 26 Aug 2017 00:00:00 +0000</pubDate>
       
       <guid>/2017/08/26/sql-management-in-r/</guid>
-      <description>IntroductionRecently, I have been building shiny apps for work. The app that I am currently working on is an interface to a database for storing information about laboratory samples being collected. In addition to building the shiny app for my coworkers to interact with the database, I also was tasked with creating and building the database. I have never build a SQL database from scratch, but luckily the odbc and the DBI packages make it fairly straight foreward.</description>
+      <description>Introduction Recently, I have been building shiny apps for work. The app that I am currently working on is an interface to a database for storing information about laboratory samples being collected. In addition to building the shiny app for my coworkers to interact with the database, I also was tasked with creating and building the database. I have never build a SQL database from scratch, but luckily the odbc and the DBI packages make it fairly straight foreward.</description>
     </item>
     
     <item>
@@ -90,7 +90,7 @@ library(dplyr)library(purrr)If you don’t believe me when I say that it is no
       <pubDate>Thu, 10 Aug 2017 00:00:00 +0000</pubDate>
       
       <guid>/2017/08/10/epl-opening-weekend/</guid>
-      <description>IntroductionI was listening to Jeff Atwood’s interview on the podcast Developer on Fire and he said something that struck home with me. It was along the lines of, “The best time to start blogging is yesterday.” I have been considering starting a blog about #rstats but had been putting it off because of any number of reasons. But after listening to his interview, I decided now was as good of a time as any.</description>
+      <description>Introduction I was listening to Jeff Atwood’s interview on the podcast Developer on Fire and he said something that struck home with me. It was along the lines of, “The best time to start blogging is yesterday.” I have been considering starting a blog about #rstats but had been putting it off because of any number of reasons. But after listening to his interview, I decided now was as good of a time as any.</description>
     </item>
     
   </channel>
