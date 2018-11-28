@@ -6,11 +6,24 @@
   <description>Recent content on goonR blog</description>
   <generator>Hugo -- gohugo.io</generator>
 <language>en-us</language>
-<lastBuildDate>Mon, 01 Oct 2018 00:00:00 +0000</lastBuildDate>
+<lastBuildDate>Wed, 28 Nov 2018 00:00:00 +0000</lastBuildDate>
 
 <atom:link href="/index.xml" rel="self" type="application/rss+xml" />
 
 
+<item>
+  <title>Presentation at Delaware Watershed Research Conference 2018</title>
+  <link>/2018/11/28/presentation-at-delaware-watershed-research-conference-2018/</link>
+  <pubDate>Wed, 28 Nov 2018 00:00:00 +0000</pubDate>
+  
+<guid>/2018/11/28/presentation-at-delaware-watershed-research-conference-2018/</guid>
+  <description>&lt;p&gt;I am pleased to announce that I will presenting at the upcoming &lt;a href=&#34;https://ansp.org/research/environmental-research/projects/watershed-protection-program/delaware-watershed-research-conference/&#34;&gt;Delaware Watershed Reseach Conference 2018&lt;/a&gt; at the Academy of Natural Sciences of Drexel University on Thursday November 29, 2018. My presentation is entitled “Comparing Illumina MiSeq and PacBio Sequel Sequencing of Fecal Samples from Various Animal Sources Potentially Contributing to Microbial Contamination of the Delaware River Watershed”. This presentation will discuss ongoing research within the &lt;a href=&#34;http://microbes.cae.drexel.edu/people/dr-sales&#34;&gt;Sales Laboratory Group&lt;/a&gt; at Drexel University.&lt;/p&gt;
+&lt;p&gt;The project is investigating the use of different next generation sequencing techniques and their ability to perform microbial source tracking. The presentation at DWRC 2018 will focus solely on the difference between the two sequencing results for just the fecal samples collected in this study. Specifically, looking at whether sequencing the full length 16S rRNA gene (done using the PacBio Sequel sequencing method) is more effective than targeting specific hyper-variable regions of the 16S rRNA gene (done using the Illumina MiSeq sequencing method). The abstract for this presentation can be found &lt;a href=&#34;https://tbradley1013.github.io/presentations/&#34;&gt;here&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;I will be presenting at 11 AM in the Freshwater Status and Trends track of the conference.&lt;/p&gt;
+&lt;p&gt;Please come and take a look at the research I am working on!&lt;/p&gt;
+</description>
+  </item>
+  
 <item>
   <title>Calculating quantiles for groups with dplyr::summarize and purrr::partial</title>
   <link>/2018/10/01/calculating-quantiles-for-groups-with-dplyr-summarize-and-purrr-partial/</link>
@@ -2260,7 +2273,18 @@ home_adv_team&lt;/code&gt;&lt;/pre&gt;
   <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
   
 <guid>/presentations/</guid>
-  <description>&lt;p&gt;&lt;strong&gt;Developing a New Approach for Proactive Nitrification Monitoring in a Chloraminated Drinking Water Distribution System&lt;/strong&gt;&lt;br/&gt;
+  <description>&lt;p&gt;&lt;strong&gt;Comparing Illumina MiSeq and PacBio SMRT Sequencing of Fecal Samples from Various Animal Sources Potentially Contributing to Microbial Contamination of the Delaware River Watershed&lt;/strong&gt;&lt;br/&gt;
+&lt;em&gt;Delaware Watershed Research Conferece 2018&lt;/em&gt;&lt;br/&gt;
+Philadelphia, PA - November 2018&lt;br/&gt;
+&lt;strong&gt;Abstract&lt;/strong&gt;&lt;br/&gt;
+Next generation sequencing technologies allow for vast amounts of information to be collected about microbial communities in order to better understand their structure and function. There are several sequencing technologies available that allow for different amounts of DNA or RNA to be sequenced. The different approaches and chemistry used by sequencing instrument manufacturers results in large differences in total sequencing yield, read length limitations, and sequence data accuracy. For example, a typical run on one of the most popular sequencing technologies, Illumina MiSeq, may produce 25 million high quality paired end 300 bp reads (2 x 300 bp). Conversely, the new Pacific Biosciences (PacBio) Sequel platform can produce reads of significantly longer lengths (averaging 10-14 kb) at a sacrifice in total yield (~ 365,000 reads) and higher error rates.&lt;/p&gt;
+
+&lt;p&gt;Investigators researching microbiomes are faced with the challenge of selecting between technologies and chemistry to maximize the utility of the sequencing data. This can be particularly difficult as significant tradeoffs exist between the additional information that may be contained in longer reads or the negative effects of higher error rates or differences in sequencing depth, as well as their ultimate costs. To investigate these effects, these two technologies were employed to sequence 32 fecal samples targeting the 16S rRNA gene of bacteria. The Illumina MiSeq run targeted the V4-V5 hyper-variable regions (~300-350 bp) while the PacBio Sequel run targeted the full length 16S rRNA gene (~1500 bp). This study examines how closely the taxonomic assignments for these different technologies matched. It was investigated whether restricting sequence length to specific hyper-variable regions resulted in misclassification or overconfidence in taxonomic classification. Overall, both of these technologies resulted in similar taxonomic assignments with 46.4% of matches OTU&amp;rsquo;s being classified identically to the genus level. Only 1.9% of MiSeq OTUs were matched with a SMRT OTU where both OTUs were assigned differently at the genus level. In addition, these fecal samples, from 9 different animal sources, were used in conjunction with water samples taken from waterways in the Delaware watershed to see what impact on river microbiome these different animals may have. Differential abundances were used to identify genera that are unique to specific animals, in order to determine how these sources may be affecting river water quality. The results from this study will allow us to determine the pros and cons of using short-read vs. long-read sequencing for microbial community analyses and for microbial source tracking.&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;
+&lt;br/&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Developing a New Approach for Proactive Nitrification Monitoring in a Chloraminated Drinking Water Distribution System&lt;/strong&gt;&lt;br/&gt;
 &lt;em&gt;AWWA Water Quality Technology Conference&lt;/em&gt;&lt;br/&gt;
 Toronto, ON, Canada - November 2018&lt;br/&gt;
 &lt;strong&gt;Abstract&lt;/strong&gt;&lt;br/&gt;

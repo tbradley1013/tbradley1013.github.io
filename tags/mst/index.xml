@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Mst on goonR blog</title>
+    <link>/tags/mst/</link>
+    <description>Recent content in Mst on goonR blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 28 Nov 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/mst/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Presentation at Delaware Watershed Research Conference 2018</title>
+      <link>/2018/11/28/presentation-at-delaware-watershed-research-conference-2018/</link>
+      <pubDate>Wed, 28 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/11/28/presentation-at-delaware-watershed-research-conference-2018/</guid>
+      <description>I am pleased to announce that I will presenting at the upcoming Delaware Watershed Reseach Conference 2018 at the Academy of Natural Sciences of Drexel University on Thursday November 29, 2018. My presentation is entitled “Comparing Illumina MiSeq and PacBio Sequel Sequencing of Fecal Samples from Various Animal Sources Potentially Contributing to Microbial Contamination of the Delaware River Watershed”. This presentation will discuss ongoing research within the Sales Laboratory Group at Drexel University.</description>
+    </item>
+    
+  </channel>
+</rss>

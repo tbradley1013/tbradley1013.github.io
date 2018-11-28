@@ -93,6 +93,15 @@
     </item>
     
     <item>
+      <title>Illumina</title>
+      <link>/tags/illumina/</link>
+      <pubDate>Wed, 28 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/illumina/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Lcr</title>
       <link>/tags/lcr/</link>
       <pubDate>Sun, 23 Sep 2018 00:00:00 +0000</pubDate>
@@ -129,6 +138,24 @@
     </item>
     
     <item>
+      <title>Mst</title>
+      <link>/tags/mst/</link>
+      <pubDate>Wed, 28 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/mst/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ngs</title>
+      <link>/tags/ngs/</link>
+      <pubDate>Wed, 28 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/ngs/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Occt</title>
       <link>/tags/occt/</link>
       <pubDate>Sun, 23 Sep 2018 00:00:00 +0000</pubDate>
@@ -143,6 +170,15 @@
       <pubDate>Sat, 26 Aug 2017 00:00:00 +0000</pubDate>
       
       <guid>/tags/odbc/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Pacbio</title>
+      <link>/tags/pacbio/</link>
+      <pubDate>Wed, 28 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/pacbio/</guid>
       <description></description>
     </item>
     
