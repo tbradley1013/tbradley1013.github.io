@@ -6,10 +6,19 @@
     <description>Recent content in Rstats on goonR blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 01 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 19 Mar 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/rstats/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Using Scoped dplyr verbs </title>
+      <link>/2019/03/19/using-scoped-dplyr-verbs/</link>
+      <pubDate>Tue, 19 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/03/19/using-scoped-dplyr-verbs/</guid>
+      <description>IntroductionOver the past several months, I have really started to increase the amount that I have been using scoped dplyr verbs. For those of you who don’t know about these functions, they are handy variants to the normal dplyr verbs, such as filter, mutate, and summarize, that allow you to target multiple columns or all of your columns. These functions allow for you to save yourself time and typing when you want to apply either one or multiple functions to more than one column, a group of columns, or to all of your columns.</description>
+    </item>
     
     <item>
       <title>Calculating quantiles for groups with dplyr::summarize and purrr::partial</title>
