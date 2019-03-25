@@ -201,9 +201,18 @@
     </item>
     
     <item>
+      <title>Rpackage</title>
+      <link>/tags/rpackage/</link>
+      <pubDate>Mon, 25 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/rpackage/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Rstats</title>
       <link>/tags/rstats/</link>
-      <pubDate>Tue, 19 Mar 2019 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 25 Mar 2019 00:00:00 +0000</pubDate>
       
       <guid>/tags/rstats/</guid>
       <description></description>
@@ -233,6 +242,15 @@
       <pubDate>Sat, 26 Aug 2017 00:00:00 +0000</pubDate>
       
       <guid>/tags/sqlite/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>The Office</title>
+      <link>/tags/the-office/</link>
+      <pubDate>Mon, 25 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/the-office/</guid>
       <description></description>
     </item>
     

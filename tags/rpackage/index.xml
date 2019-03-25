@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rpackage on goonR blog</title>
+    <link>/tags/rpackage/</link>
+    <description>Recent content in Rpackage on goonR blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 25 Mar 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/rpackage/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Get the Office Quotes in R with the dundermifflin Package</title>
+      <link>/2019/03/25/office-quotes-in-r-dundermifflin-package/</link>
+      <pubDate>Mon, 25 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/03/25/office-quotes-in-r-dundermifflin-package/</guid>
+      <description>IntroductionI am happy to share a fun project I put together this weekend - a new R package called dundermifflin. If you can’t guess from the name, it will give you quotes from the Office whenever you want! This package was inspired by the goodshirt package, which gives users quotes from The Good Place, I was able to great a similar package for the Office. By using theOffice-api, I created a data set, office_quotes, that is shipped with the package, that has every line from the Office, with the exception of season 5.</description>
+    </item>
+    
+  </channel>
+</rss>

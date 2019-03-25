@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="generator" content="Hugo 0.46" />
+
+  <title>Get the Office Quotes in R with the dundermifflin Package &middot; goonR blog</title>
+  
+  
+  <meta property="og:title" content="Get the Office Quotes in R with the dundermifflin Package - goonR blog">
+  <meta property="og:type" content="article">
+
+    
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:image" content="http://xvrdm.github.io/images/headshot-tyler-bradley-small.jpg" >
+    
+  
+  
+  <meta property="description" content="Article posted by Tyler Bradley, on Monday, March 25nd, 2019">
+  <meta property="og:description" content="Article posted by Tyler Bradley, on Monday, March 25nd, 2019">
+  
+
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css">
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-old-ie-min.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-min.css">
+  <!--<![endif]-->
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="/css/side-menu-old-ie.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="/css/side-menu.css">
+  <!--<![endif]-->
+
+  <link rel="stylesheet" href="/css/blackburn.css">
+
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+ 
+  
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/androidstudio.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+  <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon" />
+
+  
+  
+
+</head>
+
+
+<body>
+<div id="layout">
+
+  
+<a href="#menu" id="menuLink" class="menu-link">
+  
+  <span></span>
+</a>
+<div id="menu">
+
+  
+
+  <div class="pure-menu">
+    <ul class="pure-menu-list">
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="/"><i class='fa fa-home fa-fw'></i>Home</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="/post/"><i class='fa fa-list fa-fw'></i>Posts</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="/tags/rstats/"><i class='fa fa-tags fa-fw'></i>R</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="/tags/"><i class='fa fa-tags fa-fw'></i>Tags</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="/publications/"><i class='fa fa-book fa-fw'></i>Publications</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="/presentations/"><i class='fa fa-laptop fa-fw'></i>Presentations</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="/resources/"><i class='fa fa-bookmark fa-fw'></i>Resources</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="/about/"><i class='fa fa-user fa-fw'></i>About</a>
+      
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="pure-menu social">
+  <ul class="pure-menu-list">
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://twitter.com/tycbrad" target="_blank"><i class="fa fa-twitter-square fa-fw"></i>Twitter</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://linkedin.com/in/tyler-bradley-68707292/" target="_blank"><i class="fa fa-linkedin-square fa-fw"></i>LinkedIn</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://github.com/tbradley1013" target="_blank"><i class="fa fa-github-square fa-fw"></i>GitHub</a>
+    </li>
+    
+
+    
+
+    
+    
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://community.rstudio.com/u/tbradley/summary" target="_blank"><img src = "/images/community-icon.png" id = "community-icon">RStudio Community</a>
+    </li>
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://stackoverflow.com/users/7133355" target="_blank"><i class="fa fa-stack-overflow fa-fw"></i>Stack Overflow</a>
+    </li>
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://www.r-bloggers.com/"><i class="fa fa-rss fa-fw"></i>R-Bloggers</a>
+    </li>
+    
+
+  </ul>
+</div>
+
+
+  <div>
+  <div class="small-print">
+    <small></small>
+  </div>
+  <div class="small-print">
+    <small>Built with&nbsp;<a href="https://gohugo.io/" target="_blank">Hugo</a></small>
+    <small>Theme&nbsp;<a href="https://github.com/yoshiharuyamashita/blackburn" target="_blank">Blackburn</a></small>
+  </div>
+</div>
+
+</div>
+
+
+  <div id="main">
+
+
+<div class="header">
+  <h1>Get the Office Quotes in R with the dundermifflin Package</h1>
+  <h2></h2>
+</div>
+<div class="content">
+
+  <div class="post-meta">
+
+  <div>
+    <i class="fa fa-calendar fa-fw"></i>
+    <time>25 Mar 2019</time>
+  </div>
+
+  
+
+  
+  
+  
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-tags fa-fw"></i>
+    
+      <a class="post-taxonomy-tag" href="/tags/rstats">rstats</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="/tags/rpackage">rpackage</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="/tags/the-office">the-office</a>
+    
+  </div>
+  
+  
+
+</div>
+
+  <div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>I am happy to share a fun project I put together this weekend - a new R package called <a href="https://github.com/tbradley1013/dundermifflin"><code>dundermifflin</code></a>. If you can’t guess from the name, it will give you quotes from the Office whenever you want! This package was inspired by the <a href="https://github.com/adam-gruer/goodshirt"><code>goodshirt</code></a> package, which gives users quotes from The Good Place, I was able to great a similar package for the Office. By using <a href="https://github.com/anGie44/theOffice-api"><code>theOffice-api</code></a>, I created a data set, <code>office_quotes</code>, that is shipped with the package, that has every line from the Office, with the exception of season 5.</p>
+<p>I will try to keep this brief, because as in the words of Kevin:</p>
+<iframe src="https://giphy.com/embed/nxuSlWOH2Cx1K" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen>
+</iframe>
+<p>
+<a href="https://giphy.com/gifs/the-office-nxuSlWOH2Cx1K">via GIPHY</a>
+</p>
+<p>So let’s dive right in!</p>
+<p>To install the packages you can use <code>remotes::install_github</code>:</p>
+<pre><code>remotes::install_github(&quot;tbradley1013/dundermifflin&quot;)</code></pre>
+<pre class="r"><code>library(dundermifflin)
+library(cowsay)
+library(magrittr)</code></pre>
+</div>
+<div id="getting-quotes" class="section level1">
+<h1>Getting quotes</h1>
+<p>The implementation of this package is pretty straight forward. There main function of this package is <code>get_quote</code> and this will return a random quote from any season and episode in the show. By default the quotes are required to have a minimum of 10 words and a maximum of 100. This is to try to remove some of the meaningless lines from the show, but it will likely also miss some of the great one-liners. See the <a href="#next-steps">Next Steps</a> section for how I hope to deal with this! This function also allows you to specify the season, episode number, episode name, scene number, or character name to narrow down the quotes you get. By default, only quotes by characters that are apart of the main office staff are included. Let’s see how it works.</p>
+<pre class="r"><code>get_quote()</code></pre>
+<pre><code>## Good morning, Vietnam!  Okay. You know what? This isn&#39;t working. Because um I&#39;m not nervous in front of them. They&#39;re my subordinates.
+## ~ Dwight
+## Season 2, Epsiode 17 - Dwight&#39;s Speech</code></pre>
+<pre class="r"><code>get_quote(season = 1)</code></pre>
+<pre><code>## Yeah, well, if you leave we&#39;ll only have two left. Yes. Enjoy. Absolutely. Namaste. Ok, well since I am leading this, let&#39;s get down to business and why don&#39;t I just kind of introduce myself, OK? Um. I am Michael and I am part English, Irish, German and Scottish. Sort of a virtual United Nations. But what some of you might not know is that I am also part Native American Indian.
+## ~ Michael
+## Season 1, Epsiode 2 - Diversity Day</code></pre>
+<pre class="r"><code>get_quote(character = &quot;Michael&quot;)</code></pre>
+<pre><code>## What if Pam was a lesbian? What if she brought her &quot;partner&quot; in to work?  Would that be crossing the line?
+## ~ Michael
+## Season 2, Epsiode 2 - Sexual Harassment</code></pre>
+<p>By default, <code>get_quote</code> and all the other function variants, to be discussed in later sections, return an object of class <code>dunder</code>. This is just a <code>tbl</code> with info for one quote. This object can be passed to <code>as.character</code> and then used in conjunction with <code>cowsay::say</code>.</p>
+<pre class="r"><code>get_quote() %&gt;% 
+  as.character() %&gt;% 
+  say()</code></pre>
+<pre><code>## Colors cannot be applied in this environment :( Try using a terminal or RStudio.</code></pre>
+<pre><code>## 
+##  -------------- 
+## Hey, everybody. I don&#39;t know who you haven&#39;t met yet, but I think this is one of them. This is my girlfriend - Carol. This is just the front of her. Show &#39;em, show &#39;em the other side.
+## ~ Michael
+## Season 3, Epsiode 10 - A Benihana Christmas 
+##  --------------
+##     \
+##       \
+##         \
+##             |\___/|
+##           ==) ^Y^ (==
+##             \  ^  /
+##              )=*=(
+##             /     \
+##             |     |
+##            /| | | |\
+##            \| | |_|/\
+##       jgs  //_// ___/
+##                \_)
+## </code></pre>
+</div>
+<div id="quotes-by-character" class="section level1">
+<h1>Quotes by Character</h1>
+<p>While you can specify the character you wish to receive quotes from in the <code>get_quote</code> function. There are also functions for all of the main characters! Sorry if I missed any, but:</p>
+<iframe src="https://giphy.com/embed/gQmyUokrbbSpy" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen>
+</iframe>
+<p>
+<a href="https://giphy.com/gifs/the-office-sue-me-annoyed-gQmyUokrbbSpy">via GIPHY</a>
+</p>
+<p>The character functions are super straightforward. Any of the arguments, except <code>character</code>, for <code>get_quote</code> can be passed to them. Here are some examples:</p>
+<pre class="r"><code>michael()</code></pre>
+<pre><code>## Love that Andy, right? Solid fellow. Seems smart enough. Likes me a lot. A lot. Too much. Like a crazy person. A little. Not super crazy... just... there&#39;s something about him that creeps me out. I can&#39;t really explain it. He&#39;s always up in my bidness. Which is ebonics for &quot;being in my face and annoying the bejesus out of me.&quot; I don&#39;t understand how someone could have so little self-awareness.
+## ~ MIchael
+## Season 3, Epsiode 13 - The Return</code></pre>
+<pre class="r"><code>jim()</code></pre>
+<pre><code>## Can I just have the ham and cheese sandwich, thanks.
+## ~ Jim
+## Season 2, Epsiode 13 - The Secret</code></pre>
+<pre class="r"><code>dwight()</code></pre>
+<pre><code>## You just need to realize that so much rides on this. You have no idea.
+## ~ Dwight
+## Season 8, Epsiode 17 - Test the Store</code></pre>
+<pre class="r"><code>kevin()</code></pre>
+<pre><code>## Yeah. But not just the cookies, though. That was just a &#39;for instance.&#39;
+## ~ Kevin
+## Season 8, Epsiode 8 - Gettysburg</code></pre>
+</div>
+<div id="quotes-by-department" class="section level1">
+<h1>Quotes by Department</h1>
+<p>You can also get quotes for entire departments.</p>
+<pre class="r"><code>sales()</code></pre>
+<pre><code>## And you make sure to get down there and check out that Harry Potter World.
+## ~ Dwight
+## Season 7, Epsiode 17 - Todd Packer</code></pre>
+<pre class="r"><code>accounting()</code></pre>
+<pre><code>## No. I&#39;m fine. Okay, from here now. The first lesson that I&#39;m gonna teach you, right, is about finding success. And the key to finding success is to picture a winner.
+## ~ Kevin
+## Season 7, Epsiode 13 - The Seminar</code></pre>
+<pre class="r"><code>reception()</code></pre>
+<pre><code>## Okay. Um... here it is. Don&#39;t put your fingers in there.  Cool huh?
+## ~ Pam
+## Season 2, Epsiode 18 - Take Your Daughter to Work Day</code></pre>
+</div>
+<div id="thats-what-she-said" class="section level1">
+<h1>That’s what she said</h1>
+<iframe src="https://giphy.com/embed/5xtDarIX9MTLD1pMoXC" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen>
+</iframe>
+<p>
+<a href="https://giphy.com/gifs/hero0fwar-the-office-michael-scott-thats-what-she-said-5xtDarIX9MTLD1pMoXC">via GIPHY</a>
+</p>
+<p>This one might be a little more taboo, but since it is a memorable running joke of the show, I created a function <code>she_said</code> that returns a random “That’s what she said” joke from the office. This function will return the line before the joke and the line with the
+joke.</p>
+<pre class="r"><code>she_said()</code></pre>
+<pre><code>## Michael: I mean, they&#39;re just dough twisted up with some candy. They taste so good in my mouth.
+## Stanley: That&#39;s what she said. [Stanley and Michael both laugh]
+## Season 3, Epsiode 5 - Initiation</code></pre>
+</div>
+<div id="start-your-day-read-r-session-with-the-office" class="section level1">
+<h1>Start your day (read: R session) with the Office</h1>
+<p>You can also add these functions to your <code>.Rprofile</code> so that you start every new R session with a quote from the office!</p>
+<p><img src="/images/office-startup.png" /></p>
+</div>
+<div id="next-steps" class="section level1">
+<h1>Next Steps</h1>
+<p>Currently, these functions will return a random quote from the <em>entire</em> show script that meet certain length requirements. While <strong>a lot</strong> of them are hysterical (I have run the function a lot and enjoyed it immensely), you will certainly get some quotes that are not. Something I would like to do is create a separate data set that contains specific quotes that I (and you!) find especially funny, and you can help!. There is an argument in the <code>get_quote</code> function, <code>idx</code>, that can be set to <code>TRUE</code> that will return the “Quote Index”. What you can do is use this argument and submit the quote, along with the index, to this <a href="https://github.com/tbradley1013/dundermifflin/issues/1">github issue</a> as a comment. I will work periodically to add all of the funny ones to a new data set that will provide users with a more curated quote output to make sure you are always getting the funniest quotes possible!</p>
+</div>
+
+
+  
+<div class="prev-next-post pure-g">
+  <div class="pure-u-1-24" style="text-align: left;">
+    
+    <a href="/2019/03/19/using-scoped-dplyr-verbs/"><i class="fa fa-chevron-left"></i></a>
+    
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="prev">
+      <a href="/2019/03/19/using-scoped-dplyr-verbs/">Using Scoped dplyr verbs </a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-2-24">
+    &nbsp;
+  </div>
+  <div class="pure-u-10-24">
+    
+  </div>
+  <div class="pure-u-1-24" style="text-align: right;">
+    
+  </div>
+</div>
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'goonR-blog';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+</div>
+
+</div>
+</div>
+<script src="/js/ui.js"></script>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-115670447-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+
+
+</body>
+</html>
+

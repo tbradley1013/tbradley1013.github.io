@@ -7,16 +7,20 @@
   <meta name="description" content="A blog about R by an Arsenal fan">
   <meta name="generator" content="Hugo 0.46" />
 
-  <title>goonR blog</title>
+  <title>Rpackage &middot; goonR blog</title>
   
   
-  <meta property="og:title" content="goonR blog">
-  <meta property="og:type" content="website">
-  <meta property="description" content="A blog about R by an Arsenal fan">
-  <meta property="og:description" content="A blog about R by an Arsenal fan">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:image" content="http://xvrdm.github.io/images/headshot-tyler-bradley-small.jpg" >
+  <meta property="og:title" content="Rpackage - goonR blog">
+  <meta property="og:type" content="article">
+
+    
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:image" content="http://xvrdm.github.io/images/headshot-tyler-bradley-small.jpg" >
+    
   
+  
+  <meta property="description" content="Article posted by %!s(&lt;nil&gt;), on Monday, March 25nd, 2019">
+  <meta property="og:description" content="Article posted by %!s(&lt;nil&gt;), on Monday, March 25nd, 2019">
   
 
   
@@ -50,7 +54,7 @@
 
  
   
-  <link rel="alternate" type="application/rss+xml" title="goonR blog" href="/index.xml" />
+  <link rel="alternate" type="application/rss+xml" title="goonR blog" href="/tags/rpackage/index.xml" />
   
 
   
@@ -143,7 +147,7 @@
 
     
     <li class="pure-menu-item">
-      <a class="pure-menu-link" href="/index.xml"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      <a class="pure-menu-link" href="/tags/rpackage/index.xml"><i class="fa fa-rss fa-fw"></i>RSS</a>
     </li>
     
 
@@ -269,25 +273,27 @@
 
 
 <div class="header">
-  <h1>goonR blog</h1>
-  <h2>A blog about R by an Arsenal fan</h2>
+  <h1>Rpackage</h1>
 </div>
 
 <div class="content">
   
     <article>
   <header>
-    <h2><a href="/2018/02/01/pca-in-a-tidy-verse-framework/">PCA in a tidy(verse) framework</a></h2>
+    <h2><a href="/2019/03/25/office-quotes-in-r-dundermifflin-package/">Get the Office Quotes in R with the dundermifflin Package</a></h2>
 
     <div class="post-meta">
 
   <div>
     <i class="fa fa-calendar fa-fw"></i>
-    <time>01 Feb 2018</time>
+    <time>25 Mar 2019</time>
   </div>
 
   
 
+  
+  
+  
   
 
   
@@ -295,16 +301,12 @@
   
   <div>
     <i class="fa fa-tags fa-fw"></i>
-    
-      <a class="post-taxonomy-tag" href="/tags/tidyverse">tidyverse</a>&nbsp;&#47;
-    
-      <a class="post-taxonomy-tag" href="/tags/pca">PCA</a>&nbsp;&#47;
-    
-      <a class="post-taxonomy-tag" href="/tags/dplyr">dplyr</a>&nbsp;&#47;
     
       <a class="post-taxonomy-tag" href="/tags/rstats">rstats</a>&nbsp;&#47;
     
-      <a class="post-taxonomy-tag" href="/tags/purrr">purrr</a>
+      <a class="post-taxonomy-tag" href="/tags/rpackage">rpackage</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="/tags/the-office">the-office</a>
     
   </div>
   
@@ -315,133 +317,17 @@
   </header>
 
   <p>
-  IntroductionThe other day, a question was posted on RStudio Community about performing Principal Component Analysis (PCA) in a tidyverse workflow. Conveniently, I had literally just worked through this process the day before and was able to post an answer. While most questions and answers are good as they are on forum sites, I thought this one might be worth exploring a little more since using the tidyverse framework makes PCA much easier, in my opinion.
+  IntroductionI am happy to share a fun project I put together this weekend - a new R package called dundermifflin. If you can’t guess from the name, it will give you quotes from the Office whenever you want! This package was inspired by the goodshirt package, which gives users quotes from The Good Place, I was able to great a similar package for the Office. By using theOffice-api, I created a data set, office_quotes, that is shipped with the package, that has every line from the Office, with the exception of season 5.
   </p>
 
   
   <footer>
-    <a href="/2018/02/01/pca-in-a-tidy-verse-framework/">Read more<i class="fa fa-angle-double-right fa-fw"></i></a>
+    <a href="/2019/03/25/office-quotes-in-r-dundermifflin-package/">Read more<i class="fa fa-angle-double-right fa-fw"></i></a>
   </footer>
   
 </article>
 
   
-    <article>
-  <header>
-    <h2><a href="/2017/08/26/sql-management-in-r/">Creating, Writing, Querying, and Modifying SQL Database from R using odbc, dbplyr, and DBI</a></h2>
-
-    <div class="post-meta">
-
-  <div>
-    <i class="fa fa-calendar fa-fw"></i>
-    <time>26 Aug 2017</time>
-  </div>
-
-  
-
-  
-
-  
-  
-  
-  <div>
-    <i class="fa fa-tags fa-fw"></i>
-    
-      <a class="post-taxonomy-tag" href="/tags/tidyverse">tidyverse</a>&nbsp;&#47;
-    
-      <a class="post-taxonomy-tag" href="/tags/sqlite">SQLite</a>&nbsp;&#47;
-    
-      <a class="post-taxonomy-tag" href="/tags/rstats">rstats</a>&nbsp;&#47;
-    
-      <a class="post-taxonomy-tag" href="/tags/dplyr">dplyr</a>&nbsp;&#47;
-    
-      <a class="post-taxonomy-tag" href="/tags/dbi">DBI</a>&nbsp;&#47;
-    
-      <a class="post-taxonomy-tag" href="/tags/odbc">odbc</a>
-    
-  </div>
-  
-  
-
-</div>
-
-  </header>
-
-  <p>
-  IntroductionRecently, I have been building shiny apps for work. The app that I am currently working on is an interface to a database for storing information about laboratory samples being collected. In addition to building the shiny app for my coworkers to interact with the database, I also was tasked with creating and building the database. I have never build a SQL database from scratch, but luckily the odbc and the DBI packages make it fairly straight foreward.
-  </p>
-
-  
-  <footer>
-    <a href="/2017/08/26/sql-management-in-r/">Read more<i class="fa fa-angle-double-right fa-fw"></i></a>
-  </footer>
-  
-</article>
-
-  
-    <article>
-  <header>
-    <h2><a href="/2017/08/10/epl-opening-weekend/">Exploring English Premier League Historical Match Results</a></h2>
-
-    <div class="post-meta">
-
-  <div>
-    <i class="fa fa-calendar fa-fw"></i>
-    <time>10 Aug 2017</time>
-  </div>
-
-  
-
-  
-
-  
-  
-  
-  <div>
-    <i class="fa fa-tags fa-fw"></i>
-    
-      <a class="post-taxonomy-tag" href="/tags/tidyverse">tidyverse</a>&nbsp;&#47;
-    
-      <a class="post-taxonomy-tag" href="/tags/epl">EPL</a>&nbsp;&#47;
-    
-      <a class="post-taxonomy-tag" href="/tags/rstats">rstats</a>
-    
-  </div>
-  
-  
-
-</div>
-
-  </header>
-
-  <p>
-  IntroductionI was listening to Jeff Atwood’s interview on the podcast Developer on Fire and he said something that struck home with me. It was along the lines of, “The best time to start blogging is yesterday.” I have been considering starting a blog about #rstats but had been putting it off because of any number of reasons. But after listening to his interview, I decided now was as good of a time as any.
-  </p>
-
-  
-  <footer>
-    <a href="/2017/08/10/epl-opening-weekend/">Read more<i class="fa fa-angle-double-right fa-fw"></i></a>
-  </footer>
-  
-</article>
-
-  
-
-  
-
-
-<nav class="pagination" role="pagination">
-  
-  <a href="/"><i class="fa fa-chevron-left"></i></a>
-  
-  <span>&nbsp;2 / 2&nbsp;</span>
-  
-  <i class="fa fa-chevron-right"></i>
-  
-</nav>
-
-
-
 </div>
 
 </div>
@@ -466,4 +352,3 @@
 
 </body>
 </html>
-
