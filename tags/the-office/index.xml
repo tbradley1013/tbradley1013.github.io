@@ -1,24 +1,146 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>The Office on goonR blog</title>
-    <link>/tags/the-office/</link>
-    <description>Recent content in The Office on goonR blog</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Mon, 25 Mar 2019 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="/tags/the-office/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>Get the Office Quotes in R with the dundermifflin Package</title>
-      <link>/2019/03/25/office-quotes-in-r-dundermifflin-package/</link>
-      <pubDate>Mon, 25 Mar 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/2019/03/25/office-quotes-in-r-dundermifflin-package/</guid>
-      <description>IntroductionI am happy to share a fun project I put together this weekend - a new R package called dundermifflin. If you can’t guess from the name, it will give you quotes from the Office whenever you want! This package was inspired by the goodshirt package, which gives users quotes from The Good Place, I was able to great a similar package for the Office. By using theOffice-api, I created a data set, office_quotes, that is shipped with the package, that has every line from the Office, with the exception of season 5.</description>
-    </item>
-    
-  </channel>
-</rss>
+  <title>The Office on goonR blog</title>
+  <link>/tags/the-office/</link>
+  <description>Recent content in The Office on goonR blog</description>
+  <generator>Hugo -- gohugo.io</generator>
+<language>en-us</language>
+<lastBuildDate>Mon, 25 Mar 2019 00:00:00 +0000</lastBuildDate>
+
+<atom:link href="/tags/the-office/index.xml" rel="self" type="application/rss+xml" />
+
+
+<item>
+  <title>Get the Office Quotes in R with the dundermifflin Package</title>
+  <link>/2019/03/25/office-quotes-in-r-dundermifflin-package/</link>
+  <pubDate>Mon, 25 Mar 2019 00:00:00 +0000</pubDate>
+  
+<guid>/2019/03/25/office-quotes-in-r-dundermifflin-package/</guid>
+  <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;I am happy to share a fun project I put together this weekend - a new R package called &lt;a href=&#34;https://github.com/tbradley1013/dundermifflin&#34;&gt;&lt;code&gt;dundermifflin&lt;/code&gt;&lt;/a&gt;. If you can’t guess from the name, it will give you quotes from the Office whenever you want! This package was inspired by the &lt;a href=&#34;https://github.com/adam-gruer/goodshirt&#34;&gt;&lt;code&gt;goodshirt&lt;/code&gt;&lt;/a&gt; package, which gives users quotes from The Good Place, I was able to great a similar package for the Office. By using &lt;a href=&#34;https://github.com/anGie44/theOffice-api&#34;&gt;&lt;code&gt;theOffice-api&lt;/code&gt;&lt;/a&gt;, I created a data set, &lt;code&gt;office_quotes&lt;/code&gt;, that is shipped with the package, that has every line from the Office, with the exception of season 5.&lt;/p&gt;
+&lt;p&gt;I will try to keep this brief, because as in the words of Kevin:&lt;/p&gt;
+&lt;iframe src=&#34;https://giphy.com/embed/nxuSlWOH2Cx1K&#34; width=&#34;480&#34; height=&#34;270&#34; frameBorder=&#34;0&#34; class=&#34;giphy-embed&#34; allowFullScreen&gt;
+&lt;/iframe&gt;
+&lt;p&gt;
+&lt;a href=&#34;https://giphy.com/gifs/the-office-nxuSlWOH2Cx1K&#34;&gt;via GIPHY&lt;/a&gt;
+&lt;/p&gt;
+&lt;p&gt;So let’s dive right in!&lt;/p&gt;
+&lt;p&gt;To install the packages you can use &lt;code&gt;remotes::install_github&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;remotes::install_github(&amp;quot;tbradley1013/dundermifflin&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(dundermifflin)
+library(cowsay)
+library(magrittr)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;getting-quotes&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Getting quotes&lt;/h1&gt;
+&lt;p&gt;The implementation of this package is pretty straight forward. There main function of this package is &lt;code&gt;get_quote&lt;/code&gt; and this will return a random quote from any season and episode in the show. By default the quotes are required to have a minimum of 10 words and a maximum of 100. This is to try to remove some of the meaningless lines from the show, but it will likely also miss some of the great one-liners. See the &lt;a href=&#34;#next-steps&#34;&gt;Next Steps&lt;/a&gt; section for how I hope to deal with this! This function also allows you to specify the season, episode number, episode name, scene number, or character name to narrow down the quotes you get. By default, only quotes by characters that are apart of the main office staff are included. Let’s see how it works.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;get_quote()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Good morning, Vietnam!  Okay. You know what? This isn&amp;#39;t working. Because um I&amp;#39;m not nervous in front of them. They&amp;#39;re my subordinates.
+## ~ Dwight
+## Season 2, Epsiode 17 - Dwight&amp;#39;s Speech&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;get_quote(season = 1)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Yeah, well, if you leave we&amp;#39;ll only have two left. Yes. Enjoy. Absolutely. Namaste. Ok, well since I am leading this, let&amp;#39;s get down to business and why don&amp;#39;t I just kind of introduce myself, OK? Um. I am Michael and I am part English, Irish, German and Scottish. Sort of a virtual United Nations. But what some of you might not know is that I am also part Native American Indian.
+## ~ Michael
+## Season 1, Epsiode 2 - Diversity Day&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;get_quote(character = &amp;quot;Michael&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## What if Pam was a lesbian? What if she brought her &amp;quot;partner&amp;quot; in to work?  Would that be crossing the line?
+## ~ Michael
+## Season 2, Epsiode 2 - Sexual Harassment&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;By default, &lt;code&gt;get_quote&lt;/code&gt; and all the other function variants, to be discussed in later sections, return an object of class &lt;code&gt;dunder&lt;/code&gt;. This is just a &lt;code&gt;tbl&lt;/code&gt; with info for one quote. This object can be passed to &lt;code&gt;as.character&lt;/code&gt; and then used in conjunction with &lt;code&gt;cowsay::say&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;get_quote() %&amp;gt;% 
+  as.character() %&amp;gt;% 
+  say()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Colors cannot be applied in this environment :( Try using a terminal or RStudio.&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 
+##  -------------- 
+## Hey, everybody. I don&amp;#39;t know who you haven&amp;#39;t met yet, but I think this is one of them. This is my girlfriend - Carol. This is just the front of her. Show &amp;#39;em, show &amp;#39;em the other side.
+## ~ Michael
+## Season 3, Epsiode 10 - A Benihana Christmas 
+##  --------------
+##     \
+##       \
+##         \
+##             |\___/|
+##           ==) ^Y^ (==
+##             \  ^  /
+##              )=*=(
+##             /     \
+##             |     |
+##            /| | | |\
+##            \| | |_|/\
+##       jgs  //_// ___/
+##                \_)
+## &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;quotes-by-character&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Quotes by Character&lt;/h1&gt;
+&lt;p&gt;While you can specify the character you wish to receive quotes from in the &lt;code&gt;get_quote&lt;/code&gt; function. There are also functions for all of the main characters! Sorry if I missed any, but:&lt;/p&gt;
+&lt;iframe src=&#34;https://giphy.com/embed/gQmyUokrbbSpy&#34; width=&#34;480&#34; height=&#34;270&#34; frameBorder=&#34;0&#34; class=&#34;giphy-embed&#34; allowFullScreen&gt;
+&lt;/iframe&gt;
+&lt;p&gt;
+&lt;a href=&#34;https://giphy.com/gifs/the-office-sue-me-annoyed-gQmyUokrbbSpy&#34;&gt;via GIPHY&lt;/a&gt;
+&lt;/p&gt;
+&lt;p&gt;The character functions are super straightforward. Any of the arguments, except &lt;code&gt;character&lt;/code&gt;, for &lt;code&gt;get_quote&lt;/code&gt; can be passed to them. Here are some examples:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;michael()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Love that Andy, right? Solid fellow. Seems smart enough. Likes me a lot. A lot. Too much. Like a crazy person. A little. Not super crazy... just... there&amp;#39;s something about him that creeps me out. I can&amp;#39;t really explain it. He&amp;#39;s always up in my bidness. Which is ebonics for &amp;quot;being in my face and annoying the bejesus out of me.&amp;quot; I don&amp;#39;t understand how someone could have so little self-awareness.
+## ~ MIchael
+## Season 3, Epsiode 13 - The Return&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;jim()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Can I just have the ham and cheese sandwich, thanks.
+## ~ Jim
+## Season 2, Epsiode 13 - The Secret&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;dwight()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## You just need to realize that so much rides on this. You have no idea.
+## ~ Dwight
+## Season 8, Epsiode 17 - Test the Store&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;kevin()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Yeah. But not just the cookies, though. That was just a &amp;#39;for instance.&amp;#39;
+## ~ Kevin
+## Season 8, Epsiode 8 - Gettysburg&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;quotes-by-department&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Quotes by Department&lt;/h1&gt;
+&lt;p&gt;You can also get quotes for entire departments.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;sales()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## And you make sure to get down there and check out that Harry Potter World.
+## ~ Dwight
+## Season 7, Epsiode 17 - Todd Packer&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;accounting()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## No. I&amp;#39;m fine. Okay, from here now. The first lesson that I&amp;#39;m gonna teach you, right, is about finding success. And the key to finding success is to picture a winner.
+## ~ Kevin
+## Season 7, Epsiode 13 - The Seminar&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;reception()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Okay. Um... here it is. Don&amp;#39;t put your fingers in there.  Cool huh?
+## ~ Pam
+## Season 2, Epsiode 18 - Take Your Daughter to Work Day&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;thats-what-she-said&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;That’s what she said&lt;/h1&gt;
+&lt;iframe src=&#34;https://giphy.com/embed/5xtDarIX9MTLD1pMoXC&#34; width=&#34;480&#34; height=&#34;270&#34; frameBorder=&#34;0&#34; class=&#34;giphy-embed&#34; allowFullScreen&gt;
+&lt;/iframe&gt;
+&lt;p&gt;
+&lt;a href=&#34;https://giphy.com/gifs/hero0fwar-the-office-michael-scott-thats-what-she-said-5xtDarIX9MTLD1pMoXC&#34;&gt;via GIPHY&lt;/a&gt;
+&lt;/p&gt;
+&lt;p&gt;This one might be a little more taboo, but since it is a memorable running joke of the show, I created a function &lt;code&gt;she_said&lt;/code&gt; that returns a random “That’s what she said” joke from the office. This function will return the line before the joke and the line with the
+joke.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;she_said()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Michael: I mean, they&amp;#39;re just dough twisted up with some candy. They taste so good in my mouth.
+## Stanley: That&amp;#39;s what she said. [Stanley and Michael both laugh]
+## Season 3, Epsiode 5 - Initiation&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;start-your-day-read-r-session-with-the-office&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Start your day (read: R session) with the Office&lt;/h1&gt;
+&lt;p&gt;You can also add these functions to your &lt;code&gt;.Rprofile&lt;/code&gt; so that you start every new R session with a quote from the office!&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/office-startup.png&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;next-steps&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Next Steps&lt;/h1&gt;
+&lt;p&gt;Currently, these functions will return a random quote from the &lt;em&gt;entire&lt;/em&gt; show script that meet certain length requirements. While &lt;strong&gt;a lot&lt;/strong&gt; of them are hysterical (I have run the function a lot and enjoyed it immensely), you will certainly get some quotes that are not. Something I would like to do is create a separate data set that contains specific quotes that I (and you!) find especially funny, and you can help!. There is an argument in the &lt;code&gt;get_quote&lt;/code&gt; function, &lt;code&gt;idx&lt;/code&gt;, that can be set to &lt;code&gt;TRUE&lt;/code&gt; that will return the “Quote Index”. What you can do is use this argument and submit the quote, along with the index, to this &lt;a href=&#34;https://github.com/tbradley1013/dundermifflin/issues/1&#34;&gt;github issue&lt;/a&gt; as a comment. I will work periodically to add all of the funny ones to a new data set that will provide users with a more curated quote output to make sure you are always getting the funniest quotes possible!&lt;/p&gt;
+&lt;/div&gt;
+</description>
+  </item>
+  
+</channel>
+  </rss>

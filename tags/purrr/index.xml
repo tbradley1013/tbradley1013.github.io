@@ -1,43 +1,702 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Purrr on goonR blog</title>
-    <link>/tags/purrr/</link>
-    <description>Recent content in Purrr on goonR blog</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Mon, 01 Oct 2018 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="/tags/purrr/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>Calculating quantiles for groups with dplyr::summarize and purrr::partial</title>
-      <link>/2018/10/01/calculating-quantiles-for-groups-with-dplyr-summarize-and-purrr-partial/</link>
-      <pubDate>Mon, 01 Oct 2018 00:00:00 +0000</pubDate>
+  <title>Purrr on goonR blog</title>
+  <link>/tags/purrr/</link>
+  <description>Recent content in Purrr on goonR blog</description>
+  <generator>Hugo -- gohugo.io</generator>
+<language>en-us</language>
+<lastBuildDate>Mon, 01 Oct 2018 00:00:00 +0000</lastBuildDate>
+
+<atom:link href="/tags/purrr/index.xml" rel="self" type="application/rss+xml" />
+
+
+<item>
+  <title>Calculating quantiles for groups with dplyr::summarize and purrr::partial</title>
+  <link>/2018/10/01/calculating-quantiles-for-groups-with-dplyr-summarize-and-purrr-partial/</link>
+  <pubDate>Mon, 01 Oct 2018 00:00:00 +0000</pubDate>
+  
+<guid>/2018/10/01/calculating-quantiles-for-groups-with-dplyr-summarize-and-purrr-partial/</guid>
+  <description>&lt;p&gt;Recently, I was trying to calculate the percentiles of a set of variables within a data set grouped by another variable. However, I quickly ran into the realization that this is not very straight forward when using &lt;code&gt;dplyr&lt;/code&gt;’s &lt;code&gt;summarize&lt;/code&gt;. Before I demonstrate, let’s load the libraries that we will need.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(dplyr)
+library(purrr)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If you don’t believe me when I say that it is not straight forward, go ahead and try to run the following block of code.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;mtcars %&amp;gt;% 
+  dplyr::group_by(cyl) %&amp;gt;% 
+  dplyr::summarize(quants = quantile(mpg, probs = c(0.2, 0.5, 0.8)))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If you ran the code, you will see that it throws the following error:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Error in summarise_impl(.data, dots) : 
+  Column `quants` must be length 1 (a summary value), not 3&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This error is telling us that the result is returning an object of length 3 (our three quantiles) when it is expecting to get only one value. A quick Google search comes up with &lt;a href=&#34;https://stackoverflow.com/questions/30488389/using-dplyr-window-functions-to-calculate-percentiles&#34;&gt;numerous&lt;/a&gt; &lt;a href=&#34;https://stackoverflow.com/questions/46935464/dplyr-to-count-means-by-group-and-then-quantiles-for-each&#34;&gt;stack&lt;/a&gt; &lt;a href=&#34;https://stackoverflow.com/questions/46177312/how-to-find-quantile-of-grouped-variable-in-dplyr&#34;&gt;overflow&lt;/a&gt; &lt;a href=&#34;https://stackoverflow.com/questions/37845915/how-to-use-quantile-with-dplyr-and-group-by&#34;&gt;questions&lt;/a&gt; and &lt;a href=&#34;https://groups.google.com/forum/#!topic/manipulatr/jEUIbQi-iuA&#34;&gt;answers&lt;/a&gt; about this. Most of these solutions revolve around using the &lt;code&gt;do&lt;/code&gt; function to calculate the quantiles on each of the groups. However, according to &lt;a href=&#34;https://community.rstudio.com/t/should-i-move-away-from-do-and-rowwise/2857/2&#34;&gt;Hadley&lt;/a&gt;, &lt;code&gt;do&lt;/code&gt; will eventually be “going away”. While there is no definite time frame on this, I try to use it as little as possible. The new recommended practice is a combination of &lt;code&gt;tidyr::nest&lt;/code&gt;, &lt;code&gt;dplyr::mutate&lt;/code&gt; and &lt;code&gt;purrr::map&lt;/code&gt; for most cases of grouping. I love this approach for most things (and it is even the accepted for one of &lt;a href=&#34;https://stackoverflow.com/questions/30488389/using-dplyr-window-functions-to-calculate-percentiles&#34;&gt;the SO questions mentioned above&lt;/a&gt;) but I worked up a new solution that I think is useful for calculating percentiles on multiple groups for any desired number of percentiles.&lt;/p&gt;
+&lt;p&gt;This method uses &lt;code&gt;purrr::map&lt;/code&gt; and a &lt;a href=&#34;http://adv-r.had.co.nz/Function-operators.html&#34;&gt;Function Operator&lt;/a&gt;, &lt;a href=&#34;https://rdrr.io/cran/purrr/man/partial.html&#34;&gt;&lt;code&gt;purrr::partial&lt;/code&gt;&lt;/a&gt;, to create a list of functions that can than be applied to a data set using &lt;code&gt;dplyr::summarize_at&lt;/code&gt; and a little magic from &lt;code&gt;rlang&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Let’s start by creating a vector of the desired percentiles to calculate. In this example, we will calculate the 20&lt;sup&gt;th&lt;/sup&gt;, 50&lt;sup&gt;th&lt;/sup&gt;, and 80&lt;sup&gt;th&lt;/sup&gt; percentiles.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;p &amp;lt;- c(0.2, 0.5, 0.8)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now we can create a list of functions, with one for each quantile, using &lt;code&gt;purrr::map&lt;/code&gt; and &lt;code&gt;purrr::partial&lt;/code&gt;. We can also assign names to each function (useful for the output of &lt;code&gt;summarize&lt;/code&gt;) using &lt;code&gt;purrr::set_names&lt;/code&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;p_names &amp;lt;- map_chr(p, ~paste0(.x*100, &amp;quot;%&amp;quot;))
+
+p_funs &amp;lt;- map(p, ~partial(quantile, probs = .x, na.rm = TRUE)) %&amp;gt;% 
+  set_names(nm = p_names)
+
+p_funs&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## $`20%`
+## function (...) 
+## quantile(probs = .x, na.rm = TRUE, ...)
+## &amp;lt;environment: 0x7fcf50757430&amp;gt;
+## 
+## $`50%`
+## function (...) 
+## quantile(probs = .x, na.rm = TRUE, ...)
+## &amp;lt;environment: 0x7fcf50762c30&amp;gt;
+## 
+## $`80%`
+## function (...) 
+## quantile(probs = .x, na.rm = TRUE, ...)
+## &amp;lt;environment: 0x7fcf51148830&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Looking at &lt;code&gt;p_funs&lt;/code&gt; we can see that we have a named list with each element containing a function comprised of the &lt;code&gt;quantile&lt;/code&gt; function. The beauty of this is that you can use this list in the same way you would define multiple functions in any other &lt;code&gt;summarize_at&lt;/code&gt; or &lt;code&gt;summarize_all&lt;/code&gt; functions (i.e. &lt;code&gt;funs(mean, sd)&lt;/code&gt;). The only difference is that we will now have to use the “bang-bang-bang” operator (&lt;code&gt;!!!&lt;/code&gt;) from &lt;code&gt;rlang&lt;/code&gt; (it is also exported from &lt;code&gt;dplyr&lt;/code&gt;). The final product looks like this.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;mtcars %&amp;gt;% 
+  group_by(cyl) %&amp;gt;% 
+  summarize_at(vars(mpg), funs(!!!p_funs))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 3 x 4
+##     cyl `20%` `50%` `80%`
+##   &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt;
+## 1     4  22.8  26    30.4
+## 2     6  18.3  19.7  21  
+## 3     8  13.9  15.2  16.8&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I think that this provides a pretty neat way to get the desired output in a format that does not require a large amount of post calculation manipulation. In addition, it is, in my opinion, more straightforward than a lot of the &lt;code&gt;do&lt;/code&gt; methods. This method also allows for quantiles to be calculated for more than one variable, although post-processing would be necessary in that case. Here is an example.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;mtcars %&amp;gt;% 
+  group_by(cyl) %&amp;gt;% 
+  summarize_at(vars(mpg, hp), funs(!!!p_funs)) %&amp;gt;% 
+  select(cyl, contains(&amp;quot;mpg&amp;quot;), contains(&amp;quot;hp&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 3 x 7
+##     cyl `mpg_20%` `mpg_50%` `mpg_80%` `hp_20%` `hp_50%` `hp_80%`
+##   &amp;lt;dbl&amp;gt;     &amp;lt;dbl&amp;gt;     &amp;lt;dbl&amp;gt;     &amp;lt;dbl&amp;gt;    &amp;lt;dbl&amp;gt;    &amp;lt;dbl&amp;gt;    &amp;lt;dbl&amp;gt;
+## 1     4      22.8      26        30.4       65      91        97
+## 2     6      18.3      19.7      21        110     110       123
+## 3     8      13.9      15.2      16.8      175     192.      245&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;partial&lt;/code&gt; is &lt;em&gt;yet another&lt;/em&gt; tool from the &lt;code&gt;purrr&lt;/code&gt; package that can greatly enhance your R coding abilities. While this is surely a basic application of its functionality, one can easily see how powerful this function can be.&lt;/p&gt;
+</description>
+  </item>
+  
+<item>
+  <title>Create a dynamic number of UI elements in Shiny with purrr</title>
+  <link>/2018/08/10/create-a-dynamic-number-of-ui-elements-in-shiny-with-purrr/</link>
+  <pubDate>Fri, 10 Aug 2018 00:00:00 +0000</pubDate>
+  
+<guid>/2018/08/10/create-a-dynamic-number-of-ui-elements-in-shiny-with-purrr/</guid>
+  <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&#34;https://purrr.tidyverse.org/&#34;&gt;&lt;code&gt;purrr&lt;/code&gt;&lt;/a&gt; is an incredibly powerful package that has greatly enhanced my R programming abilities. &lt;code&gt;purrr&lt;/code&gt; has applications in pretty much any situation. One of the most useful situations, IMHO, is in the creation of a dynamic number of &lt;a href=&#34;https://shiny.rstudio.com/&#34;&gt;&lt;code&gt;shiny&lt;/code&gt;&lt;/a&gt; UI elements. This can be extremely useful if you want to be able to create a dynamic number of ui elements (whether that be inputs or outputs) based on either user selection or the data being used. This post will walk through how to create a dynamic number of plots depending on how many parameters the user selects.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;background&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Background&lt;/h1&gt;
+&lt;p&gt;Before we get started, let’s load the libraries we will be using.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(dataRetrieval)
+library(tidyverse)
+library(lubridate)
+library(shiny)
+library(shinyjs)
+library(plotly)&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;data&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Data&lt;/h2&gt;
+&lt;p&gt;In this post, I will be using the R package &lt;a href=&#34;https://github.com/USGS-R/dataRetrieval&#34;&gt;&lt;code&gt;dataRetrieval&lt;/code&gt;&lt;/a&gt; provided by the USGS to access their public API. If you wish to know more about how to use this package I would recommend checking out &lt;a href=&#34;https://cran.r-project.org/web/packages/dataRetrieval/vignettes/dataRetrieval.html&#34;&gt;the package’s vignette&lt;/a&gt;. The data used in this example app is daily water quality averages for three parameters (Temperature, Conductivity, and Dissolved Oxygen) measured in the Delaware River at the Ben Franklin Bridge in Philadelphia, PA. The code to pull the site info is placed at the top of the script outside of the ui and server code and looks like this:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# usgs site number of ben franklin bridge site
+site &amp;lt;- &amp;quot;01467200&amp;quot;
+
+site_info &amp;lt;- whatNWISdata(siteNumbers = site, service = &amp;quot;dv&amp;quot;, statCd = &amp;quot;00003&amp;quot;)
+
+param_info &amp;lt;- site_info$parm_cd %&amp;gt;% unique() %&amp;gt;% readNWISpCode()
+
+
+site_meta &amp;lt;- site_info %&amp;gt;% 
+  select(site_no, station_nm, parm_cd) %&amp;gt;% 
+  left_join(param_info %&amp;gt;% 
+              select(parameter_cd, srsname, parameter_units), 
+            by = c(&amp;quot;parm_cd&amp;quot; = &amp;quot;parameter_cd&amp;quot;)) %&amp;gt;% 
+  # these are the parameters with data at this site 
+  filter(parm_cd %in% c(&amp;quot;00010&amp;quot;, &amp;quot;00095&amp;quot;, &amp;quot;00300&amp;quot;))
+
+param_choices &amp;lt;- site_meta$parm_cd
+names(param_choices) &amp;lt;- site_meta$srsname&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The actual data is queried from the API using the &lt;code&gt;readNWISdv&lt;/code&gt; function and reformatted to be easy to graph inside an &lt;code&gt;eventReactive&lt;/code&gt; function at the top of the server code. This looks like this:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;wq_data &amp;lt;- eventReactive(input$submit, {
+      req(input$parameter, input$date)
       
-      <guid>/2018/10/01/calculating-quantiles-for-groups-with-dplyr-summarize-and-purrr-partial/</guid>
-      <description>Recently, I was trying to calculate the percentiles of a set of variables within a data set grouped by another variable. However, I quickly ran into the realization that this is not very straight forward when using dplyr’s summarize. Before I demonstrate, let’s load the libraries that we will need.
-library(dplyr)library(purrr)If you don’t believe me when I say that it is not straight forward, go ahead and try to run the following block of code.</description>
-    </item>
-    
-    <item>
-      <title>Create a dynamic number of UI elements in Shiny with purrr</title>
-      <link>/2018/08/10/create-a-dynamic-number-of-ui-elements-in-shiny-with-purrr/</link>
-      <pubDate>Fri, 10 Aug 2018 00:00:00 +0000</pubDate>
+      raw_data &amp;lt;- readNWISdv(
+        siteNumbers = site, 
+        parameterCd = input$parameter,
+        startDate = input$date[[1]],
+        endDate = input$date[[2]]
+      )
       
-      <guid>/2018/08/10/create-a-dynamic-number-of-ui-elements-in-shiny-with-purrr/</guid>
-      <description>Introductionpurrr is an incredibly powerful package that has greatly enhanced my R programming abilities. purrr has applications in pretty much any situation. One of the most useful situations, IMHO, is in the creation of a dynamic number of shiny UI elements. This can be extremely useful if you want to be able to create a dynamic number of ui elements (whether that be inputs or outputs) based on either user selection or the data being used.</description>
-    </item>
-    
-    <item>
-      <title>PCA in a tidy(verse) framework</title>
-      <link>/2018/02/01/pca-in-a-tidy-verse-framework/</link>
-      <pubDate>Thu, 01 Feb 2018 00:00:00 +0000</pubDate>
+      output &amp;lt;- raw_data %&amp;gt;% 
+        select(-contains(&amp;quot;_cd&amp;quot;)) %&amp;gt;% 
+        gather(key = &amp;quot;parameter&amp;quot;, value = &amp;quot;result&amp;quot;, contains(&amp;quot;X_&amp;quot;)) %&amp;gt;% 
+        mutate(parameter = str_replace_all(parameter, &amp;quot;X_|_00003&amp;quot;, &amp;quot;&amp;quot;)) %&amp;gt;% 
+        left_join(site_meta, by = c(&amp;quot;parameter&amp;quot; = &amp;quot;parm_cd&amp;quot;, &amp;quot;site_no&amp;quot;)) 
       
-      <guid>/2018/02/01/pca-in-a-tidy-verse-framework/</guid>
-      <description>IntroductionThe other day, a question was posted on RStudio Community about performing Principal Component Analysis (PCA) in a tidyverse workflow. Conveniently, I had literally just worked through this process the day before and was able to post an answer. While most questions and answers are good as they are on forum sites, I thought this one might be worth exploring a little more since using the tidyverse framework makes PCA much easier, in my opinion.</description>
-    </item>
+      return(output)
+    })&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;plotting-function&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Plotting function&lt;/h2&gt;
+&lt;p&gt;Since the focus of this post is how to generate multiple plots and the data format after basic manipulation is the same for all three parameters, I have defined my plot generation as a function named &lt;code&gt;wq_plotly()&lt;/code&gt; outside of the server code. This functions looks like this:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;wq_plotly &amp;lt;- function(data){
+  data %&amp;gt;%
+    plot_ly(
+      x = ~Date,
+      y = ~result,
+      type = &amp;quot;scatter&amp;quot;,
+      mode = &amp;quot;lines+markers&amp;quot;,
+      marker = list(
+        size = 4,
+        color = &amp;quot;blue&amp;quot;
+      ),
+      line = list(
+        color = &amp;quot;blue&amp;quot;
+      ),
+      hoverinfo = &amp;quot;text&amp;quot;,
+      text = ~paste(
+        &amp;quot;Site:&amp;quot;, station_nm,
+        &amp;quot;&amp;lt;br&amp;gt;Parameter:&amp;quot;, srsname,
+        &amp;quot;&amp;lt;br&amp;gt;Date Time:&amp;quot;, format(Date),
+        &amp;quot;&amp;lt;br&amp;gt;Result:&amp;quot;, result,
+        &amp;quot;&amp;lt;br&amp;gt;Units:&amp;quot;, parameter_units
+      )
+    ) %&amp;gt;%
+    layout(
+      title = paste(
+        unique(data$station_nm), &amp;quot;&amp;lt;br&amp;gt;&amp;quot;, 
+        unique(data$srsname), 
+        paste0(&amp;quot;(&amp;quot;, unique(data$parameter_units), &amp;quot;)&amp;quot;)
+      ),
+      titlefont = list(
+        size = 10
+      ),
+      xaxis = list(
+        title = &amp;quot;&amp;quot;
+      ),
+      yaxis = list(
+        title = &amp;quot;&amp;quot;
+      ),
+      margin = list(
+        t = 40
+      )
+    )
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ui&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;UI&lt;/h1&gt;
+&lt;p&gt;So the first part of the app is the ui code. This part is actually somewhat straightforward because all of the magic is gonna happen in our server code. We have to define our inputs for which parameters to graph (named &lt;code&gt;input$parameter&lt;/code&gt;) and the desired date range (named &lt;code&gt;input$date&lt;/code&gt;) and create an &lt;code&gt;actionButton&lt;/code&gt; so that the user controls when new graphs are generated (my personal preference). I create these all within a single &lt;code&gt;fluidRow&lt;/code&gt; with each in its own &lt;code&gt;column&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;After that, I create a new &lt;code&gt;fluidRow&lt;/code&gt; and simply have a &lt;code&gt;uiOutput&lt;/code&gt; (with an id of &lt;code&gt;graphs_ui&lt;/code&gt;) in it. This &lt;code&gt;uiOutput&lt;/code&gt; will be created in our server code and contain all of the ui elements for our plots.&lt;/p&gt;
+&lt;p&gt;Here is the full ui code:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ui &amp;lt;- shinyUI(
+  fluidPage(
+    tags$head(
+      tags$style(HTML(&amp;#39;.shiny-input-container{margin-top: 20px;}&amp;#39;))
+    ),
+    div(
+      fluidRow(
+        column(
+          4, 
+          selectInput(
+            inputId = &amp;quot;parameter&amp;quot;,
+            label = &amp;quot;Select Parameter(s):&amp;quot;,
+            choices = param_choices,
+            multiple = TRUE
+          )
+        ),
+        column(
+          4,
+          dateRangeInput(
+            inputId = &amp;quot;date&amp;quot;,
+            label = &amp;quot;Select Date Range:&amp;quot;,
+            start = Sys.Date() - days(31),
+            end = Sys.Date()
+          )
+        ),
+        column(
+          4, 
+          actionButton(
+            inputId = &amp;quot;submit&amp;quot;,
+            label = &amp;quot;Apply Changes!&amp;quot;,
+            style = &amp;quot;margin:40px;&amp;quot;
+          )
+        )
+      ),
+      fluidRow(
+        div(
+          id = &amp;quot;plot-container&amp;quot;,
+          uiOutput(
+            outputId = &amp;quot;graphs_ui&amp;quot;
+          )
+        )
+      )
+    )
+  )
+)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;server&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Server&lt;/h1&gt;
+&lt;p&gt;Now for the fun! The first part of the server code, which was shown above, is the &lt;code&gt;wq_data&lt;/code&gt; reactive expression to query our data set. The next part involves generating a reactive object that contains a list of our graphs (a vector would work too). This is important because it is what will be used to generate the different inputs. Since I defined my graphing function above, I can call that with a combination of &lt;code&gt;dplyr::group_by&lt;/code&gt;, &lt;code&gt;tidyr::nest&lt;/code&gt;, &lt;code&gt;dplyr::mutate&lt;/code&gt;, &lt;code&gt;purrr::map&lt;/code&gt;, and &lt;code&gt;dplyr::pull&lt;/code&gt;. This combination allows us to create unique graphs for each parameter and store them in a single list. The code looks like this:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;graphs &amp;lt;- eventReactive(input$submit, {
+  req(wq_data())
+      
+  wq_data() %&amp;gt;% 
+    group_by(parameter) %&amp;gt;% 
+    nest() %&amp;gt;% 
+    mutate(
+       graphs = map(data, wq_plotly) 
+    ) %&amp;gt;% 
+    arrange(parameter) %&amp;gt;% 
+    pull(graphs)
+})&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;It is important to note that I have only tested this on &lt;a href=&#34;https://plot.ly/r/&#34;&gt;&lt;code&gt;plotly&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;https://ggplot2.tidyverse.org/&#34;&gt;&lt;code&gt;ggplot2&lt;/code&gt;&lt;/a&gt;, and base graphics. This method only works with &lt;code&gt;plotly&lt;/code&gt; and &lt;code&gt;ggplot2&lt;/code&gt;. It does not work with base graphics because base plots cannot be saved as objects.&lt;/p&gt;
+&lt;p&gt;Now that we have our list of graphs, we need to create our outputs. However, since we are giving the user the ability to choose how many parameters they want to create graphs for, &lt;em&gt;how do we know&lt;/em&gt; how many outputs to create? With &lt;code&gt;purrr&lt;/code&gt; and our list of graphs, &lt;strong&gt;we don’t need to know&lt;/strong&gt; how many outputs need to be created. By iterating over our list of graphs with &lt;code&gt;iwalk&lt;/code&gt; we can create as many outputs as there are graphs.&lt;/p&gt;
+&lt;p&gt;In this case, we want to use &lt;code&gt;purrr::iwalk&lt;/code&gt; (which is a variant of &lt;code&gt;walk&lt;/code&gt;) because we want to use both the graph and its index. Using &lt;code&gt;iwalk(x, ...)&lt;/code&gt; is the same as using &lt;code&gt;walk2(x, seq_along(x), ...)&lt;/code&gt;. We use &lt;code&gt;walk&lt;/code&gt; instead of &lt;code&gt;map&lt;/code&gt; because we are not returning anything from the overall iteration, but rather only using it for its side effects. Using &lt;code&gt;walk&lt;/code&gt; instead of &lt;code&gt;map&lt;/code&gt; is similar to using an &lt;code&gt;observe&lt;/code&gt; function instead of a &lt;code&gt;reactive&lt;/code&gt; function. To further connect the comparison, we will use our &lt;code&gt;iwalk&lt;/code&gt; function inside of an &lt;code&gt;observeEvent&lt;/code&gt; function.&lt;/p&gt;
+&lt;p&gt;Here is what the output generation looks like:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;observeEvent(input$submit, {
+  req(graphs())
+      
+  iwalk(graphs(), ~{
+    output_name &amp;lt;- paste0(&amp;quot;plot_&amp;quot;, .y)
+    output[[output_name]] &amp;lt;- renderPlotly(.x)
+  })
+})&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;There are two simple pieces to our &lt;code&gt;iwalk&lt;/code&gt; function. First, we define a unique &lt;code&gt;outputId&lt;/code&gt; using the index of the plot in our list. Then using that &lt;code&gt;outputId&lt;/code&gt; we can render our plotly object.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; defining an output using &lt;code&gt;output[[&amp;quot;my_output_id&amp;quot;]]&lt;/code&gt; is the same as defining it as &lt;code&gt;output$my_output_id&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Finally, the last step of the server code is to create the ui elements! Remember, in our ui code, we defined the &lt;code&gt;uiOutput&lt;/code&gt; for our graphs with an id of &lt;code&gt;graphs_ui&lt;/code&gt;. So now, we will use &lt;code&gt;renderUI&lt;/code&gt; and &lt;code&gt;purrr::imap&lt;/code&gt; to create our ui elements. Since &lt;code&gt;render*&lt;/code&gt; functions are similar to &lt;code&gt;reactive&lt;/code&gt; functions, in that they return their output, we use &lt;code&gt;imap&lt;/code&gt; rather than &lt;code&gt;iwalk&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Here is what our ui generation looks like:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;output$graphs_ui &amp;lt;- renderUI({
+  req(graphs())
+      
+  plots_list &amp;lt;- imap(graphs(), ~{
+    tagList(
+      plotlyOutput(
+        outputId = paste0(&amp;quot;plot_&amp;quot;, .y)
+      ),
+      br()
+    )
+        
+  })
+      
+  tagList(plots_list)
+})&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;As you can see, we use the index of our plot list again to call each individual plot &lt;code&gt;outputId&lt;/code&gt;. It is important to notice the &lt;code&gt;tagList(plots_list)&lt;/code&gt; call at the end of the &lt;code&gt;renderUI&lt;/code&gt; function. Since the output of &lt;code&gt;imap&lt;/code&gt; is a list, &lt;code&gt;plots_list&lt;/code&gt; is a list of ui elements and is not valid to be entered directly into the UI code. &lt;code&gt;tagList&lt;/code&gt; takes care of this for us and combines multiple ui elements into one.&lt;/p&gt;
+&lt;p&gt;Combining all of these elements, our final shiny app looks like this:&lt;/p&gt;
+&lt;center&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/images/dynamic-ui-elements/dynamic-graphs.gif&#34; /&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;conclusion&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;Being able to create a dynamic number of ui elements, whether they are inputs or outputs, is an incredibly powerful tool when trying to scale your shiny apps! The method shown here was applied to creating a dynamic number of graphs based on the users input, but it is certainly not limited to that! You can see an example of how to apply this to creating &lt;code&gt;textInput&lt;/code&gt; and &lt;code&gt;numericInput&lt;/code&gt; dynamically based on column names of an uploaded dataset in this &lt;a href=&#34;https://community.rstudio.com/t/creating-multiple-numeric-input-according-to-the-variables-of-an-uploaded-dataset/12293&#34;&gt;RStudio Community thread&lt;/a&gt;. Learning and using &lt;code&gt;purrr&lt;/code&gt; can &lt;strong&gt;&lt;em&gt;dramatically&lt;/em&gt;&lt;/strong&gt; increase your capabilities within general R programming and building shiny applications!&lt;/p&gt;
+&lt;p&gt;Finally, the full code for the shiny app looks like this:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(dataRetrieval)
+library(tidyverse)
+library(lubridate)
+library(shiny)
+library(shinyjs)
+library(plotly)
+
+
+# usgs site number of ben franklin bridge site
+site &amp;lt;- &amp;quot;01467200&amp;quot;
+
+site_info &amp;lt;- whatNWISdata(siteNumbers = site, service = &amp;quot;dv&amp;quot;, statCd = &amp;quot;00003&amp;quot;)
+
+param_info &amp;lt;- site_info$parm_cd %&amp;gt;% unique() %&amp;gt;% readNWISpCode()
+
+
+site_meta &amp;lt;- site_info %&amp;gt;% 
+  select(site_no, station_nm, parm_cd) %&amp;gt;% 
+  left_join(param_info %&amp;gt;% 
+              select(parameter_cd, srsname, parameter_units), 
+            by = c(&amp;quot;parm_cd&amp;quot; = &amp;quot;parameter_cd&amp;quot;)) %&amp;gt;% 
+  filter(parm_cd %in% c(&amp;quot;00010&amp;quot;, &amp;quot;00095&amp;quot;, &amp;quot;00300&amp;quot;))
+
+param_choices &amp;lt;- site_meta$parm_cd
+names(param_choices) &amp;lt;- site_meta$srsname
+
+wq_plotly &amp;lt;- function(data){
+  data %&amp;gt;%
+    plot_ly(
+      x = ~Date,
+      y = ~result,
+      type = &amp;quot;scatter&amp;quot;,
+      mode = &amp;quot;lines+markers&amp;quot;,
+      marker = list(
+        size = 4,
+        color = &amp;quot;blue&amp;quot;
+      ),
+      line = list(
+        color = &amp;quot;blue&amp;quot;
+      ),
+      hoverinfo = &amp;quot;text&amp;quot;,
+      text = ~paste(
+        &amp;quot;Site:&amp;quot;, station_nm,
+        &amp;quot;&amp;lt;br&amp;gt;Parameter:&amp;quot;, srsname,
+        &amp;quot;&amp;lt;br&amp;gt;Date Time:&amp;quot;, format(Date),
+        &amp;quot;&amp;lt;br&amp;gt;Result:&amp;quot;, result,
+        &amp;quot;&amp;lt;br&amp;gt;Units:&amp;quot;, parameter_units
+      )
+    ) %&amp;gt;%
+    layout(
+      title = paste(
+        unique(data$station_nm), &amp;quot;&amp;lt;br&amp;gt;&amp;quot;, 
+        unique(data$srsname), 
+        paste0(&amp;quot;(&amp;quot;, unique(data$parameter_units), &amp;quot;)&amp;quot;)
+      ),
+      titlefont = list(
+        size = 10
+      ),
+      xaxis = list(
+        title = &amp;quot;&amp;quot;
+      ),
+      yaxis = list(
+        title = &amp;quot;&amp;quot;
+      ),
+      margin = list(
+        t = 40
+      )
+    )
+}
+
+
+ui &amp;lt;- shinyUI(
+  fluidPage(
+    tags$head(
+      tags$style(HTML(&amp;#39;.shiny-input-container{margin-top: 20px;}&amp;#39;))
+    ),
+    div(
+      fluidRow(
+        column(
+          4, 
+          selectInput(
+            inputId = &amp;quot;parameter&amp;quot;,
+            label = &amp;quot;Select Parameter(s):&amp;quot;,
+            choices = param_choices,
+            multiple = TRUE
+          )
+        ),
+        column(
+          4,
+          dateRangeInput(
+            inputId = &amp;quot;date&amp;quot;,
+            label = &amp;quot;Select Date Range:&amp;quot;,
+            start = Sys.Date() - days(31),
+            end = Sys.Date()
+          )
+        ),
+        column(
+          4, 
+          actionButton(
+            inputId = &amp;quot;submit&amp;quot;,
+            label = &amp;quot;Apply Changes!&amp;quot;,
+            style = &amp;quot;margin:40px;&amp;quot;
+          )
+        )
+      ),
+      fluidRow(
+        div(
+          id = &amp;quot;plot-container&amp;quot;,
+          uiOutput(
+            outputId = &amp;quot;graphs_ui&amp;quot;
+          )
+        )
+      )
+    )
+  )
+)
+
+
+server &amp;lt;- shinyServer(
+  function(input, output, session){
+    session$onSessionEnded(stopApp)
     
-  </channel>
-</rss>
+    # query data from USGS API
+    wq_data &amp;lt;- eventReactive(input$submit, {
+      req(input$parameter, input$date)
+      
+      raw_data &amp;lt;- readNWISdv(
+        siteNumbers = site, 
+        parameterCd = input$parameter,
+        startDate = input$date[[1]],
+        endDate = input$date[[2]]
+      )
+      
+      output &amp;lt;- raw_data %&amp;gt;% 
+        select(-contains(&amp;quot;_cd&amp;quot;)) %&amp;gt;% 
+        gather(key = &amp;quot;parameter&amp;quot;, value = &amp;quot;result&amp;quot;, contains(&amp;quot;X_&amp;quot;)) %&amp;gt;% 
+        mutate(parameter = str_replace_all(parameter, &amp;quot;X_|_00003&amp;quot;, &amp;quot;&amp;quot;)) %&amp;gt;% 
+        left_join(site_meta, by = c(&amp;quot;parameter&amp;quot; = &amp;quot;parm_cd&amp;quot;, &amp;quot;site_no&amp;quot;)) 
+      
+      return(output)
+    })
+    
+    # create a list of graphs - with one for each parameter selected
+    graphs &amp;lt;- eventReactive(input$submit, {
+      req(wq_data())
+      
+      wq_data() %&amp;gt;% 
+        group_by(parameter) %&amp;gt;% 
+        nest() %&amp;gt;% 
+        mutate(
+          graphs = map(data, wq_plotly) 
+        ) %&amp;gt;% 
+        arrange(parameter) %&amp;gt;% 
+        pull(graphs)
+    })
+    
+    # use purrr::iwalk to create a dynamic number of outputs
+    observeEvent(input$submit, {
+      req(graphs())
+      
+      iwalk(graphs(), ~{
+        output_name &amp;lt;- paste0(&amp;quot;plot_&amp;quot;, .y)
+        output[[output_name]] &amp;lt;- renderPlotly(.x)
+      })
+    })
+    
+    # use renderUI to create a dynamic number of output ui elements
+    output$graphs_ui &amp;lt;- renderUI({
+      req(graphs())
+      
+      plots_list &amp;lt;- imap(graphs(), ~{
+        tagList(
+          plotlyOutput(
+            outputId = paste0(&amp;quot;plot_&amp;quot;, .y)
+          ),
+          br()
+        )
+        
+      })
+      
+      tagList(plots_list)
+    })
+    
+  }
+)
+
+
+shinyApp(ui = ui, server = server)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+  </item>
+  
+<item>
+  <title>PCA in a tidy(verse) framework</title>
+  <link>/2018/02/01/pca-in-a-tidy-verse-framework/</link>
+  <pubDate>Thu, 01 Feb 2018 00:00:00 +0000</pubDate>
+  
+<guid>/2018/02/01/pca-in-a-tidy-verse-framework/</guid>
+  <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;The other day, a &lt;a href=&#34;https://community.rstudio.com/t/tidyverse-solutions-for-factor-analysis-principal-component-analysis/4504&#34;&gt;question&lt;/a&gt; was posted on &lt;a href=&#34;https://community.rstudio.com/&#34;&gt;RStudio Community&lt;/a&gt; about performing Principal Component Analysis (PCA) in a &lt;a href=&#34;https://www.tidyverse.org/&#34;&gt;tidyverse&lt;/a&gt; workflow. Conveniently, I had literally just worked through this process the day before and was able to post an &lt;a href=&#34;https://community.rstudio.com/t/tidyverse-solutions-for-factor-analysis-principal-component-analysis/4504/2&#34;&gt;answer&lt;/a&gt;. While most questions and answers are good as they are on forum sites, I thought this one might be worth exploring a little more since using the tidyverse framework makes PCA much easier, in my opinion.&lt;/p&gt;
+&lt;p&gt;PCA is a multi-variate statistical technique for dimension reduction. Essentially, it allows you to take a data set that has n continuous variables and relate them through n orthogonal dimensions. This is a method of unsupervised learning that allows you to better understand the variability in the data set and how different variables are related. While there are the same number of principal components created as there are variables (assuming you have more observations than variables-but that is another issue), each principal component explains the maximum possible variation in the data conditional on it being orthogonal, or perpendicular, to the previous principal components.&lt;/p&gt;
+&lt;p&gt;In my answer, I used the &lt;code&gt;iris&lt;/code&gt; data set to demonstrate how PCA can be done in the tidyverse workflow. For this post, I will be using the &lt;code&gt;USArrests&lt;/code&gt; data set that was used in &lt;a href=&#34;http://www-bcf.usc.edu/~gareth/ISL/index.html&#34;&gt;An Introduction to Statistical Thinking&lt;/a&gt; by Gareth James et. al. In this book, they work through a PCA and focus on the statistics and explanations behind PCA. This is how I learned how to do PCA and would highly recommend it if you are unfamiliar with the topic. In this blog post, my focus will be more on implementing the PCA in the tidyverse framework. Another nice walkthough of PCA with this dataset that is online can be found at &lt;a href=&#34;http://uc-r.github.io/pca&#34;&gt;University of Cincinnati’s R blog&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;exploring-the-data&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Exploring the data&lt;/h1&gt;
+&lt;p&gt;Before we dive in to the analysis, we want to explore our data set and become familiar with it.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+library(broom)
+library(knitr)
+library(ggfortify)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;USArrests %&amp;gt;% head() %&amp;gt;% knitr::kable()&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Murder&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Assault&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;UrbanPop&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Rape&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td&gt;Alabama&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;13.2&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;236&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;58&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;21.2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td&gt;Alaska&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;10.0&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;263&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;48&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;44.5&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td&gt;Arizona&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;8.1&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;294&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;80&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;31.0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td&gt;Arkansas&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;8.8&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;190&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;50&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;19.5&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td&gt;California&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;9.0&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;276&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;91&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;40.6&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td&gt;Colorado&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;7.9&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;204&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;78&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;38.7&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Looking at the first 6 rows using the &lt;code&gt;head()&lt;/code&gt; function, we can see that each row is a state and and each column is a variable. Looking at &lt;code&gt;?USArrests&lt;/code&gt;, we can see that the column descriptions are as follows:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Murder - the number of murder arrests per 100,000 people in a given state&lt;/li&gt;
+&lt;li&gt;Assault - the number of assault arrests per 100,000 people in a given state&lt;/li&gt;
+&lt;li&gt;UrbanPop - a numeric percentage of the urban population per state (i.e. the percentage of the state’s population that lives in cities)&lt;/li&gt;
+&lt;li&gt;Rape - the number of rape arrests per 100,000 people in a given state&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Now, that we see how the data set is set up, let’s try to visualize the data as it is. Before we do that, let’s convert the data set to a &lt;code&gt;tibble&lt;/code&gt;. Since tibbles do not support rownames, we will have to convert them to their own column with &lt;code&gt;rownames_to_column&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;us_arrests &amp;lt;- USArrests %&amp;gt;% 
+  rownames_to_column(var = &amp;quot;state&amp;quot;) %&amp;gt;% 
+  # I prefer column names to be all lowercase so I am going to change them here
+  rename_all(tolower) %&amp;gt;% 
+  as_tibble()
+
+us_arrests&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 50 x 5
+##    state       murder assault urbanpop  rape
+##    &amp;lt;chr&amp;gt;        &amp;lt;dbl&amp;gt;   &amp;lt;int&amp;gt;    &amp;lt;int&amp;gt; &amp;lt;dbl&amp;gt;
+##  1 Alabama      13.2      236       58  21.2
+##  2 Alaska       10.0      263       48  44.5
+##  3 Arizona       8.10     294       80  31.0
+##  4 Arkansas      8.80     190       50  19.5
+##  5 California    9.00     276       91  40.6
+##  6 Colorado      7.90     204       78  38.7
+##  7 Connecticut   3.30     110       77  11.1
+##  8 Delaware      5.90     238       72  15.8
+##  9 Florida      15.4      335       80  31.9
+## 10 Georgia      17.4      211       60  25.8
+## # ... with 40 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let’s take a look at murder arrest rates in each of the stats.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;us_arrests %&amp;gt;% 
+  mutate(state = factor(state), 
+         state = fct_reorder(state, murder) %&amp;gt;% fct_rev()) %&amp;gt;% 
+  ggplot(aes(state, murder)) + 
+  geom_bar(stat = &amp;quot;identity&amp;quot;) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.4)) +
+  labs(y = &amp;quot;Murder Arrest Rate per 100,000 people&amp;quot;,
+       x = &amp;quot;State&amp;quot;,
+       title = &amp;quot;Murder rate in each state of the USA&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-02-01-pca-in-a-tidy-verse-framework_files/figure-html/murder-bar-plot-1.png&#34; width=&#34;768&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;You can see that Georgia has the highest murder rate, followed by Mississippi, Louisiana, and Florida Let’s try one more.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;us_arrests %&amp;gt;% 
+  gather(key = crime, value = rate, c(murder, assault, rape)) %&amp;gt;% 
+  ggplot(aes(urbanpop, rate, color = crime)) + 
+  facet_wrap(~crime, scales = &amp;quot;free_y&amp;quot;, ncol = 1) +
+  geom_point() + 
+  geom_smooth(se = FALSE, method = &amp;quot;lm&amp;quot;) +
+  theme_bw() + 
+  labs(x = &amp;quot;Percentage Urban Population&amp;quot;,
+       y = &amp;quot;Arrest Rate per 100,000 people&amp;quot;,
+       title = &amp;quot;Arrest rate vs percentage urban population&amp;quot;) +
+  theme(legend.title = element_blank(),
+        legend.position = &amp;quot;bottom&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-02-01-pca-in-a-tidy-verse-framework_files/figure-html/tidy-us-arrests-plot-1.png&#34; width=&#34;768&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;This figure is a slightly more informative than the last one. In this figure, each crime rate is plotted against percentage urban population. Simple linear models are fit for each of the different crime types to see if any pattern can be seen in the data. There appears to be an increase in assault arrests as urban population grows, however, there is &lt;em&gt;a lot&lt;/em&gt; of variability around the line of best fit. Rape arrest rates follow the linear model much closer than the others but there is still a lot of variability. On the other hand, murder arrest rates seem to be unchanged based on urban population.&lt;/p&gt;
+&lt;p&gt;Now we could certainly do correlations, multiple linear regressions, or fit other types of models and would likely gain some useful insights, but instead let’s focus on the PCA.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;pca-in-the-tidyverse-framework&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;PCA in the tidyverse framework&lt;/h1&gt;
+&lt;p&gt;Now, when I first fit PCA models in R, I found myself with an unmanageable number of variables and to track and maintain. This can make the process overwhelming and can make you lose track of information. Luckily, using the &lt;code&gt;tidyverse&lt;/code&gt; and the &lt;code&gt;broom&lt;/code&gt; package, we can solve these issues much more easily. In order to run the model in the tidyverse framework, we will use the &lt;code&gt;nest()&lt;/code&gt; function along with the &lt;code&gt;mutate&lt;/code&gt; and &lt;code&gt;map&lt;/code&gt; combo to operate on the nested columns.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;us_arrests_pca &amp;lt;- us_arrests %&amp;gt;% 
+  nest() %&amp;gt;% 
+  mutate(pca = map(data, ~ prcomp(.x %&amp;gt;% select(-state), 
+                                  center = TRUE, scale = TRUE)),
+         pca_aug = map2(pca, data, ~augment(.x, data = .y)))
+
+us_arrests_pca&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 1 x 3
+##   data              pca          pca_aug               
+##   &amp;lt;list&amp;gt;            &amp;lt;list&amp;gt;       &amp;lt;list&amp;gt;                
+## 1 &amp;lt;tibble [50 x 5]&amp;gt; &amp;lt;S3: prcomp&amp;gt; &amp;lt;data.frame [50 x 10]&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;As you can see, we now have a tibble with one row and three columns. The first is our original data set, the second is the &lt;code&gt;prcomp&lt;/code&gt; object and the third is a data frame containing the principal component values for each observation. Now we have everything we need to evaluate the results of the model. First, it is important to look at how much variance is explained by each principal component. This will tell you how many of the components you need to look at when analyzing the results. To do this, you can use the data in the &lt;code&gt;pca_aug&lt;/code&gt; column of our &lt;code&gt;us_arrests_pca&lt;/code&gt; tibble along with some &lt;code&gt;dplyr&lt;/code&gt; functions.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;var_exp &amp;lt;- us_arrests_pca %&amp;gt;% 
+  unnest(pca_aug) %&amp;gt;% 
+  summarize_at(.vars = vars(contains(&amp;quot;PC&amp;quot;)), .funs = funs(var)) %&amp;gt;% 
+  gather(key = pc, value = variance) %&amp;gt;% 
+  mutate(var_exp = variance/sum(variance),
+         cum_var_exp = cumsum(var_exp),
+         pc = str_replace(pc, &amp;quot;.fitted&amp;quot;, &amp;quot;&amp;quot;))
+
+var_exp&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 4 x 4
+##   pc    variance var_exp cum_var_exp
+##   &amp;lt;chr&amp;gt;    &amp;lt;dbl&amp;gt;   &amp;lt;dbl&amp;gt;       &amp;lt;dbl&amp;gt;
+## 1 PC1      2.48   0.620        0.620
+## 2 PC2      0.990  0.247        0.868
+## 3 PC3      0.357  0.0891       0.957
+## 4 PC4      0.173  0.0434       1.00&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can see that the first principal component explains 62% of the variation and that the second principal component explains 25% of the remaining variation. Together, we can see that they explain 87% of the variance in the data set. As a general rule of thumb, you want to look at enough principal components to explain ~90% of your data’s variability.&lt;/p&gt;
+&lt;p&gt;Another way of assessing this is to plot the variance explained and the cumulative variance explained and look for the “elbow” in the graph. You can do that like this:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;var_exp %&amp;gt;% 
+  rename(
+    `Variance Explained` = var_exp,
+    `Cumulative Variance Explained` = cum_var_exp
+  ) %&amp;gt;% 
+  gather(key = key, value = value, `Variance Explained`:`Cumulative Variance Explained`) %&amp;gt;% 
+  ggplot(aes(pc, value, group = key)) + 
+  geom_point() + 
+  geom_line() + 
+  facet_wrap(~key, scales = &amp;quot;free_y&amp;quot;) +
+  theme_bw() +
+  lims(y = c(0, 1)) +
+  labs(y = &amp;quot;Variance&amp;quot;,
+       title = &amp;quot;Variance explained by each principal component&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-02-01-pca-in-a-tidy-verse-framework_files/figure-html/var-exp-graph-1.png&#34; width=&#34;768&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Since the majority of the variance is explained by the first two principal components, let’s plot them against each other. Luckily, this is made easy by the &lt;code&gt;ggplot2&lt;/code&gt; and &lt;code&gt;ggfortify&lt;/code&gt; packages which gives an &lt;code&gt;autoplot&lt;/code&gt; method for prcomp objects. Conveniently, we still have our &lt;code&gt;prcomp&lt;/code&gt; object stored in the our &lt;code&gt;us_arrests_pca&lt;/code&gt; tibble along with our original data. This is important as the original data is needed to add labels and/or colors to your ggplot based on discrete variables not included in the PCA. Using the same &lt;code&gt;mutate&lt;/code&gt; and &lt;code&gt;map&lt;/code&gt; combo as before, along with the handy &lt;code&gt;dplyr::pull&lt;/code&gt; function, we can plot this graph. &lt;code&gt;autoplot.prcomp()&lt;/code&gt; can take any arguments that can be passed to &lt;code&gt;ggbiplot()&lt;/code&gt;, so to see all of your options use &lt;code&gt;?ggbiplot&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;us_arrests_pca %&amp;gt;%
+  mutate(
+    pca_graph = map2(
+      .x = pca,
+      .y = data,
+      ~ autoplot(.x, loadings = TRUE, loadings.label = TRUE,
+                 loadings.label.repel = TRUE,
+                 data = .y, label = TRUE,
+                 label.label = &amp;quot;state&amp;quot;,
+                 label.repel = TRUE) +
+        theme_bw() +
+        labs(x = &amp;quot;Principal Component 1&amp;quot;,
+             y = &amp;quot;Principal Component 2&amp;quot;,
+             title = &amp;quot;First two principal components of PCA on USArrests dataset&amp;quot;)
+    )
+  ) %&amp;gt;%
+  pull(pca_graph)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [[1]]&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-02-01-pca-in-a-tidy-verse-framework_files/figure-html/pca-plot-1.png&#34; width=&#34;960&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;If you notice the &lt;code&gt;[[1]]&lt;/code&gt; above the graph, this method would automatically print each graph in the &lt;code&gt;pca_graph&lt;/code&gt; column. This means that if you fit multiple pca graphs onto a grouped data set then this would automatically print all of the figures for you in one command. Another important thing to notice is the the &lt;code&gt;autoplot()&lt;/code&gt; function simply returns a &lt;code&gt;gg&lt;/code&gt; object and that can be extended just like any other &lt;code&gt;ggplot&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Looking at this figure, we are getting a lot more information about how these variables are related. For example, we can see that murder, rape, and assault arrest rates all have similar values alone the first principal component, which indicates that they are correlated with one another. We may have been able to figure that out using more basic methods, but this method allows us to see it in one figure. In addition, we are able to see how each of the observations in the data (i.e. states) relates to the variables. For example, California is characterized by high arrest rates (1st principal component) and high urban population (2nd principal component).&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;conclusion&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;PCA can provide an analysis with a lot of information about their data set and can give valuable insights into potentially unseen relationships between the observations and the variables. By performing this analysis in the tidyverse framework, we can easily extend this model by using the modelling capabilities of the tidyverse. You can see some of these &lt;a href=&#34;http://r4ds.had.co.nz/many-models.html&#34;&gt;here&lt;/a&gt; and &lt;a href=&#34;http://www.business-science.io/code-tools/2017/10/24/demo_week_timetk.html&#34;&gt;here&lt;/a&gt;. I believe that this framework allows for much more flexibility in your analysis and how you use the data from the model, which will enable you to gather more from your data in a faster and convenient way.&lt;/p&gt;
+&lt;p&gt;Please let me know what you think of performing PCA in the tidyverse framework!&lt;/p&gt;
+&lt;/div&gt;
+</description>
+  </item>
+  
+</channel>
+  </rss>

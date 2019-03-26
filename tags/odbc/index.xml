@@ -1,24 +1,206 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Odbc on goonR blog</title>
-    <link>/tags/odbc/</link>
-    <description>Recent content in Odbc on goonR blog</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Sat, 26 Aug 2017 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="/tags/odbc/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>Creating, Writing, Querying, and Modifying SQL Database from R using odbc, dbplyr, and DBI</title>
-      <link>/2017/08/26/sql-management-in-r/</link>
-      <pubDate>Sat, 26 Aug 2017 00:00:00 +0000</pubDate>
-      
-      <guid>/2017/08/26/sql-management-in-r/</guid>
-      <description>IntroductionRecently, I have been building shiny apps for work. The app that I am currently working on is an interface to a database for storing information about laboratory samples being collected. In addition to building the shiny app for my coworkers to interact with the database, I also was tasked with creating and building the database. I have never build a SQL database from scratch, but luckily the odbc and the DBI packages make it fairly straight foreward.</description>
-    </item>
-    
-  </channel>
-</rss>
+  <title>Odbc on goonR blog</title>
+  <link>/tags/odbc/</link>
+  <description>Recent content in Odbc on goonR blog</description>
+  <generator>Hugo -- gohugo.io</generator>
+<language>en-us</language>
+<lastBuildDate>Sat, 26 Aug 2017 00:00:00 +0000</lastBuildDate>
+
+<atom:link href="/tags/odbc/index.xml" rel="self" type="application/rss+xml" />
+
+
+<item>
+  <title>Creating, Writing, Querying, and Modifying SQL Database from R using odbc, dbplyr, and DBI</title>
+  <link>/2017/08/26/sql-management-in-r/</link>
+  <pubDate>Sat, 26 Aug 2017 00:00:00 +0000</pubDate>
+  
+<guid>/2017/08/26/sql-management-in-r/</guid>
+  <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;Recently, I have been building shiny apps for work. The app that I am currently working on is an interface to a database for storing information about laboratory samples being collected. In addition to building the shiny app for my coworkers to interact with the database, I also was tasked with creating and building the database. I have never build a SQL database from scratch, but luckily the &lt;a href=&#34;https://github.com/rstats-db/odbc&#34;&gt;odbc&lt;/a&gt; and the &lt;a href=&#34;https://github.com/rstats-db/DBI&#34;&gt;DBI&lt;/a&gt; packages make it fairly straight foreward.&lt;/p&gt;
+&lt;p&gt;Let’s start by loading in the packages that we will need.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(DBI)
+library(odbc)
+library(RSQLite)
+library(tidyverse)
+library(magrittr)
+library(dbplyr)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;connecting-to-the-database&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Connecting to the Database&lt;/h1&gt;
+&lt;p&gt;The &lt;code&gt;dbConnect&lt;/code&gt; function from the &lt;code&gt;DBI&lt;/code&gt; package allows us to create a SQLite database directly from R. SQLite databases are saved as files in the current working directory with this method. As described in the &lt;code&gt;RSQLite&lt;/code&gt; packge vignette, if you simply want to use a temporary database, you can create either an on-disk database or an in-memory database with this same method. For this example, we will create a new SQLite in-memory database&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;con &amp;lt;- dbConnect(RSQLite::SQLite(), &amp;quot;:memory:&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Currently, our database is empty, as can be seen if we use the &lt;code&gt;dbListTables&lt;/code&gt; function.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;dbListTables(con)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## character(0)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;writing-tables-to-database&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Writing Tables to database&lt;/h1&gt;
+&lt;p&gt;To add data to this database we will use the &lt;code&gt;dbWriteTable&lt;/code&gt; function. First, let’s load in two common datasets, &lt;code&gt;mtcars&lt;/code&gt; and &lt;code&gt;diamonds&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;data(&amp;quot;mtcars&amp;quot;)
+data(&amp;quot;diamonds&amp;quot;)
+
+mtcars %&amp;lt;&amp;gt;% 
+  rownames_to_column()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now that we have these two data sets loaded into the session, lets write them into the database.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;dbWriteTable(con, &amp;quot;cars&amp;quot;, mtcars)
+dbWriteTable(con, &amp;quot;diamonds&amp;quot;, diamonds)
+
+dbListTables(con)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;cars&amp;quot;     &amp;quot;diamonds&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;query-the-database&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Query the Database&lt;/h1&gt;
+&lt;p&gt;There are several ways that we can query the tables in this database. We can read in the entire table using the &lt;code&gt;dbReadTable&lt;/code&gt; function.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;dbReadTable(con, &amp;quot;cars&amp;quot;) %&amp;gt;%
+  head(10)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##              rowname  mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+## 1          Mazda RX4 21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+## 2      Mazda RX4 Wag 21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+## 3         Datsun 710 22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+## 4     Hornet 4 Drive 21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+## 5  Hornet Sportabout 18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
+## 6            Valiant 18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+## 7         Duster 360 14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
+## 8          Merc 240D 24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+## 9           Merc 230 22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+## 10          Merc 280 19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Alternatively, we can write out a full sql query using the &lt;code&gt;dbGetQuery&lt;/code&gt; function.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;dbGetQuery(con, &amp;quot;select * from cars&amp;quot;) %&amp;gt;%
+  head(10) &lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##              rowname  mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+## 1          Mazda RX4 21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+## 2      Mazda RX4 Wag 21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+## 3         Datsun 710 22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+## 4     Hornet 4 Drive 21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+## 5  Hornet Sportabout 18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
+## 6            Valiant 18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+## 7         Duster 360 14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
+## 8          Merc 240D 24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+## 9           Merc 230 22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+## 10          Merc 280 19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can use the &lt;code&gt;microbenchmark&lt;/code&gt; package to determine which of these methods is faster. We will measure the time for the diamonds data set as that has nearly 54,000 observations, as opposed to the 32 in the mtcars dataset.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;microbenchmark::microbenchmark(
+  read_table = dbReadTable(con, &amp;quot;diamonds&amp;quot;),
+  query = dbGetQuery(con, &amp;quot;select * from diamonds&amp;quot;)
+)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Unit: milliseconds
+##        expr      min       lq     mean   median       uq      max neval
+##  read_table 91.36283 94.55963 115.4623 98.51866 150.1218 175.2671   100
+##       query 90.61233 93.50576 111.0308 98.11973 113.0769 181.2567   100&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;It looks like the &lt;code&gt;dbReadTable&lt;/code&gt; method is slightly faster than a full query. However, the real benefit to using &lt;code&gt;dbGetQuery&lt;/code&gt; is the ability to write much more complex sql queries. For example, if we want to subset the data, we are able to.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;query &amp;lt;- paste(&amp;quot;select carat, cut, clarity, color, price from diamonds&amp;quot;,
+               &amp;quot;where carat &amp;gt; 1 and cut = &amp;#39;Ideal&amp;#39;&amp;quot;)
+dbGetQuery(con, query) %&amp;gt;%
+  as.tibble()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 5,662 x 5
+##    carat   cut clarity color price
+##    &amp;lt;dbl&amp;gt; &amp;lt;chr&amp;gt;   &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;int&amp;gt;
+##  1  1.01 Ideal      I1     I  2844
+##  2  1.02 Ideal     SI2     H  2856
+##  3  1.02 Ideal      I1     I  2872
+##  4  1.02 Ideal     SI2     J  2879
+##  5  1.01 Ideal      I1     I  2896
+##  6  1.02 Ideal      I1     I  2925
+##  7  1.14 Ideal     SI1     J  3045
+##  8  1.02 Ideal     SI2     H  3142
+##  9  1.06 Ideal     SI2     I  3146
+## 10  1.02 Ideal     VS2     I  3148
+## # ... with 5,652 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This particular query returned just over 10% of the total data with 5,662 rows matching the conditions set. This feature is extremely important when dealing with database that house extremely large amounts of data. Having to query full tables would be extemely unfeasible in most situations.&lt;/p&gt;
+&lt;p&gt;In addition to writing more complex sql queries, the &lt;code&gt;dbplyr&lt;/code&gt; package allows for R users to avoid having to write queries at all. This package allows users to create a reference to the sql table and interact with it using typical &lt;code&gt;dplyr&lt;/code&gt; verbs. We can recreate the query above using this method. First we will use the &lt;code&gt;tbl&lt;/code&gt; function to create the reference to the diamonds table in the database. Then we will be able to use that reference with all of our favorite &lt;code&gt;dplyr&lt;/code&gt; verbs.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;diamonds_tbl &amp;lt;- tbl(con, &amp;quot;diamonds&amp;quot;)
+
+diamonds_tbl %&amp;gt;%
+  select(carat, cut, clarity, color, price) %&amp;gt;%
+  filter(carat &amp;gt; 1, 
+         cut == &amp;quot;Ideal&amp;quot;) %&amp;gt;% 
+  collect() %&amp;gt;%
+  as.tibble()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 5,662 x 5
+##    carat   cut clarity color price
+##    &amp;lt;dbl&amp;gt; &amp;lt;chr&amp;gt;   &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;int&amp;gt;
+##  1  1.01 Ideal      I1     I  2844
+##  2  1.02 Ideal     SI2     H  2856
+##  3  1.02 Ideal      I1     I  2872
+##  4  1.02 Ideal     SI2     J  2879
+##  5  1.01 Ideal      I1     I  2896
+##  6  1.02 Ideal      I1     I  2925
+##  7  1.14 Ideal     SI1     J  3045
+##  8  1.02 Ideal     SI2     H  3142
+##  9  1.06 Ideal     SI2     I  3146
+## 10  1.02 Ideal     VS2     I  3148
+## # ... with 5,652 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The &lt;code&gt;collect&lt;/code&gt; verb is important if you want the full query to be brought into your R session. The &lt;code&gt;dbplyr&lt;/code&gt; package uses lazy evaluation and only brings in a portion of the query into your session.&lt;/p&gt;
+&lt;p&gt;Let’s take a look at how these two methods compare using the &lt;code&gt;microbenchmark&lt;/code&gt; package.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;microbenchmark::microbenchmark(
+  db_query = dbGetQuery(con, query),
+  dbplyr = diamonds_tbl %&amp;gt;%
+             select(carat, cut, clarity, color, price) %&amp;gt;%
+             filter(carat &amp;gt; 1, 
+                    cut == &amp;quot;Ideal&amp;quot;) %&amp;gt;% 
+             collect()
+)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Unit: milliseconds
+##      expr      min       lq     mean   median       uq      max neval
+##  db_query 10.10302 10.30996 10.63014 10.44201 10.60457 15.27123   100
+##    dbplyr 51.23319 52.08525 54.66543 53.53378 54.32673 87.69649   100&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;As we can see, the &lt;code&gt;dbplyr&lt;/code&gt; method, while very familiar and potentially easier if you have no experience writing sql queries, takes nearly 6x as long as the straight sql query.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;modify-tables-in-place&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Modify Tables in Place&lt;/h1&gt;
+&lt;p&gt;While there are a lot of blog posts and some great package vignettes about setting up your tables and querying sql databases, there is not too much (that I have seen) about modifying tables in place in your database. There are a few options that are possible when you want to modify a table in a sql database. The first option is to simply query the entire database, make your desired changes using your prefered R tools and then overwrite the table in the database. However, this approach is not practical if you have a large amount of data in your table.&lt;/p&gt;
+&lt;p&gt;The method that I have found that seems to be fairly straight forward is using the &lt;code&gt;dbSendQuery&lt;/code&gt; function. While knowing this function is important, the more important part of this function is knowing what SQL commmads to include in your query. The blog post on &lt;a href=&#34;http://www.win-vector.com/blog/2016/02/using-postgresql-in-r/&#34;&gt;Win-Vector Blog&lt;/a&gt; concerning using PostgreSqL in R shows how you can drop entire tables from your database, and the &lt;code&gt;RSQLite&lt;/code&gt; vignette by Hadley Wickham shows how to delete rows that meet certain conditions. However, if you want to modify a table in your database, the sql commands needed are “update” “set”, and “where”. You can see below how we can use these commands.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;update_query &amp;lt;- paste(&amp;quot;update cars&amp;quot;,
+                      &amp;quot;set mpg = 20&amp;quot;,
+                      &amp;quot;where cyl = 6&amp;quot;)
+
+dbSendQuery(con, update_query)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## &amp;lt;SQLiteResult&amp;gt;
+##   SQL  update cars set mpg = 20 where cyl = 6
+##   ROWS Fetched: 0 [complete]
+##        Changed: 7&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can see that 7 rows were changed in the database. Let’s now query the database and see how the table now looks.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;dbGetQuery(con, &amp;quot;select * from cars&amp;quot;) %&amp;gt;%
+  as.tibble()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 32 x 12
+##              rowname   mpg   cyl  disp    hp  drat    wt  qsec    vs    am
+##                &amp;lt;chr&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt;
+##  1         Mazda RX4  20.0     6 160.0   110  3.90 2.620 16.46     0     1
+##  2     Mazda RX4 Wag  20.0     6 160.0   110  3.90 2.875 17.02     0     1
+##  3        Datsun 710  22.8     4 108.0    93  3.85 2.320 18.61     1     1
+##  4    Hornet 4 Drive  20.0     6 258.0   110  3.08 3.215 19.44     1     0
+##  5 Hornet Sportabout  18.7     8 360.0   175  3.15 3.440 17.02     0     0
+##  6           Valiant  20.0     6 225.0   105  2.76 3.460 20.22     1     0
+##  7        Duster 360  14.3     8 360.0   245  3.21 3.570 15.84     0     0
+##  8         Merc 240D  24.4     4 146.7    62  3.69 3.190 20.00     1     0
+##  9          Merc 230  22.8     4 140.8    95  3.92 3.150 22.90     1     0
+## 10          Merc 280  20.0     6 167.6   123  3.92 3.440 18.30     1     0
+## # ... with 22 more rows, and 2 more variables: gear &amp;lt;dbl&amp;gt;, carb &amp;lt;dbl&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;It looks like all of the rows where cyl = 6 have had their mpg changed to 20. While this is a somewhat trivial example, as you would most likely not want to change the results for a data set like this, this can be an incredibly useful feature if you are maintaining a database from R.&lt;/p&gt;
+&lt;p&gt;You can modify more rows by adding additional arguments to the “set” command and add more conditions by setting additional arguments to the “where” command. For example, we can edit the diamonds table below.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;update_query &amp;lt;- paste(&amp;quot;update diamonds&amp;quot;,
+                      &amp;quot;set cut = &amp;#39;new Ideal&amp;#39;,&amp;quot;,
+                      &amp;quot;color = &amp;#39;Z&amp;#39;&amp;quot;,
+                      &amp;quot;where cut = &amp;#39;Ideal&amp;#39; and&amp;quot;,
+                      &amp;quot;color = &amp;#39;E&amp;#39;&amp;quot;)
+dbSendQuery(con, update_query)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## &amp;lt;SQLiteResult&amp;gt;
+##   SQL  update diamonds set cut = &amp;#39;new Ideal&amp;#39;, color = &amp;#39;Z&amp;#39; where cut = &amp;#39;Ideal&amp;#39; and color = &amp;#39;E&amp;#39;
+##   ROWS Fetched: 0 [complete]
+##        Changed: 3903&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can see that this changed 3903 rows in the diamonds dataset.&lt;/p&gt;
+&lt;p&gt;Before we finish, it is imprtant to remember to disconnect from the in-memory database using the &lt;code&gt;dbDisconnect&lt;/code&gt; function.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;dbDisconnect(con)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;conclusion&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;The &lt;code&gt;DBI&lt;/code&gt;, &lt;code&gt;odbc&lt;/code&gt;, and &lt;code&gt;dbplyr&lt;/code&gt; packages offer an incredible number of tools for interacting with SQL databases of all different kinds. While you are certainly able to navigate through most SQL query problems with only the functions provided in these packages, you can cartainly increase your capabilites by learning some basic SQL commands and how to use them in conjunction with the R functions provided in these packages.&lt;/p&gt;
+&lt;/div&gt;
+</description>
+  </item>
+  
+</channel>
+  </rss>

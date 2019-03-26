@@ -1,25 +1,47 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Water Quality on goonR blog</title>
-    <link>/tags/water-quality/</link>
-    <description>Recent content in Water Quality on goonR blog</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Sun, 23 Sep 2018 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="/tags/water-quality/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>Paper Published, Using Historical LCR and Water Quality Data to Evaluate Corrosion Control Treatment in JAWWA</title>
-      <link>/2018/09/23/paper-published-using-historical-lcr-and-water-quality-data-to-evaluate-corrosion-control-treatment-in-jawwa/</link>
-      <pubDate>Sun, 23 Sep 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/2018/09/23/paper-published-using-historical-lcr-and-water-quality-data-to-evaluate-corrosion-control-treatment-in-jawwa/</guid>
-      <description>I am pleased to announce that my manuscript entitled &amp;ldquo;Using Historical LCR and Water Quality Data to Evaluate Corrosion Control Treatment&amp;rdquo; has been published in the upcoming issue of Journal - American Water Works Association (JAWWA October 2018). This article is a case study that explores the utility of historical LCR and water quality data to assess a drinking water distribution system&amp;rsquo;s corrosion control treatment progress.
-I would like to thank my co-author, Nicola Horscroft, who is the lead Project Engineer for the LCR sampling program for the Philadelphia Water Department (PWD).</description>
-    </item>
-    
-  </channel>
-</rss>
+  <title>Water Quality on goonR blog</title>
+  <link>/tags/water-quality/</link>
+  <description>Recent content in Water Quality on goonR blog</description>
+  <generator>Hugo -- gohugo.io</generator>
+<language>en-us</language>
+<lastBuildDate>Sun, 23 Sep 2018 00:00:00 +0000</lastBuildDate>
+
+<atom:link href="/tags/water-quality/index.xml" rel="self" type="application/rss+xml" />
+
+
+<item>
+  <title>Paper Published, Using Historical LCR and Water Quality Data to Evaluate Corrosion Control Treatment in JAWWA</title>
+  <link>/2018/09/23/paper-published-using-historical-lcr-and-water-quality-data-to-evaluate-corrosion-control-treatment-in-jawwa/</link>
+  <pubDate>Sun, 23 Sep 2018 00:00:00 +0000</pubDate>
+  
+<guid>/2018/09/23/paper-published-using-historical-lcr-and-water-quality-data-to-evaluate-corrosion-control-treatment-in-jawwa/</guid>
+  <description>
+
+&lt;p&gt;I am pleased to announce that my manuscript entitled &amp;ldquo;Using Historical LCR and Water Quality Data to Evaluate Corrosion Control Treatment&amp;rdquo; has been published in the upcoming issue of &lt;a href=&#34;https://awwa.onlinelibrary.wiley.com/journal/15518833&#34;&gt;Journal - American Water Works Association&lt;/a&gt; (&lt;a href=&#34;https://awwa.onlinelibrary.wiley.com/toc/15518833/0/0&#34;&gt;JAWWA October 2018&lt;/a&gt;). This article is a case study that explores the utility of historical LCR and water quality data to assess a drinking water distribution system&amp;rsquo;s corrosion control treatment progress.&lt;/p&gt;
+
+&lt;p&gt;I would like to thank my co-author, Nicola Horscroft, who is the lead Project Engineer for the LCR sampling program for the Philadelphia Water Department (PWD).&lt;/p&gt;
+
+&lt;p&gt;The article can be found from &lt;a href=&#34;https://doi.org/10.1002/awwa.1143&#34;&gt;JAWWA&lt;/a&gt;. This article demonstrates that a drinking water system that is in compliance with the Lead and Copper Rule (LCR) can use historical LCR and water quality data to demonstrate the progress of its Corrosion Control Treatment (CCT). This article explores PWD&amp;rsquo;s historical LCR data to demonstrate how treatment changes, primarily the addition of orthophosphate, have helped to reduce lead levels in the distribution system. In addition this article demonstrates several methods to parse through historical LCR data. One of these methods is using ridge plots to see how the distribution of lead levels has changed over the course of LCR regulatory sampling rounds.&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;strong&gt;Distribution of lead results for each LCR sampling round&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;/images/lcr-article-announcement/lcr-ridge-plot.png&#34; alt=&#34;&#34; /&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;citation&#34;&gt;Citation&lt;/h3&gt;
+
+&lt;p&gt;Bradley, Tyler, and Nicola Horscroft. “Using Historical LCR and Water Quality Data to Evaluate Corrosion Control Treatment.” &lt;em&gt;Journal - American Water Works Association&lt;/em&gt;, 21 Sept. 2018, &lt;a href=&#34;https://doi.org/10.1002/awwa.1143&#34;&gt;doi:10.1002/awwa.1143&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;abstract&#34;&gt;Abstract&lt;/h3&gt;
+
+&lt;p&gt;Historical Lead and Copper Rule (LCR) regulatory sampling data from the Philadelphia Water Department were examined to explore their potential value for guiding a water utility&amp;rsquo;s progress with regard to optimal corrosion control treatment (OCCT). If a system has established a stable water treatment process with consistent corrosion control treatment (CCT) and has achieved continued decreases in lead levels during regulatory sampling, then the information collected during LCR monitoring can be used as an important data set of a broader OCCT evaluation and will help inform the benefit of additional changes in CCT. Since water utilities have LCR data dating back to 1992, these data should be used to make informed decisions. This research also showed that the addition of orthophosphate has resulted in a significant decrease in lead levels at the customer tap. Additionally, profile sampling was performed to show that first‐draw 1 L samples following a 6 h stagnation period provide a good representation of the lead concentrations measured from lead service line and home plumbing samples at the same sites and may be used to indicate overall changes in lead concentrations at the tap resulting from CCT for this system.&lt;/p&gt;
+</description>
+  </item>
+  
+</channel>
+  </rss>

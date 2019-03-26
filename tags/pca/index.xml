@@ -1,24 +1,227 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Pca on goonR blog</title>
-    <link>/tags/pca/</link>
-    <description>Recent content in Pca on goonR blog</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Thu, 01 Feb 2018 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="/tags/pca/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>PCA in a tidy(verse) framework</title>
-      <link>/2018/02/01/pca-in-a-tidy-verse-framework/</link>
-      <pubDate>Thu, 01 Feb 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/2018/02/01/pca-in-a-tidy-verse-framework/</guid>
-      <description>IntroductionThe other day, a question was posted on RStudio Community about performing Principal Component Analysis (PCA) in a tidyverse workflow. Conveniently, I had literally just worked through this process the day before and was able to post an answer. While most questions and answers are good as they are on forum sites, I thought this one might be worth exploring a little more since using the tidyverse framework makes PCA much easier, in my opinion.</description>
-    </item>
-    
-  </channel>
-</rss>
+  <title>Pca on goonR blog</title>
+  <link>/tags/pca/</link>
+  <description>Recent content in Pca on goonR blog</description>
+  <generator>Hugo -- gohugo.io</generator>
+<language>en-us</language>
+<lastBuildDate>Thu, 01 Feb 2018 00:00:00 +0000</lastBuildDate>
+
+<atom:link href="/tags/pca/index.xml" rel="self" type="application/rss+xml" />
+
+
+<item>
+  <title>PCA in a tidy(verse) framework</title>
+  <link>/2018/02/01/pca-in-a-tidy-verse-framework/</link>
+  <pubDate>Thu, 01 Feb 2018 00:00:00 +0000</pubDate>
+  
+<guid>/2018/02/01/pca-in-a-tidy-verse-framework/</guid>
+  <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;The other day, a &lt;a href=&#34;https://community.rstudio.com/t/tidyverse-solutions-for-factor-analysis-principal-component-analysis/4504&#34;&gt;question&lt;/a&gt; was posted on &lt;a href=&#34;https://community.rstudio.com/&#34;&gt;RStudio Community&lt;/a&gt; about performing Principal Component Analysis (PCA) in a &lt;a href=&#34;https://www.tidyverse.org/&#34;&gt;tidyverse&lt;/a&gt; workflow. Conveniently, I had literally just worked through this process the day before and was able to post an &lt;a href=&#34;https://community.rstudio.com/t/tidyverse-solutions-for-factor-analysis-principal-component-analysis/4504/2&#34;&gt;answer&lt;/a&gt;. While most questions and answers are good as they are on forum sites, I thought this one might be worth exploring a little more since using the tidyverse framework makes PCA much easier, in my opinion.&lt;/p&gt;
+&lt;p&gt;PCA is a multi-variate statistical technique for dimension reduction. Essentially, it allows you to take a data set that has n continuous variables and relate them through n orthogonal dimensions. This is a method of unsupervised learning that allows you to better understand the variability in the data set and how different variables are related. While there are the same number of principal components created as there are variables (assuming you have more observations than variables-but that is another issue), each principal component explains the maximum possible variation in the data conditional on it being orthogonal, or perpendicular, to the previous principal components.&lt;/p&gt;
+&lt;p&gt;In my answer, I used the &lt;code&gt;iris&lt;/code&gt; data set to demonstrate how PCA can be done in the tidyverse workflow. For this post, I will be using the &lt;code&gt;USArrests&lt;/code&gt; data set that was used in &lt;a href=&#34;http://www-bcf.usc.edu/~gareth/ISL/index.html&#34;&gt;An Introduction to Statistical Thinking&lt;/a&gt; by Gareth James et. al. In this book, they work through a PCA and focus on the statistics and explanations behind PCA. This is how I learned how to do PCA and would highly recommend it if you are unfamiliar with the topic. In this blog post, my focus will be more on implementing the PCA in the tidyverse framework. Another nice walkthough of PCA with this dataset that is online can be found at &lt;a href=&#34;http://uc-r.github.io/pca&#34;&gt;University of Cincinnati’s R blog&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;exploring-the-data&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Exploring the data&lt;/h1&gt;
+&lt;p&gt;Before we dive in to the analysis, we want to explore our data set and become familiar with it.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+library(broom)
+library(knitr)
+library(ggfortify)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;USArrests %&amp;gt;% head() %&amp;gt;% knitr::kable()&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Murder&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Assault&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;UrbanPop&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Rape&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td&gt;Alabama&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;13.2&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;236&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;58&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;21.2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td&gt;Alaska&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;10.0&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;263&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;48&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;44.5&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td&gt;Arizona&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;8.1&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;294&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;80&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;31.0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td&gt;Arkansas&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;8.8&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;190&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;50&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;19.5&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td&gt;California&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;9.0&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;276&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;91&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;40.6&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td&gt;Colorado&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;7.9&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;204&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;78&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;38.7&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Looking at the first 6 rows using the &lt;code&gt;head()&lt;/code&gt; function, we can see that each row is a state and and each column is a variable. Looking at &lt;code&gt;?USArrests&lt;/code&gt;, we can see that the column descriptions are as follows:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Murder - the number of murder arrests per 100,000 people in a given state&lt;/li&gt;
+&lt;li&gt;Assault - the number of assault arrests per 100,000 people in a given state&lt;/li&gt;
+&lt;li&gt;UrbanPop - a numeric percentage of the urban population per state (i.e. the percentage of the state’s population that lives in cities)&lt;/li&gt;
+&lt;li&gt;Rape - the number of rape arrests per 100,000 people in a given state&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Now, that we see how the data set is set up, let’s try to visualize the data as it is. Before we do that, let’s convert the data set to a &lt;code&gt;tibble&lt;/code&gt;. Since tibbles do not support rownames, we will have to convert them to their own column with &lt;code&gt;rownames_to_column&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;us_arrests &amp;lt;- USArrests %&amp;gt;% 
+  rownames_to_column(var = &amp;quot;state&amp;quot;) %&amp;gt;% 
+  # I prefer column names to be all lowercase so I am going to change them here
+  rename_all(tolower) %&amp;gt;% 
+  as_tibble()
+
+us_arrests&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 50 x 5
+##    state       murder assault urbanpop  rape
+##    &amp;lt;chr&amp;gt;        &amp;lt;dbl&amp;gt;   &amp;lt;int&amp;gt;    &amp;lt;int&amp;gt; &amp;lt;dbl&amp;gt;
+##  1 Alabama      13.2      236       58  21.2
+##  2 Alaska       10.0      263       48  44.5
+##  3 Arizona       8.10     294       80  31.0
+##  4 Arkansas      8.80     190       50  19.5
+##  5 California    9.00     276       91  40.6
+##  6 Colorado      7.90     204       78  38.7
+##  7 Connecticut   3.30     110       77  11.1
+##  8 Delaware      5.90     238       72  15.8
+##  9 Florida      15.4      335       80  31.9
+## 10 Georgia      17.4      211       60  25.8
+## # ... with 40 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let’s take a look at murder arrest rates in each of the stats.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;us_arrests %&amp;gt;% 
+  mutate(state = factor(state), 
+         state = fct_reorder(state, murder) %&amp;gt;% fct_rev()) %&amp;gt;% 
+  ggplot(aes(state, murder)) + 
+  geom_bar(stat = &amp;quot;identity&amp;quot;) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.4)) +
+  labs(y = &amp;quot;Murder Arrest Rate per 100,000 people&amp;quot;,
+       x = &amp;quot;State&amp;quot;,
+       title = &amp;quot;Murder rate in each state of the USA&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-02-01-pca-in-a-tidy-verse-framework_files/figure-html/murder-bar-plot-1.png&#34; width=&#34;768&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;You can see that Georgia has the highest murder rate, followed by Mississippi, Louisiana, and Florida Let’s try one more.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;us_arrests %&amp;gt;% 
+  gather(key = crime, value = rate, c(murder, assault, rape)) %&amp;gt;% 
+  ggplot(aes(urbanpop, rate, color = crime)) + 
+  facet_wrap(~crime, scales = &amp;quot;free_y&amp;quot;, ncol = 1) +
+  geom_point() + 
+  geom_smooth(se = FALSE, method = &amp;quot;lm&amp;quot;) +
+  theme_bw() + 
+  labs(x = &amp;quot;Percentage Urban Population&amp;quot;,
+       y = &amp;quot;Arrest Rate per 100,000 people&amp;quot;,
+       title = &amp;quot;Arrest rate vs percentage urban population&amp;quot;) +
+  theme(legend.title = element_blank(),
+        legend.position = &amp;quot;bottom&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-02-01-pca-in-a-tidy-verse-framework_files/figure-html/tidy-us-arrests-plot-1.png&#34; width=&#34;768&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;This figure is a slightly more informative than the last one. In this figure, each crime rate is plotted against percentage urban population. Simple linear models are fit for each of the different crime types to see if any pattern can be seen in the data. There appears to be an increase in assault arrests as urban population grows, however, there is &lt;em&gt;a lot&lt;/em&gt; of variability around the line of best fit. Rape arrest rates follow the linear model much closer than the others but there is still a lot of variability. On the other hand, murder arrest rates seem to be unchanged based on urban population.&lt;/p&gt;
+&lt;p&gt;Now we could certainly do correlations, multiple linear regressions, or fit other types of models and would likely gain some useful insights, but instead let’s focus on the PCA.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;pca-in-the-tidyverse-framework&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;PCA in the tidyverse framework&lt;/h1&gt;
+&lt;p&gt;Now, when I first fit PCA models in R, I found myself with an unmanageable number of variables and to track and maintain. This can make the process overwhelming and can make you lose track of information. Luckily, using the &lt;code&gt;tidyverse&lt;/code&gt; and the &lt;code&gt;broom&lt;/code&gt; package, we can solve these issues much more easily. In order to run the model in the tidyverse framework, we will use the &lt;code&gt;nest()&lt;/code&gt; function along with the &lt;code&gt;mutate&lt;/code&gt; and &lt;code&gt;map&lt;/code&gt; combo to operate on the nested columns.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;us_arrests_pca &amp;lt;- us_arrests %&amp;gt;% 
+  nest() %&amp;gt;% 
+  mutate(pca = map(data, ~ prcomp(.x %&amp;gt;% select(-state), 
+                                  center = TRUE, scale = TRUE)),
+         pca_aug = map2(pca, data, ~augment(.x, data = .y)))
+
+us_arrests_pca&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 1 x 3
+##   data              pca          pca_aug               
+##   &amp;lt;list&amp;gt;            &amp;lt;list&amp;gt;       &amp;lt;list&amp;gt;                
+## 1 &amp;lt;tibble [50 x 5]&amp;gt; &amp;lt;S3: prcomp&amp;gt; &amp;lt;data.frame [50 x 10]&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;As you can see, we now have a tibble with one row and three columns. The first is our original data set, the second is the &lt;code&gt;prcomp&lt;/code&gt; object and the third is a data frame containing the principal component values for each observation. Now we have everything we need to evaluate the results of the model. First, it is important to look at how much variance is explained by each principal component. This will tell you how many of the components you need to look at when analyzing the results. To do this, you can use the data in the &lt;code&gt;pca_aug&lt;/code&gt; column of our &lt;code&gt;us_arrests_pca&lt;/code&gt; tibble along with some &lt;code&gt;dplyr&lt;/code&gt; functions.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;var_exp &amp;lt;- us_arrests_pca %&amp;gt;% 
+  unnest(pca_aug) %&amp;gt;% 
+  summarize_at(.vars = vars(contains(&amp;quot;PC&amp;quot;)), .funs = funs(var)) %&amp;gt;% 
+  gather(key = pc, value = variance) %&amp;gt;% 
+  mutate(var_exp = variance/sum(variance),
+         cum_var_exp = cumsum(var_exp),
+         pc = str_replace(pc, &amp;quot;.fitted&amp;quot;, &amp;quot;&amp;quot;))
+
+var_exp&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 4 x 4
+##   pc    variance var_exp cum_var_exp
+##   &amp;lt;chr&amp;gt;    &amp;lt;dbl&amp;gt;   &amp;lt;dbl&amp;gt;       &amp;lt;dbl&amp;gt;
+## 1 PC1      2.48   0.620        0.620
+## 2 PC2      0.990  0.247        0.868
+## 3 PC3      0.357  0.0891       0.957
+## 4 PC4      0.173  0.0434       1.00&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can see that the first principal component explains 62% of the variation and that the second principal component explains 25% of the remaining variation. Together, we can see that they explain 87% of the variance in the data set. As a general rule of thumb, you want to look at enough principal components to explain ~90% of your data’s variability.&lt;/p&gt;
+&lt;p&gt;Another way of assessing this is to plot the variance explained and the cumulative variance explained and look for the “elbow” in the graph. You can do that like this:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;var_exp %&amp;gt;% 
+  rename(
+    `Variance Explained` = var_exp,
+    `Cumulative Variance Explained` = cum_var_exp
+  ) %&amp;gt;% 
+  gather(key = key, value = value, `Variance Explained`:`Cumulative Variance Explained`) %&amp;gt;% 
+  ggplot(aes(pc, value, group = key)) + 
+  geom_point() + 
+  geom_line() + 
+  facet_wrap(~key, scales = &amp;quot;free_y&amp;quot;) +
+  theme_bw() +
+  lims(y = c(0, 1)) +
+  labs(y = &amp;quot;Variance&amp;quot;,
+       title = &amp;quot;Variance explained by each principal component&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-02-01-pca-in-a-tidy-verse-framework_files/figure-html/var-exp-graph-1.png&#34; width=&#34;768&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Since the majority of the variance is explained by the first two principal components, let’s plot them against each other. Luckily, this is made easy by the &lt;code&gt;ggplot2&lt;/code&gt; and &lt;code&gt;ggfortify&lt;/code&gt; packages which gives an &lt;code&gt;autoplot&lt;/code&gt; method for prcomp objects. Conveniently, we still have our &lt;code&gt;prcomp&lt;/code&gt; object stored in the our &lt;code&gt;us_arrests_pca&lt;/code&gt; tibble along with our original data. This is important as the original data is needed to add labels and/or colors to your ggplot based on discrete variables not included in the PCA. Using the same &lt;code&gt;mutate&lt;/code&gt; and &lt;code&gt;map&lt;/code&gt; combo as before, along with the handy &lt;code&gt;dplyr::pull&lt;/code&gt; function, we can plot this graph. &lt;code&gt;autoplot.prcomp()&lt;/code&gt; can take any arguments that can be passed to &lt;code&gt;ggbiplot()&lt;/code&gt;, so to see all of your options use &lt;code&gt;?ggbiplot&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;us_arrests_pca %&amp;gt;%
+  mutate(
+    pca_graph = map2(
+      .x = pca,
+      .y = data,
+      ~ autoplot(.x, loadings = TRUE, loadings.label = TRUE,
+                 loadings.label.repel = TRUE,
+                 data = .y, label = TRUE,
+                 label.label = &amp;quot;state&amp;quot;,
+                 label.repel = TRUE) +
+        theme_bw() +
+        labs(x = &amp;quot;Principal Component 1&amp;quot;,
+             y = &amp;quot;Principal Component 2&amp;quot;,
+             title = &amp;quot;First two principal components of PCA on USArrests dataset&amp;quot;)
+    )
+  ) %&amp;gt;%
+  pull(pca_graph)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [[1]]&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-02-01-pca-in-a-tidy-verse-framework_files/figure-html/pca-plot-1.png&#34; width=&#34;960&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;If you notice the &lt;code&gt;[[1]]&lt;/code&gt; above the graph, this method would automatically print each graph in the &lt;code&gt;pca_graph&lt;/code&gt; column. This means that if you fit multiple pca graphs onto a grouped data set then this would automatically print all of the figures for you in one command. Another important thing to notice is the the &lt;code&gt;autoplot()&lt;/code&gt; function simply returns a &lt;code&gt;gg&lt;/code&gt; object and that can be extended just like any other &lt;code&gt;ggplot&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Looking at this figure, we are getting a lot more information about how these variables are related. For example, we can see that murder, rape, and assault arrest rates all have similar values alone the first principal component, which indicates that they are correlated with one another. We may have been able to figure that out using more basic methods, but this method allows us to see it in one figure. In addition, we are able to see how each of the observations in the data (i.e. states) relates to the variables. For example, California is characterized by high arrest rates (1st principal component) and high urban population (2nd principal component).&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;conclusion&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;PCA can provide an analysis with a lot of information about their data set and can give valuable insights into potentially unseen relationships between the observations and the variables. By performing this analysis in the tidyverse framework, we can easily extend this model by using the modelling capabilities of the tidyverse. You can see some of these &lt;a href=&#34;http://r4ds.had.co.nz/many-models.html&#34;&gt;here&lt;/a&gt; and &lt;a href=&#34;http://www.business-science.io/code-tools/2017/10/24/demo_week_timetk.html&#34;&gt;here&lt;/a&gt;. I believe that this framework allows for much more flexibility in your analysis and how you use the data from the model, which will enable you to gather more from your data in a faster and convenient way.&lt;/p&gt;
+&lt;p&gt;Please let me know what you think of performing PCA in the tidyverse framework!&lt;/p&gt;
+&lt;/div&gt;
+</description>
+  </item>
+  
+</channel>
+  </rss>

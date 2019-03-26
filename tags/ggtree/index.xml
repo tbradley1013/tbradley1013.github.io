@@ -1,24 +1,99 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Ggtree on goonR blog</title>
-    <link>/tags/ggtree/</link>
-    <description>Recent content in Ggtree on goonR blog</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Tue, 19 Jun 2018 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="/tags/ggtree/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>Subsetting Phylogenetic Trees</title>
-      <link>/2018/06/19/subsetting-phylogenetic-trees/</link>
-      <pubDate>Tue, 19 Jun 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/2018/06/19/subsetting-phylogenetic-trees/</guid>
-      <description>IntroductionIn the past few months, I have been introduced to and started working with phylogenetic trees. The trees I have been working with contain the entire tree of life for bacteria. Needless to say, they are huge. At first, I was told that I could download a program that would let me view the tree and search for particular species on the tree, but of course, I immediately looked for a better solution using R.</description>
-    </item>
-    
-  </channel>
-</rss>
+  <title>Ggtree on goonR blog</title>
+  <link>/tags/ggtree/</link>
+  <description>Recent content in Ggtree on goonR blog</description>
+  <generator>Hugo -- gohugo.io</generator>
+<language>en-us</language>
+<lastBuildDate>Tue, 19 Jun 2018 00:00:00 +0000</lastBuildDate>
+
+<atom:link href="/tags/ggtree/index.xml" rel="self" type="application/rss+xml" />
+
+
+<item>
+  <title>Subsetting Phylogenetic Trees</title>
+  <link>/2018/06/19/subsetting-phylogenetic-trees/</link>
+  <pubDate>Tue, 19 Jun 2018 00:00:00 +0000</pubDate>
+  
+<guid>/2018/06/19/subsetting-phylogenetic-trees/</guid>
+  <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;In the past few months, I have been introduced to and started working with phylogenetic trees. The trees I have been working with contain the entire tree of life for bacteria. Needless to say, they are huge. At first, I was told that I could download a program that would let me view the tree and search for particular species on the tree, but of course, I immediately looked for a better solution using R. As is the case for most things, I was able to find a full suite of packages (&lt;a href=&#34;https://github.com/GuangchuangYu/treeio&#34;&gt;&lt;code&gt;treeio&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;https://github.com/GuangchuangYu/ggtree&#34;&gt;&lt;code&gt;ggtree&lt;/code&gt;&lt;/a&gt;, and &lt;a href=&#34;https://github.com/GuangchuangYu/tidytree&#34;&gt;&lt;code&gt;tidytree&lt;/code&gt;&lt;/a&gt; - all created by &lt;a href=&#34;https://guangchuangyu.github.io&#34;&gt;Guangchuang Yu&lt;/a&gt;) that allowed me to interact with this data.&lt;/p&gt;
+&lt;p&gt;However, since my tree was so large, it was extremely difficult to make legible figures even with the great flexibility of &lt;code&gt;ggtree&lt;/code&gt;. In order to better analyze the tree as I needed to, I needed to come up with a way to look at only the portions of the tree that I wanted while still maintaining the structure of the tree for the subset portion. As a result, I created the &lt;code&gt;tree_subset&lt;/code&gt; function which is now in the development version (1.5.1.002) of &lt;code&gt;treeio&lt;/code&gt; on github. This post will briefly walk through the usage of this function!&lt;/p&gt;
+&lt;p&gt;Before we get started, let’s load in the required packages.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# install development version of treeio
+# devtools::install_github(&amp;quot;GuangchuangYu/treeio&amp;quot;)
+
+library(ape)
+library(treeio)
+library(ggplot2)
+library(ggtree)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;subset-trees-by-tip-label&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Subset trees by tip label&lt;/h1&gt;
+&lt;p&gt;&lt;code&gt;tree_subset()&lt;/code&gt; allows the user to subset a tree, either of class &lt;code&gt;phylo&lt;/code&gt; or &lt;code&gt;treedata&lt;/code&gt;, by specifying the tip label they are interested in and the number of levels back they want to go. To demonstrate, let’s generate a random tree.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;set.seed(42)
+
+bi_tree &amp;lt;- rtree(100)
+bi_tree$tip_label &amp;lt;- paste0(&amp;quot;t&amp;quot;, 1:100)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To show why this function is useful, let’s first try to visualize this tree that has 100 tips.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;bi_tree %&amp;gt;% 
+  ggtree() + 
+  geom_tiplab() +
+  theme_tree2()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-06-19-subsetting-phylogenetic-trees_files/figure-html/unnamed-chunk-3-1.png&#34; width=&#34;384&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;As we can see, the tree can get slightly crowded. Obviously, we could make the figure taller to allow more space for the labels and we could make the text smaller. However, these fixes are not always applicable when you have a lot more than 100 tips. Sometimes you have hundreds or thousands of tips but you are only interested in the portion of the tree around a particular tip. That is where &lt;code&gt;tree_subset&lt;/code&gt; comes in. Let’s say we are interested in tip &lt;code&gt;t79&lt;/code&gt; from the above tree and we want to look at the immediate relatives of this tip.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;bi_subset &amp;lt;- tree_subset(bi_tree, &amp;quot;t79&amp;quot;, levels_back = 4)
+
+bi_subset %&amp;gt;% 
+  ggtree(aes(color = group)) + 
+  geom_tiplab() + 
+  theme_tree2() + 
+  scale_color_manual(values = c(`1` = &amp;quot;red&amp;quot;, `0` = &amp;quot;black&amp;quot;)) +
+  xlim(0, 4)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-06-19-subsetting-phylogenetic-trees_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;384&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;This function allows for you to easily look at portions of the tree that are of interest. This can greatly reduce the amount of time spent if trying to investigate a large tree for certain species. A couple of important things to note about the function above. As you may have noticed, the specified tip is grouped separately then the rest to allow for it to be easily distinguishable from the rest of the tips. If your tree has existing groups, this functionality can be disabled by specifying &lt;code&gt;group_node = FALSE&lt;/code&gt; in the &lt;code&gt;tree_subset&lt;/code&gt; call. Additionally, the branch lengths of the different nodes is maintained after the subset, however, the root of the tree is always anchored at zero for the subset tree, so all distances are relative to this root.&lt;/p&gt;
+&lt;p&gt;In addition to working on &lt;code&gt;phylo&lt;/code&gt; objects, this function works also on &lt;code&gt;treedata&lt;/code&gt; objects and maintains all of the information associated with the &lt;code&gt;treedata&lt;/code&gt; object. Here is an example with a &lt;code&gt;treedata&lt;/code&gt; object from the &lt;code&gt;ggtree&lt;/code&gt; package.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;beast_file &amp;lt;- system.file(&amp;quot;examples/MCC_FluA_H3.tree&amp;quot;, package=&amp;quot;ggtree&amp;quot;)
+rst_file &amp;lt;- system.file(&amp;quot;examples/rst&amp;quot;, package=&amp;quot;ggtree&amp;quot;)
+mlc_file &amp;lt;- system.file(&amp;quot;examples/mlc&amp;quot;, package=&amp;quot;ggtree&amp;quot;)
+beast_tree &amp;lt;- read.beast(beast_file)
+codeml_tree &amp;lt;- read.codeml(rst_file, mlc_file)
+
+merged_tree &amp;lt;- merge_tree(beast_tree, codeml_tree)
+
+merged_tree %&amp;gt;% 
+  ggtree() + 
+  geom_tiplab(size = 3) +
+  theme_tree2() +
+  lims(x = c(0, 30))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-06-19-subsetting-phylogenetic-trees_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;384&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The tree is pretty crowded when trying to view the full tree. Let’s see what it looks like using &lt;code&gt;tree_subset&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;merged_subset &amp;lt;- tree_subset(merged_tree, &amp;quot;A/Swine/GX/2242/2011&amp;quot;, levels_back = 4)
+
+merged_subset %&amp;gt;%
+  ggtree(aes(color = group)) + 
+  geom_tiplab(size = 3) +
+  scale_color_manual(values = c(`1` = &amp;quot;red&amp;quot;, `0` = &amp;quot;black&amp;quot;)) +
+  theme_tree2() +
+  lims(x = c(0, 4))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-06-19-subsetting-phylogenetic-trees_files/figure-html/unnamed-chunk-6-1.png&#34; width=&#34;384&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;shiny-app-to-explore-phylogentic-trees&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Shiny App to explore phylogentic trees&lt;/h1&gt;
+&lt;p&gt;In addition to the &lt;code&gt;tree_subset&lt;/code&gt; function in the &lt;code&gt;treeio&lt;/code&gt; package. I have created a fairly basic shiny application that allows for users to interactively import a tree object and select different nodes that they want to subset the tree by. The code and instructions for running it can be found &lt;a href=&#34;https://github.com/tbradley1013/tree-subset-shiny&#34;&gt;here&lt;/a&gt;. This app allows you to import most of the tree files types that &lt;code&gt;treeio&lt;/code&gt; has methods for (see &lt;a href=&#34;http://bioconductor.org/packages/devel/bioc/vignettes/treeio/inst/doc/Importer.html&#34;&gt;here&lt;/a&gt; for info on different tree file types). Here is an example of the app:&lt;/p&gt;
+&lt;center&gt;
+&lt;img src=&#34;/images/tree-subset-gif.gif&#34; /&gt;
+&lt;/center&gt;
+&lt;/div&gt;
+&lt;div id=&#34;conclusion&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;This function allows users to explore their phylogenetic trees by looking at specific portions of the overall tree when the full tree is too large to easily interpret. The shiny application allows for users who are not familiar with R to easily use this function so that they can explore the trees in a method that, in my opinion, is more efficient than some of the other phylogentic tree programs. I hope that this function is of use to others!&lt;/p&gt;
+&lt;p&gt;This was my first experience with contributing to an open-source project and Dr. Yu made it extremely easy. I would like to thank him for helping me get my pull request merged and for his great packages!&lt;/p&gt;
+&lt;/div&gt;
+</description>
+  </item>
+  
+</channel>
+  </rss>
