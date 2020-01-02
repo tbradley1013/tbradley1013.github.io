@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/2020/01/02/analyzing-my-2019-github-usage-in-r/</loc>
+    <lastmod>2020-01-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/2019/07/13/dragondown-thesis-dissertation-template-drexel-university/</loc>
     <lastmod>2019-07-13T00:00:00+00:00</lastmod>
   </url>
@@ -132,6 +137,18 @@
   </url>
   
   <url>
+    <loc>/tags/gh/</loc>
+    <lastmod>2020-01-02T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/github/</loc>
+    <lastmod>2020-01-02T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/tags/gradschool/</loc>
     <lastmod>2019-07-13T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -211,7 +228,7 @@
   
   <url>
     <loc>/post/</loc>
-    <lastmod>2019-07-13T00:00:00+00:00</lastmod>
+    <lastmod>2020-01-02T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -241,7 +258,7 @@
   
   <url>
     <loc>/tags/rstats/</loc>
-    <lastmod>2019-03-25T00:00:00+00:00</lastmod>
+    <lastmod>2020-01-02T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -306,7 +323,7 @@
   
   <url>
     <loc>/</loc>
-    <lastmod>2019-07-13T00:00:00+00:00</lastmod>
+    <lastmod>2020-01-02T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

@@ -6,11 +6,262 @@
   <description>Recent content in Rstats on goonR blog</description>
   <generator>Hugo -- gohugo.io</generator>
 <language>en-us</language>
-<lastBuildDate>Mon, 25 Mar 2019 00:00:00 +0000</lastBuildDate>
+<lastBuildDate>Thu, 02 Jan 2020 00:00:00 +0000</lastBuildDate>
 
 <atom:link href="/tags/rstats/index.xml" rel="self" type="application/rss+xml" />
 
 
+<item>
+  <title>Analyzing My 2019 GitHub Usage in R</title>
+  <link>/2020/01/02/analyzing-my-2019-github-usage-in-r/</link>
+  <pubDate>Thu, 02 Jan 2020 00:00:00 +0000</pubDate>
+  
+<guid>/2020/01/02/analyzing-my-2019-github-usage-in-r/</guid>
+  <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;If you are anything like me, then you probably enjoy the contribution graphs that GitHub posts to both your own and others GitHub profile. You can see mine &lt;a href=&#34;https://github.com/tbradley1013&#34;&gt;here&lt;/a&gt;. Since it is the beginning of a new year, I thought it would be fun to take a look back to see how I used GitHub in 2019 and in previous years. This is made much easier by using the &lt;a href=&#34;https://github.com/r-lib/gh&#34;&gt;&lt;code&gt;gh&lt;/code&gt;&lt;/a&gt; R package which provides an R interface to the &lt;a href=&#34;https://developer.github.com/v3/&#34;&gt;GitHub API&lt;/a&gt;. This post will walk through how to get all of the commits for your personal repos (so your results will look different from mine). The &lt;code&gt;gh&lt;/code&gt; package will use the &lt;code&gt;GITHUB_PAT&lt;/code&gt; environment variable to access any personal access token you have previously set up. If you do not have that configured, than you can provide your token with the &lt;code&gt;.token&lt;/code&gt; argument.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+library(gh)
+library(lubridate)
+library(glue)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We will also define a custom color palette based on the &lt;a href=&#34;https://primer.style/css/utilities/colors&#34;&gt;GitHub Style Guide&lt;/a&gt; to stick with the post’s theme.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;gh_pal &amp;lt;- c(blue = &amp;quot;#0366d6&amp;quot;, yellow = &amp;quot;#ffd33d&amp;quot;, red = &amp;quot;#d73a49&amp;quot;, green = &amp;quot;#28a745&amp;quot;, purple = &amp;quot;#6f42c1&amp;quot;, light_green = &amp;quot;#dcffe4&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;getting-repos&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Getting Repos&lt;/h1&gt;
+&lt;p&gt;First, we want to get a listing of all of the repos that are associated with my GitHub account. We can do this using the &lt;code&gt;/user/repos&lt;/code&gt; API endpoint.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;repos &amp;lt;- gh(&amp;quot;/user/repos&amp;quot;, .limit = Inf)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can extract the desired information from the &lt;code&gt;repos&lt;/code&gt; using the &lt;code&gt;map_chr&lt;/code&gt; and &lt;code&gt;map_lgl&lt;/code&gt; functions in the &lt;code&gt;purrr&lt;/code&gt; package.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;repo_info &amp;lt;- tibble(
+  owner = map_chr(repos, c(&amp;quot;owner&amp;quot;, &amp;quot;login&amp;quot;)),
+  name = map_chr(repos, &amp;quot;name&amp;quot;),
+  full_name = map_chr(repos, &amp;quot;full_name&amp;quot;),
+  private = map_lgl(repos, &amp;quot;private&amp;quot;)
+)
+
+# showing the first few non-private repos
+filter(repo_info, !private)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 35 x 4
+##    owner      name                  full_name                       private
+##    &amp;lt;chr&amp;gt;      &amp;lt;chr&amp;gt;                 &amp;lt;chr&amp;gt;                           &amp;lt;lgl&amp;gt;  
+##  1 saleslab   DWC                   saleslab/DWC                    FALSE  
+##  2 saleslab   ParsingLabSolutionsA… saleslab/ParsingLabSolutionsAS… FALSE  
+##  3 tbradley1… adv-r                 tbradley1013/adv-r              FALSE  
+##  4 tbradley1… aob-power             tbradley1013/aob-power          FALSE  
+##  5 tbradley1… blog                  tbradley1013/blog               FALSE  
+##  6 tbradley1… connectapi            tbradley1013/connectapi         FALSE  
+##  7 tbradley1… critical-thinking-ev… tbradley1013/critical-thinking… FALSE  
+##  8 tbradley1… dbp-calculator        tbradley1013/dbp-calculator     FALSE  
+##  9 tbradley1… dragondown            tbradley1013/dragondown         FALSE  
+## 10 tbradley1… dragondown_book       tbradley1013/dragondown_book    FALSE  
+## # … with 25 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;There is a lot of other information contained within the &lt;code&gt;repos&lt;/code&gt; API response. However, since I will be focusing mainly on my commits, I don’t need most of it for this purpose.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;get-and-parse-commits&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Get and Parse Commits&lt;/h1&gt;
+&lt;p&gt;In order to get all of the commits for each of these repos, we will use the &lt;code&gt;map_dfr&lt;/code&gt; to append all of the commit information for each repo into a single dataset. Before we do that, we need to define a few helper functions that can parse the output of the API endpoint response.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;null_list &amp;lt;- function(x){
+  map_chr(x, ~{ifelse(is.null(.x), NA, .x)})
+}
+
+parse_commit &amp;lt;- function(commits, repo){
+  # browser()
+  commit_by &amp;lt;- map(commits, c(&amp;quot;commit&amp;quot;, &amp;quot;author&amp;quot;, &amp;quot;name&amp;quot;))
+  username &amp;lt;- map(commits, c(&amp;quot;committer&amp;quot;, &amp;quot;login&amp;quot;))
+  commit_time &amp;lt;- map(commits, c(&amp;quot;commit&amp;quot;, &amp;quot;author&amp;quot;, &amp;quot;date&amp;quot;))
+  message &amp;lt;- map(commits, c(&amp;quot;commit&amp;quot;, &amp;quot;message&amp;quot;))
+  
+  out &amp;lt;- tibble(
+    repo = repo,
+    commit_by = null_list(commit_by),
+    username = null_list(username),
+    commit_time = null_list(commit_time),
+    message = null_list(message)
+  )
+  
+  out &amp;lt;- mutate(out, commit_time = as.POSIXct(commit_time, format = &amp;quot;%Y-%m-%dT%H:%M:%SZ&amp;quot;))
+  return(out)
+}
+
+gh_safe &amp;lt;- purrr::possibly(gh, otherwise = NULL)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The &lt;code&gt;parse_commit&lt;/code&gt; function will extract the desired information from each API response. The &lt;code&gt;null_list&lt;/code&gt; function is a simple helper to convert any NULL values in the response to NA, so that the &lt;code&gt;map&lt;/code&gt; functions don’t throw errors. Finally, the &lt;code&gt;gh_safe&lt;/code&gt; function is a safe version of the &lt;code&gt;gh&lt;/code&gt; function. This is defined in case any of the individual responses fail, it doesn’t cause the entire loop to fail.&lt;/p&gt;
+&lt;p&gt;Now we can query all of the commits from each of these repos and filter the output to include only commits that I made.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;all_commits &amp;lt;- map_dfr(repo_info$full_name, function(z){
+  name_split &amp;lt;- str_split(z, &amp;quot;/&amp;quot;)
+  owner &amp;lt;- name_split[[1]][1]
+  repo &amp;lt;- name_split[[1]][2]
+  
+  repo_commits &amp;lt;- gh_safe(&amp;quot;/repos/:owner/:repo/commits&amp;quot;, owner = owner, 
+                          repo = repo, author = &amp;quot;tbradley1013&amp;quot;,
+                          since = &amp;quot;2017-01-01T00:00:00Z&amp;quot;,
+                          until = &amp;quot;2020-01-01T00:00:00Z&amp;quot;,
+                          .limit = Inf)
+  
+  out &amp;lt;- parse_commit(repo_commits, repo = z)
+  
+  return(out)
+})
+
+
+my_commits &amp;lt;- all_commits %&amp;gt;% 
+  filter(commit_by == &amp;quot;Tyler Bradley&amp;quot;) %&amp;gt;% 
+  mutate(commit_time = commit_time - hours(5))
+
+my_commits&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 3,549 x 5
+##    repo     commit_by  username  commit_time         message               
+##    &amp;lt;chr&amp;gt;    &amp;lt;chr&amp;gt;      &amp;lt;chr&amp;gt;     &amp;lt;dttm&amp;gt;              &amp;lt;chr&amp;gt;                 
+##  1 nmanna/… Tyler Bra… tbradley… 2019-10-25 07:16:50 rendering changes     
+##  2 nmanna/… Tyler Bra… tbradley… 2019-10-25 07:08:12 Merge branch &amp;#39;master&amp;#39;…
+##  3 nmanna/… Tyler Bra… tbradley… 2019-10-25 07:08:03 changes from rendering
+##  4 nmanna/… Tyler Bra… tbradley… 2019-10-25 07:07:23 force style change    
+##  5 nmanna/… Tyler Bra… tbradley… 2019-10-25 06:45:06 adding public back to…
+##  6 nmanna/… Tyler Bra… tbradley… 2019-10-25 06:44:44 removing public       
+##  7 nmanna/… Tyler Bra… tbradley… 2019-10-25 06:37:32 Merge branch &amp;#39;master&amp;#39;…
+##  8 nmanna/… Tyler Bra… tbradley… 2019-10-25 06:37:12 rendered on server    
+##  9 nmanna/… Tyler Bra… tbradley… 2019-10-25 06:35:46 removed public        
+## 10 nmanna/… Tyler Bra… tbradley… 2019-10-25 06:33:36 added post for settin…
+## # … with 3,539 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;analyzing-the-results&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Analyzing the results&lt;/h1&gt;
+&lt;p&gt;First, we can look at the overall number of commits I have made per year since I started using GitHub in 2017. Before we do that, we will add a few columns to the &lt;code&gt;my_commits&lt;/code&gt; dataset to include grouping variables based on the commit date and time. We will also join the &lt;code&gt;repo_info&lt;/code&gt; dataset to the &lt;code&gt;my_commits&lt;/code&gt; dataset.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;my_commits &amp;lt;- my_commits %&amp;gt;% 
+  mutate(
+    date = date(commit_time),
+    wday = wday(date, label = TRUE),
+    year = year(date),
+    week = week(date)
+  ) %&amp;gt;% 
+  left_join(
+    repo_info, 
+    by = c(&amp;quot;repo&amp;quot; = &amp;quot;full_name&amp;quot;)
+  ) &lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;my_commits %&amp;gt;% 
+  count(year) %&amp;gt;% 
+  ggplot(aes(as.character(year), n)) + 
+  geom_col(fill = gh_pal[&amp;quot;green&amp;quot;]) + 
+  geom_text(aes(y = (n-35), label = paste(n, &amp;quot;commits&amp;quot;)), color = &amp;quot;white&amp;quot;, fontface = &amp;quot;bold&amp;quot;) + 
+  theme_bw() + 
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 2050)) + 
+  scale_x_discrete(expand = c(0.17, 0.17)) + 
+  labs(
+    title = &amp;quot;Commits by Tyler Bradley (tbradley1013) since joining GitHub by Year&amp;quot;,
+    y = &amp;quot;Number of Commits&amp;quot;
+  ) + 
+  theme(
+    axis.title.x = element_blank(),
+    panel.grid.minor.x = element_blank()
+  )&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-01-02-analyzing-my-2019-github-usage-in-r_files/figure-html/commits-per-year-1.png&#34; width=&#34;960&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;We can see that I have used GitHub more and more over the last three years, with my highest number of commits coming in 2019 (n = 1988). The same trend is true when looking at my commits to public and private repos.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;my_commits  %&amp;gt;% 
+  count(year, private) %&amp;gt;% 
+  mutate(private = ifelse(private, &amp;quot;Private&amp;quot;, &amp;quot;Public&amp;quot;),
+         year = factor(year, levels = unique(year)),
+         text_x = ifelse(private == &amp;quot;Private&amp;quot;, as.numeric(year) - 0.22, as.numeric(year) + 0.22)) %&amp;gt;% 
+  ggplot(aes(year, n, fill = private)) + 
+  geom_col(position = &amp;quot;dodge&amp;quot;) + 
+  geom_text(aes(text_x, n-20, label = paste(n, &amp;quot;commits&amp;quot;)), color = &amp;quot;white&amp;quot;, fontface = &amp;quot;bold&amp;quot;) +
+  theme_bw() + 
+  # ggsci::scale_f
+  scale_fill_manual(values = c(unname(gh_pal[&amp;quot;blue&amp;quot;]), unname(gh_pal[&amp;quot;green&amp;quot;]))) + 
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 1550)) + 
+  scale_x_discrete(expand = c(0.17, 0.17)) +
+  labs(
+    title = &amp;quot;Number of GitHub Commits by Tyler Bradley (tbradley1013) to Public and Private Repos by Year&amp;quot;,
+    y = &amp;quot;Number of Commits&amp;quot;
+  ) + 
+  theme(
+    axis.title.x = element_blank(),
+    legend.title = element_blank()
+  )&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-01-02-analyzing-my-2019-github-usage-in-r_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;960&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;We can also use &lt;code&gt;ggplot2&lt;/code&gt; to recreate the GitHub contribution heatmap. There is a minor bit of hacking to get the axes in the desired format showing the start to the month, but it can be done like this.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;my_commits %&amp;gt;% 
+  count(date, wday, year, week) %&amp;gt;% 
+  mutate(
+    week = factor(week),
+    wday = fct_rev(wday)
+  ) %&amp;gt;% 
+  group_by(year, week) %&amp;gt;% 
+  mutate(
+    min_date = floor_date(date, &amp;quot;week&amp;quot;), 
+    min_date = if_else(
+      year(min_date) &amp;lt; year, 
+      as.Date(str_replace(min_date, as.character(year-1), &amp;quot;1998&amp;quot;)),
+      as.Date(str_replace(min_date, as.character(year), &amp;quot;1999&amp;quot;))
+    )
+    
+  ) %&amp;gt;% 
+  ungroup() %&amp;gt;% 
+  ggplot(aes(min_date, wday, fill = n)) + 
+  facet_wrap(~year, ncol = 1) +
+  geom_tile(width = 5, height = 0.9, color = &amp;quot;black&amp;quot;) + 
+  theme_bw() + 
+  scale_y_discrete(expand = c(0,0)) + 
+  scale_x_date(date_breaks = &amp;quot;1 month&amp;quot;, date_labels = &amp;quot;%b&amp;quot;, expand = c(0, 0)) +
+  labs(
+    title = &amp;quot;Tyler Bradley&amp;#39;s (tbradley1013) GitHub contributions heat map by year&amp;quot;
+  ) +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    axis.title = element_blank(),
+    legend.title = element_blank()
+  ) + 
+  scale_fill_gradient(low = gh_pal[&amp;quot;light_green&amp;quot;], high = gh_pal[&amp;quot;green&amp;quot;])&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-01-02-analyzing-my-2019-github-usage-in-r_files/figure-html/contributions-heat-1.png&#34; width=&#34;960&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Now we can look just at the last year and see when I am the most productive according to commits. We can group the commits by the day of the week and the time of day to see if any patterns can be seen.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;my_commits %&amp;gt;% 
+  filter(year == 2019) %&amp;gt;% 
+  mutate(
+    hour = hour(commit_time)
+  ) %&amp;gt;% 
+  count(hour) %&amp;gt;% 
+  mutate(
+    text_y = ifelse(n &amp;lt; 50, n+5, n-5),
+    text_color = ifelse(n &amp;lt; 50, &amp;quot;black&amp;quot;, &amp;quot;white&amp;quot;)
+  ) %&amp;gt;% 
+  ggplot(aes(hour, n)) + 
+  geom_col(fill = gh_pal[&amp;quot;green&amp;quot;]) + 
+  geom_text(aes(y = text_y, color = text_color, label = paste(&amp;quot;n =&amp;quot;, n)), show.legend = FALSE, size = 3) + 
+  theme_bw() + 
+  scale_x_continuous(breaks = seq(0, 23, 2), labels = seq(0, 23, 2)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 310)) +
+  scale_color_manual(values = c(&amp;quot;black&amp;quot;, &amp;quot;white&amp;quot;)) + 
+  labs(
+    title = &amp;quot;Commits by Tyler Bradley (tbradley1013) in 2019 by time of day&amp;quot;,
+    y = &amp;quot;Number of Commits&amp;quot;,
+    x = &amp;quot;Time of Day (Hour)&amp;quot;
+  )&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-01-02-analyzing-my-2019-github-usage-in-r_files/figure-html/commits-by-hour-1.png&#34; width=&#34;960&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;My most productive time periods are clearly between 9 am and 2 pm. Over the course of that time it appears that I am fairly consistent in my productivity. This period of productivity corresponds to the time when I am in the office at work. The time periods right outside of that window (7am-8am and 3pm-4pm) are typically the beginning and end of my work day so I am either getting my day started or wrapping things up at that point. It is clear from this figure that I don’t tend to do any work from 10pm-5am which conforms as expected with my sleep schedule.&lt;/p&gt;
+&lt;p&gt;Similarly, my commits by day of the week conforms with an expected pattern that my most productive periods are when I am at work in the office Monday-Friday.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;my_commits %&amp;gt;% 
+  filter(year == 2019) %&amp;gt;% 
+  count(wday) %&amp;gt;% 
+  ggplot(aes(wday, n)) + 
+  geom_col(fill = gh_pal[&amp;quot;green&amp;quot;]) + 
+  geom_text(aes(y = n-10, label = paste(&amp;quot;n =&amp;quot;, n)), color = &amp;quot;white&amp;quot;, show.legend = FALSE) + 
+  theme_bw() +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 475)) +
+  scale_color_manual(values = c(&amp;quot;black&amp;quot;, &amp;quot;white&amp;quot;)) + 
+  labs(
+    title = &amp;quot;Commits by Tyler Bradley (tbradley1013) in 2019 by day of the week&amp;quot;,
+    y = &amp;quot;Number of Commits&amp;quot;,
+    x = &amp;quot;Day of the week&amp;quot;
+  )&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-01-02-analyzing-my-2019-github-usage-in-r_files/figure-html/commits-by-wday-1.png&#34; width=&#34;960&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;conclusion&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;Overall, 2019 was a very productive year for me in terms of GitHub commits! At this point, I am very committed to the git/GitHub workflow and expect that my commits will continue to either follow an upward trend or reach a plateau as I continue to take on new and exciting projects at work and in school!&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;gh&lt;/code&gt; package allows R users to easily interact with the GitHub API and analyze how they are utilizing the tools available through GitHub.&lt;/p&gt;
+&lt;/div&gt;
+</description>
+  </item>
+  
 <item>
   <title>Get the Office Quotes in R with the dundermifflin Package</title>
   <link>/2019/03/25/office-quotes-in-r-dundermifflin-package/</link>
@@ -2184,197 +2435,6 @@ var_exp&lt;/code&gt;&lt;/pre&gt;
 &lt;h1&gt;Conclusion&lt;/h1&gt;
 &lt;p&gt;PCA can provide an analysis with a lot of information about their data set and can give valuable insights into potentially unseen relationships between the observations and the variables. By performing this analysis in the tidyverse framework, we can easily extend this model by using the modelling capabilities of the tidyverse. You can see some of these &lt;a href=&#34;http://r4ds.had.co.nz/many-models.html&#34;&gt;here&lt;/a&gt; and &lt;a href=&#34;http://www.business-science.io/code-tools/2017/10/24/demo_week_timetk.html&#34;&gt;here&lt;/a&gt;. I believe that this framework allows for much more flexibility in your analysis and how you use the data from the model, which will enable you to gather more from your data in a faster and convenient way.&lt;/p&gt;
 &lt;p&gt;Please let me know what you think of performing PCA in the tidyverse framework!&lt;/p&gt;
-&lt;/div&gt;
-</description>
-  </item>
-  
-<item>
-  <title>Creating, Writing, Querying, and Modifying SQL Database from R using odbc, dbplyr, and DBI</title>
-  <link>/2017/08/26/sql-management-in-r/</link>
-  <pubDate>Sat, 26 Aug 2017 00:00:00 +0000</pubDate>
-  
-<guid>/2017/08/26/sql-management-in-r/</guid>
-  <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;Introduction&lt;/h1&gt;
-&lt;p&gt;Recently, I have been building shiny apps for work. The app that I am currently working on is an interface to a database for storing information about laboratory samples being collected. In addition to building the shiny app for my coworkers to interact with the database, I also was tasked with creating and building the database. I have never build a SQL database from scratch, but luckily the &lt;a href=&#34;https://github.com/rstats-db/odbc&#34;&gt;odbc&lt;/a&gt; and the &lt;a href=&#34;https://github.com/rstats-db/DBI&#34;&gt;DBI&lt;/a&gt; packages make it fairly straight foreward.&lt;/p&gt;
-&lt;p&gt;Let’s start by loading in the packages that we will need.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(DBI)
-library(odbc)
-library(RSQLite)
-library(tidyverse)
-library(magrittr)
-library(dbplyr)&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;div id=&#34;connecting-to-the-database&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;Connecting to the Database&lt;/h1&gt;
-&lt;p&gt;The &lt;code&gt;dbConnect&lt;/code&gt; function from the &lt;code&gt;DBI&lt;/code&gt; package allows us to create a SQLite database directly from R. SQLite databases are saved as files in the current working directory with this method. As described in the &lt;code&gt;RSQLite&lt;/code&gt; packge vignette, if you simply want to use a temporary database, you can create either an on-disk database or an in-memory database with this same method. For this example, we will create a new SQLite in-memory database&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;con &amp;lt;- dbConnect(RSQLite::SQLite(), &amp;quot;:memory:&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Currently, our database is empty, as can be seen if we use the &lt;code&gt;dbListTables&lt;/code&gt; function.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;dbListTables(con)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## character(0)&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;div id=&#34;writing-tables-to-database&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;Writing Tables to database&lt;/h1&gt;
-&lt;p&gt;To add data to this database we will use the &lt;code&gt;dbWriteTable&lt;/code&gt; function. First, let’s load in two common datasets, &lt;code&gt;mtcars&lt;/code&gt; and &lt;code&gt;diamonds&lt;/code&gt;.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;data(&amp;quot;mtcars&amp;quot;)
-data(&amp;quot;diamonds&amp;quot;)
-
-mtcars %&amp;lt;&amp;gt;% 
-  rownames_to_column()&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Now that we have these two data sets loaded into the session, lets write them into the database.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;dbWriteTable(con, &amp;quot;cars&amp;quot;, mtcars)
-dbWriteTable(con, &amp;quot;diamonds&amp;quot;, diamonds)
-
-dbListTables(con)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;cars&amp;quot;     &amp;quot;diamonds&amp;quot;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;div id=&#34;query-the-database&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;Query the Database&lt;/h1&gt;
-&lt;p&gt;There are several ways that we can query the tables in this database. We can read in the entire table using the &lt;code&gt;dbReadTable&lt;/code&gt; function.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;dbReadTable(con, &amp;quot;cars&amp;quot;) %&amp;gt;%
-  head(10)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;##              rowname  mpg cyl  disp  hp drat    wt  qsec vs am gear carb
-## 1          Mazda RX4 21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
-## 2      Mazda RX4 Wag 21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
-## 3         Datsun 710 22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
-## 4     Hornet 4 Drive 21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
-## 5  Hornet Sportabout 18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
-## 6            Valiant 18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
-## 7         Duster 360 14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
-## 8          Merc 240D 24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
-## 9           Merc 230 22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
-## 10          Merc 280 19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Alternatively, we can write out a full sql query using the &lt;code&gt;dbGetQuery&lt;/code&gt; function.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;dbGetQuery(con, &amp;quot;select * from cars&amp;quot;) %&amp;gt;%
-  head(10) &lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;##              rowname  mpg cyl  disp  hp drat    wt  qsec vs am gear carb
-## 1          Mazda RX4 21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
-## 2      Mazda RX4 Wag 21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
-## 3         Datsun 710 22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
-## 4     Hornet 4 Drive 21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
-## 5  Hornet Sportabout 18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
-## 6            Valiant 18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
-## 7         Duster 360 14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
-## 8          Merc 240D 24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
-## 9           Merc 230 22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
-## 10          Merc 280 19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;We can use the &lt;code&gt;microbenchmark&lt;/code&gt; package to determine which of these methods is faster. We will measure the time for the diamonds data set as that has nearly 54,000 observations, as opposed to the 32 in the mtcars dataset.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;microbenchmark::microbenchmark(
-  read_table = dbReadTable(con, &amp;quot;diamonds&amp;quot;),
-  query = dbGetQuery(con, &amp;quot;select * from diamonds&amp;quot;)
-)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## Unit: milliseconds
-##        expr      min       lq     mean   median       uq      max neval
-##  read_table 91.36283 94.55963 115.4623 98.51866 150.1218 175.2671   100
-##       query 90.61233 93.50576 111.0308 98.11973 113.0769 181.2567   100&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;It looks like the &lt;code&gt;dbReadTable&lt;/code&gt; method is slightly faster than a full query. However, the real benefit to using &lt;code&gt;dbGetQuery&lt;/code&gt; is the ability to write much more complex sql queries. For example, if we want to subset the data, we are able to.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;query &amp;lt;- paste(&amp;quot;select carat, cut, clarity, color, price from diamonds&amp;quot;,
-               &amp;quot;where carat &amp;gt; 1 and cut = &amp;#39;Ideal&amp;#39;&amp;quot;)
-dbGetQuery(con, query) %&amp;gt;%
-  as.tibble()&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## # A tibble: 5,662 x 5
-##    carat   cut clarity color price
-##    &amp;lt;dbl&amp;gt; &amp;lt;chr&amp;gt;   &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;int&amp;gt;
-##  1  1.01 Ideal      I1     I  2844
-##  2  1.02 Ideal     SI2     H  2856
-##  3  1.02 Ideal      I1     I  2872
-##  4  1.02 Ideal     SI2     J  2879
-##  5  1.01 Ideal      I1     I  2896
-##  6  1.02 Ideal      I1     I  2925
-##  7  1.14 Ideal     SI1     J  3045
-##  8  1.02 Ideal     SI2     H  3142
-##  9  1.06 Ideal     SI2     I  3146
-## 10  1.02 Ideal     VS2     I  3148
-## # ... with 5,652 more rows&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;This particular query returned just over 10% of the total data with 5,662 rows matching the conditions set. This feature is extremely important when dealing with database that house extremely large amounts of data. Having to query full tables would be extemely unfeasible in most situations.&lt;/p&gt;
-&lt;p&gt;In addition to writing more complex sql queries, the &lt;code&gt;dbplyr&lt;/code&gt; package allows for R users to avoid having to write queries at all. This package allows users to create a reference to the sql table and interact with it using typical &lt;code&gt;dplyr&lt;/code&gt; verbs. We can recreate the query above using this method. First we will use the &lt;code&gt;tbl&lt;/code&gt; function to create the reference to the diamonds table in the database. Then we will be able to use that reference with all of our favorite &lt;code&gt;dplyr&lt;/code&gt; verbs.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;diamonds_tbl &amp;lt;- tbl(con, &amp;quot;diamonds&amp;quot;)
-
-diamonds_tbl %&amp;gt;%
-  select(carat, cut, clarity, color, price) %&amp;gt;%
-  filter(carat &amp;gt; 1, 
-         cut == &amp;quot;Ideal&amp;quot;) %&amp;gt;% 
-  collect() %&amp;gt;%
-  as.tibble()&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## # A tibble: 5,662 x 5
-##    carat   cut clarity color price
-##    &amp;lt;dbl&amp;gt; &amp;lt;chr&amp;gt;   &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;int&amp;gt;
-##  1  1.01 Ideal      I1     I  2844
-##  2  1.02 Ideal     SI2     H  2856
-##  3  1.02 Ideal      I1     I  2872
-##  4  1.02 Ideal     SI2     J  2879
-##  5  1.01 Ideal      I1     I  2896
-##  6  1.02 Ideal      I1     I  2925
-##  7  1.14 Ideal     SI1     J  3045
-##  8  1.02 Ideal     SI2     H  3142
-##  9  1.06 Ideal     SI2     I  3146
-## 10  1.02 Ideal     VS2     I  3148
-## # ... with 5,652 more rows&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The &lt;code&gt;collect&lt;/code&gt; verb is important if you want the full query to be brought into your R session. The &lt;code&gt;dbplyr&lt;/code&gt; package uses lazy evaluation and only brings in a portion of the query into your session.&lt;/p&gt;
-&lt;p&gt;Let’s take a look at how these two methods compare using the &lt;code&gt;microbenchmark&lt;/code&gt; package.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;microbenchmark::microbenchmark(
-  db_query = dbGetQuery(con, query),
-  dbplyr = diamonds_tbl %&amp;gt;%
-             select(carat, cut, clarity, color, price) %&amp;gt;%
-             filter(carat &amp;gt; 1, 
-                    cut == &amp;quot;Ideal&amp;quot;) %&amp;gt;% 
-             collect()
-)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## Unit: milliseconds
-##      expr      min       lq     mean   median       uq      max neval
-##  db_query 10.10302 10.30996 10.63014 10.44201 10.60457 15.27123   100
-##    dbplyr 51.23319 52.08525 54.66543 53.53378 54.32673 87.69649   100&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;As we can see, the &lt;code&gt;dbplyr&lt;/code&gt; method, while very familiar and potentially easier if you have no experience writing sql queries, takes nearly 6x as long as the straight sql query.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div id=&#34;modify-tables-in-place&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;Modify Tables in Place&lt;/h1&gt;
-&lt;p&gt;While there are a lot of blog posts and some great package vignettes about setting up your tables and querying sql databases, there is not too much (that I have seen) about modifying tables in place in your database. There are a few options that are possible when you want to modify a table in a sql database. The first option is to simply query the entire database, make your desired changes using your prefered R tools and then overwrite the table in the database. However, this approach is not practical if you have a large amount of data in your table.&lt;/p&gt;
-&lt;p&gt;The method that I have found that seems to be fairly straight forward is using the &lt;code&gt;dbSendQuery&lt;/code&gt; function. While knowing this function is important, the more important part of this function is knowing what SQL commmads to include in your query. The blog post on &lt;a href=&#34;http://www.win-vector.com/blog/2016/02/using-postgresql-in-r/&#34;&gt;Win-Vector Blog&lt;/a&gt; concerning using PostgreSqL in R shows how you can drop entire tables from your database, and the &lt;code&gt;RSQLite&lt;/code&gt; vignette by Hadley Wickham shows how to delete rows that meet certain conditions. However, if you want to modify a table in your database, the sql commands needed are “update” “set”, and “where”. You can see below how we can use these commands.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;update_query &amp;lt;- paste(&amp;quot;update cars&amp;quot;,
-                      &amp;quot;set mpg = 20&amp;quot;,
-                      &amp;quot;where cyl = 6&amp;quot;)
-
-dbSendQuery(con, update_query)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## &amp;lt;SQLiteResult&amp;gt;
-##   SQL  update cars set mpg = 20 where cyl = 6
-##   ROWS Fetched: 0 [complete]
-##        Changed: 7&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;We can see that 7 rows were changed in the database. Let’s now query the database and see how the table now looks.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;dbGetQuery(con, &amp;quot;select * from cars&amp;quot;) %&amp;gt;%
-  as.tibble()&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## # A tibble: 32 x 12
-##              rowname   mpg   cyl  disp    hp  drat    wt  qsec    vs    am
-##                &amp;lt;chr&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt;
-##  1         Mazda RX4  20.0     6 160.0   110  3.90 2.620 16.46     0     1
-##  2     Mazda RX4 Wag  20.0     6 160.0   110  3.90 2.875 17.02     0     1
-##  3        Datsun 710  22.8     4 108.0    93  3.85 2.320 18.61     1     1
-##  4    Hornet 4 Drive  20.0     6 258.0   110  3.08 3.215 19.44     1     0
-##  5 Hornet Sportabout  18.7     8 360.0   175  3.15 3.440 17.02     0     0
-##  6           Valiant  20.0     6 225.0   105  2.76 3.460 20.22     1     0
-##  7        Duster 360  14.3     8 360.0   245  3.21 3.570 15.84     0     0
-##  8         Merc 240D  24.4     4 146.7    62  3.69 3.190 20.00     1     0
-##  9          Merc 230  22.8     4 140.8    95  3.92 3.150 22.90     1     0
-## 10          Merc 280  20.0     6 167.6   123  3.92 3.440 18.30     1     0
-## # ... with 22 more rows, and 2 more variables: gear &amp;lt;dbl&amp;gt;, carb &amp;lt;dbl&amp;gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;It looks like all of the rows where cyl = 6 have had their mpg changed to 20. While this is a somewhat trivial example, as you would most likely not want to change the results for a data set like this, this can be an incredibly useful feature if you are maintaining a database from R.&lt;/p&gt;
-&lt;p&gt;You can modify more rows by adding additional arguments to the “set” command and add more conditions by setting additional arguments to the “where” command. For example, we can edit the diamonds table below.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;update_query &amp;lt;- paste(&amp;quot;update diamonds&amp;quot;,
-                      &amp;quot;set cut = &amp;#39;new Ideal&amp;#39;,&amp;quot;,
-                      &amp;quot;color = &amp;#39;Z&amp;#39;&amp;quot;,
-                      &amp;quot;where cut = &amp;#39;Ideal&amp;#39; and&amp;quot;,
-                      &amp;quot;color = &amp;#39;E&amp;#39;&amp;quot;)
-dbSendQuery(con, update_query)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## &amp;lt;SQLiteResult&amp;gt;
-##   SQL  update diamonds set cut = &amp;#39;new Ideal&amp;#39;, color = &amp;#39;Z&amp;#39; where cut = &amp;#39;Ideal&amp;#39; and color = &amp;#39;E&amp;#39;
-##   ROWS Fetched: 0 [complete]
-##        Changed: 3903&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;We can see that this changed 3903 rows in the diamonds dataset.&lt;/p&gt;
-&lt;p&gt;Before we finish, it is imprtant to remember to disconnect from the in-memory database using the &lt;code&gt;dbDisconnect&lt;/code&gt; function.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;dbDisconnect(con)&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;div id=&#34;conclusion&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;Conclusion&lt;/h1&gt;
-&lt;p&gt;The &lt;code&gt;DBI&lt;/code&gt;, &lt;code&gt;odbc&lt;/code&gt;, and &lt;code&gt;dbplyr&lt;/code&gt; packages offer an incredible number of tools for interacting with SQL databases of all different kinds. While you are certainly able to navigate through most SQL query problems with only the functions provided in these packages, you can cartainly increase your capabilites by learning some basic SQL commands and how to use them in conjunction with the R functions provided in these packages.&lt;/p&gt;
 &lt;/div&gt;
 </description>
   </item>
