@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-  <title>Epl on goonR blog</title>
+  <title>EPL on goonR blog</title>
   <link>/tags/epl/</link>
-  <description>Recent content in Epl on goonR blog</description>
+  <description>Recent content in EPL on goonR blog</description>
   <generator>Hugo -- gohugo.io</generator>
 <language>en-us</language>
 <lastBuildDate>Thu, 10 Aug 2017 00:00:00 +0000</lastBuildDate>
@@ -17,7 +16,10 @@
   <pubDate>Thu, 10 Aug 2017 00:00:00 +0000</pubDate>
   
 <guid>/2017/08/10/epl-opening-weekend/</guid>
-  <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+  <description>
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;I was listening to &lt;a href=&#34;https://twitter.com/codinghorror&#34;&gt;Jeff Atwood’s&lt;/a&gt; interview on the podcast &lt;a href=&#34;http://developeronfire.com/&#34;&gt;Developer on Fire&lt;/a&gt; and he said something that struck home with me. It was along the lines of, “The best time to start blogging is yesterday.” I have been considering starting a blog about &lt;a href=&#34;https://twitter.com/hashtag/rstats&#34;&gt;#rstats&lt;/a&gt; but had been putting it off because of any number of reasons. But after listening to his interview, I decided now was as good of a time as any. With the help of Yihui Xie’s &lt;a href=&#34;https://github.com/rstudio/blogdown&#34;&gt;blogdown&lt;/a&gt;, I was able to set up the basic webpage pretty easily too.&lt;/p&gt;
 &lt;p&gt;So In honor of the start of a new season for the English Premier League (EPL), I put together this exploratory data analysis of historical EPL data to see how teams typically do to start a season. I would love any feed back and suggestions! Please feel free to follow me on &lt;a href=&#34;twitter%20https://twitter.com/tb_goonR&#34;&gt;twitter&lt;/a&gt; (I just created it this past week to better keep up with #rstats rather than just continually googling it as I have been for the last year.)&lt;/p&gt;

@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-  <title>Tidyverse on goonR blog</title>
+  <title>tidyverse on goonR blog</title>
   <link>/tags/tidyverse/</link>
-  <description>Recent content in Tidyverse on goonR blog</description>
+  <description>Recent content in tidyverse on goonR blog</description>
   <generator>Hugo -- gohugo.io</generator>
 <language>en-us</language>
 <lastBuildDate>Tue, 19 Mar 2019 00:00:00 +0000</lastBuildDate>
@@ -17,7 +16,10 @@
   <pubDate>Tue, 19 Mar 2019 00:00:00 +0000</pubDate>
   
 <guid>/2019/03/19/using-scoped-dplyr-verbs/</guid>
-  <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+  <description>
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;Over the past several months, I have really started to increase the amount that I have been using scoped &lt;code&gt;dplyr&lt;/code&gt; verbs. For those of you who don’t know about these functions, they are handy variants to the normal &lt;code&gt;dplyr&lt;/code&gt; verbs, such as &lt;code&gt;filter&lt;/code&gt;, &lt;code&gt;mutate&lt;/code&gt;, and &lt;code&gt;summarize&lt;/code&gt;, that allow you to target multiple columns or all of your columns. These functions allow for you to save yourself time and typing when you want to apply either one or multiple functions to more than one column, a group of columns, or to all of your columns. This post will walk through a few of the ones I use on a regular basis and how I use them!&lt;/p&gt;
 &lt;p&gt;These scoped verbs typically come in three different flavors:&lt;/p&gt;
@@ -543,7 +545,10 @@ iris_tbl&lt;/code&gt;&lt;/pre&gt;
   <pubDate>Thu, 06 Sep 2018 00:00:00 +0000</pubDate>
   
 <guid>/2018/09/06/tracking-joey-wendle-rookie-season-with-gganimate/</guid>
-  <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+  <description>
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;This past weekend I got the chance to go to the Tampa Bay Rays vs Cleveland Indians game. This game was a ton of fun, made even more exciting for me - and by the end of the game, the people in my section - because my brother-in-law’s brother (does that make him my brother-in-law too? No one ever knows for sure…), Joey Wendle, plays for the Rays! In case you haven’t been paying attention, Joey has been having a &lt;strong&gt;&lt;em&gt;MASSIVE&lt;/em&gt;&lt;/strong&gt; rookie season. Just take a look at some of the tweets from the Ray’s organization in the last few days.&lt;/p&gt;
 &lt;center&gt;
@@ -892,7 +897,10 @@ animate(multi_stats, width = 800, height = 1000)&lt;/code&gt;&lt;/pre&gt;
   <pubDate>Fri, 10 Aug 2018 00:00:00 +0000</pubDate>
   
 <guid>/2018/08/10/create-a-dynamic-number-of-ui-elements-in-shiny-with-purrr/</guid>
-  <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+  <description>
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;&lt;a href=&#34;https://purrr.tidyverse.org/&#34;&gt;&lt;code&gt;purrr&lt;/code&gt;&lt;/a&gt; is an incredibly powerful package that has greatly enhanced my R programming abilities. &lt;code&gt;purrr&lt;/code&gt; has applications in pretty much any situation. One of the most useful situations, IMHO, is in the creation of a dynamic number of &lt;a href=&#34;https://shiny.rstudio.com/&#34;&gt;&lt;code&gt;shiny&lt;/code&gt;&lt;/a&gt; UI elements. This can be extremely useful if you want to be able to create a dynamic number of ui elements (whether that be inputs or outputs) based on either user selection or the data being used. This post will walk through how to create a dynamic number of plots depending on how many parameters the user selects.&lt;/p&gt;
 &lt;/div&gt;
@@ -1301,7 +1309,10 @@ shinyApp(ui = ui, server = server)&lt;/code&gt;&lt;/pre&gt;
   <pubDate>Thu, 01 Feb 2018 00:00:00 +0000</pubDate>
   
 <guid>/2018/02/01/pca-in-a-tidy-verse-framework/</guid>
-  <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+  <description>
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;The other day, a &lt;a href=&#34;https://community.rstudio.com/t/tidyverse-solutions-for-factor-analysis-principal-component-analysis/4504&#34;&gt;question&lt;/a&gt; was posted on &lt;a href=&#34;https://community.rstudio.com/&#34;&gt;RStudio Community&lt;/a&gt; about performing Principal Component Analysis (PCA) in a &lt;a href=&#34;https://www.tidyverse.org/&#34;&gt;tidyverse&lt;/a&gt; workflow. Conveniently, I had literally just worked through this process the day before and was able to post an &lt;a href=&#34;https://community.rstudio.com/t/tidyverse-solutions-for-factor-analysis-principal-component-analysis/4504/2&#34;&gt;answer&lt;/a&gt;. While most questions and answers are good as they are on forum sites, I thought this one might be worth exploring a little more since using the tidyverse framework makes PCA much easier, in my opinion.&lt;/p&gt;
 &lt;p&gt;PCA is a multi-variate statistical technique for dimension reduction. Essentially, it allows you to take a data set that has n continuous variables and relate them through n orthogonal dimensions. This is a method of unsupervised learning that allows you to better understand the variability in the data set and how different variables are related. While there are the same number of principal components created as there are variables (assuming you have more observations than variables-but that is another issue), each principal component explains the maximum possible variation in the data conditional on it being orthogonal, or perpendicular, to the previous principal components.&lt;/p&gt;
@@ -1513,7 +1524,10 @@ var_exp&lt;/code&gt;&lt;/pre&gt;
   <pubDate>Sat, 26 Aug 2017 00:00:00 +0000</pubDate>
   
 <guid>/2017/08/26/sql-management-in-r/</guid>
-  <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+  <description>
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;Recently, I have been building shiny apps for work. The app that I am currently working on is an interface to a database for storing information about laboratory samples being collected. In addition to building the shiny app for my coworkers to interact with the database, I also was tasked with creating and building the database. I have never build a SQL database from scratch, but luckily the &lt;a href=&#34;https://github.com/rstats-db/odbc&#34;&gt;odbc&lt;/a&gt; and the &lt;a href=&#34;https://github.com/rstats-db/DBI&#34;&gt;DBI&lt;/a&gt; packages make it fairly straight foreward.&lt;/p&gt;
 &lt;p&gt;Let’s start by loading in the packages that we will need.&lt;/p&gt;
@@ -1704,7 +1718,10 @@ dbSendQuery(con, update_query)&lt;/code&gt;&lt;/pre&gt;
   <pubDate>Thu, 10 Aug 2017 00:00:00 +0000</pubDate>
   
 <guid>/2017/08/10/epl-opening-weekend/</guid>
-  <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+  <description>
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;I was listening to &lt;a href=&#34;https://twitter.com/codinghorror&#34;&gt;Jeff Atwood’s&lt;/a&gt; interview on the podcast &lt;a href=&#34;http://developeronfire.com/&#34;&gt;Developer on Fire&lt;/a&gt; and he said something that struck home with me. It was along the lines of, “The best time to start blogging is yesterday.” I have been considering starting a blog about &lt;a href=&#34;https://twitter.com/hashtag/rstats&#34;&gt;#rstats&lt;/a&gt; but had been putting it off because of any number of reasons. But after listening to his interview, I decided now was as good of a time as any. With the help of Yihui Xie’s &lt;a href=&#34;https://github.com/rstudio/blogdown&#34;&gt;blogdown&lt;/a&gt;, I was able to set up the basic webpage pretty easily too.&lt;/p&gt;
 &lt;p&gt;So In honor of the start of a new season for the English Premier League (EPL), I put together this exploratory data analysis of historical EPL data to see how teams typically do to start a season. I would love any feed back and suggestions! Please feel free to follow me on &lt;a href=&#34;twitter%20https://twitter.com/tb_goonR&#34;&gt;twitter&lt;/a&gt; (I just created it this past week to better keep up with #rstats rather than just continually googling it as I have been for the last year.)&lt;/p&gt;

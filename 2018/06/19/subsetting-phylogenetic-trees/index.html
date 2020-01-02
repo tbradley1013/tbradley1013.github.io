@@ -5,7 +5,7 @@
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Subsetting Phylogenetic Trees">
-  <meta name="generator" content="Hugo 0.46" />
+  <meta name="generator" content="Hugo 0.55.5" />
 
   <title>Subsetting Phylogenetic Trees &middot; goonR blog</title>
   
@@ -301,7 +301,10 @@
 
 </div>
 
-  <div id="introduction" class="section level1">
+  
+
+
+<div id="introduction" class="section level1">
 <h1>Introduction</h1>
 <p>In the past few months, I have been introduced to and started working with phylogenetic trees. The trees I have been working with contain the entire tree of life for bacteria. Needless to say, they are huge. At first, I was told that I could download a program that would let me view the tree and search for particular species on the tree, but of course, I immediately looked for a better solution using R. As is the case for most things, I was able to find a full suite of packages (<a href="https://github.com/GuangchuangYu/treeio"><code>treeio</code></a>, <a href="https://github.com/GuangchuangYu/ggtree"><code>ggtree</code></a>, and <a href="https://github.com/GuangchuangYu/tidytree"><code>tidytree</code></a> - all created by <a href="https://guangchuangyu.github.io">Guangchuang Yu</a>) that allowed me to interact with this data.</p>
 <p>However, since my tree was so large, it was extremely difficult to make legible figures even with the great flexibility of <code>ggtree</code>. In order to better analyze the tree as I needed to, I needed to come up with a way to look at only the portions of the tree that I wanted while still maintaining the structure of the tree for the subset portion. As a result, I created the <code>tree_subset</code> function which is now in the development version (1.5.1.002) of <code>treeio</code> on github. This post will briefly walk through the usage of this function!</p>
@@ -398,13 +401,13 @@ merged_subset %&gt;%
   <div class="pure-u-10-24">
     
     <nav class="next">
-      <a href="/2018/07/20/r-shiny-modules--using-global-inputs/">Using global input values inside of R Shiny modules</a>
+      <a href="/2018/07/20/r-shiny-modules-using-global-inputs/">Using global input values inside of R Shiny modules</a>
     </nav>
     
   </div>
   <div class="pure-u-1-24" style="text-align: right;">
     
-    <a href="/2018/07/20/r-shiny-modules--using-global-inputs/"><i class="fa fa-chevron-right"></i></a>
+    <a href="/2018/07/20/r-shiny-modules-using-global-inputs/"><i class="fa fa-chevron-right"></i></a>
     
   </div>
 </div>

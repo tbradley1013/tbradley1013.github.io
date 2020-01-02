@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-  <title>Blogdown on goonR blog</title>
+  <title>blogdown on goonR blog</title>
   <link>/tags/blogdown/</link>
-  <description>Recent content in Blogdown on goonR blog</description>
+  <description>Recent content in blogdown on goonR blog</description>
   <generator>Hugo -- gohugo.io</generator>
 <language>en-us</language>
 <lastBuildDate>Fri, 24 Aug 2018 00:00:00 +0000</lastBuildDate>
@@ -17,7 +16,10 @@
   <pubDate>Fri, 24 Aug 2018 00:00:00 +0000</pubDate>
   
 <guid>/2018/08/24/add-rstudio-community-to-your-blogs-social-links/</guid>
-  <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+  <description>
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;Recently, I switched themes for my blog to the &lt;a href=&#34;https://github.com/yoshiharuyamashita/blackburn&#34;&gt;blackburn&lt;/a&gt; theme and I love it! Luckily, the &lt;a href=&#34;https://github.com/rstudio/blogdown&#34;&gt;&lt;code&gt;blogdown&lt;/code&gt;&lt;/a&gt; package makes this super easy to do within R! If you haven’t used &lt;code&gt;blogdown&lt;/code&gt;, I &lt;strong&gt;&lt;em&gt;highly&lt;/em&gt;&lt;/strong&gt; recommend you take a look at it for setting up your blog. One of the nice features of the blackburn theme, is that it provides easy to add “social” tags that can be configured in your &lt;code&gt;config.toml&lt;/code&gt; file. The built in social tags all come with nice &lt;a href=&#34;https://fontawesome.com/&#34;&gt;font-awesome&lt;/a&gt; icons to their left.&lt;/p&gt;
 &lt;p&gt;However, one of the social media sites that I visit the most is not included on the provided sites, and that is &lt;a href=&#34;https://community.rstudio.com/&#34;&gt;RStudio Community&lt;/a&gt;! RStudio Community is a web-forum that is hosted by RStudio to provide community Q and A for all things related to R, RStudio products, and packages provided by RStudio. If you haven’t been there before, I highly recommend that you check it out! Since this site is not included in blackburn’s social links, I had to add it myself. This post will walk through how to edit the blackburn theme to include custom social links, specifically for RStudio Community.&lt;/p&gt;

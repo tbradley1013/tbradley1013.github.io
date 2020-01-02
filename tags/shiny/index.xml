@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-  <title>Shiny on goonR blog</title>
+  <title>shiny on goonR blog</title>
   <link>/tags/shiny/</link>
-  <description>Recent content in Shiny on goonR blog</description>
+  <description>Recent content in shiny on goonR blog</description>
   <generator>Hugo -- gohugo.io</generator>
 <language>en-us</language>
 <lastBuildDate>Fri, 10 Aug 2018 00:00:00 +0000</lastBuildDate>
@@ -17,7 +16,10 @@
   <pubDate>Fri, 10 Aug 2018 00:00:00 +0000</pubDate>
   
 <guid>/2018/08/10/create-a-dynamic-number-of-ui-elements-in-shiny-with-purrr/</guid>
-  <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+  <description>
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;&lt;a href=&#34;https://purrr.tidyverse.org/&#34;&gt;&lt;code&gt;purrr&lt;/code&gt;&lt;/a&gt; is an incredibly powerful package that has greatly enhanced my R programming abilities. &lt;code&gt;purrr&lt;/code&gt; has applications in pretty much any situation. One of the most useful situations, IMHO, is in the creation of a dynamic number of &lt;a href=&#34;https://shiny.rstudio.com/&#34;&gt;&lt;code&gt;shiny&lt;/code&gt;&lt;/a&gt; UI elements. This can be extremely useful if you want to be able to create a dynamic number of ui elements (whether that be inputs or outputs) based on either user selection or the data being used. This post will walk through how to create a dynamic number of plots depending on how many parameters the user selects.&lt;/p&gt;
 &lt;/div&gt;
@@ -422,11 +424,14 @@ shinyApp(ui = ui, server = server)&lt;/code&gt;&lt;/pre&gt;
   
 <item>
   <title>Using global input values inside of R Shiny modules</title>
-  <link>/2018/07/20/r-shiny-modules--using-global-inputs/</link>
+  <link>/2018/07/20/r-shiny-modules-using-global-inputs/</link>
   <pubDate>Fri, 20 Jul 2018 00:00:00 +0000</pubDate>
   
-<guid>/2018/07/20/r-shiny-modules--using-global-inputs/</guid>
-  <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+<guid>/2018/07/20/r-shiny-modules-using-global-inputs/</guid>
+  <description>
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;This week, I have been working on a new shiny app. This app allows for similar figures to be rendered based on which summary statistic the user is interested in. There are four different figure types for the user to choose from, each of which are placed into their own &lt;code&gt;tabPanel&lt;/code&gt;. This means copying the server code used to generate the graphs four different times. Following Hadley’s words of wisdom in &lt;a href=&#34;http://r4ds.had.co.nz/functions.html&#34;&gt;R for Data Science&lt;/a&gt;, I wanted to abstract this process into functions. In the world of &lt;a href=&#34;https://shiny.rstudio.com/&#34;&gt;shiny&lt;/a&gt;, this means working with &lt;a href=&#34;https://shiny.rstudio.com/articles/modules.html&#34;&gt;modules&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;I have worked with modules before, but each time I have, the modules have been more overarching (i.e. they were large components of the app that did not share inputs) and I did not use them to repeat a similar process but simply to split up the code of a large app. In this case, I want the user to be able to select their inputs and click a submit button which will result in all of the graphs being updated. Then they will be able to switch between the &lt;code&gt;tabPanel&lt;/code&gt;s without having to click any additional buttons or re-select any inputs. This desired functionality requires using the same &lt;code&gt;actionButton&lt;/code&gt; and the same data set for multiple modules. However, I found out it isn’t as easy as I expected for global inputs to be used within modules!&lt;/p&gt;

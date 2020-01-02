@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
   <title>Posts on goonR blog</title>
@@ -6,18 +5,391 @@
   <description>Recent content in Posts on goonR blog</description>
   <generator>Hugo -- gohugo.io</generator>
 <language>en-us</language>
-<lastBuildDate>Mon, 25 Mar 2019 00:00:00 +0000</lastBuildDate>
+<lastBuildDate>Thu, 02 Jan 2020 00:00:00 +0000</lastBuildDate>
 
 <atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
 
 
+<item>
+  <title>Analyzing My 2019 GitHub Usage in R</title>
+  <link>/2020/01/02/analyzing-my-2019-github-usage-in-r/</link>
+  <pubDate>Thu, 02 Jan 2020 00:00:00 +0000</pubDate>
+  
+<guid>/2020/01/02/analyzing-my-2019-github-usage-in-r/</guid>
+  <description>
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;If you are anything like me, then you probably enjoy the contribution graphs that GitHub posts to both your own and others GitHub profile. You can see mine &lt;a href=&#34;https://github.com/tbradley1013&#34;&gt;here&lt;/a&gt;. Since it is the beginning of a new year, I thought it would be fun to take a look back to see how I used GitHub in 2019 and in previous years. This is made much easier by using the &lt;a href=&#34;https://github.com/r-lib/gh&#34;&gt;&lt;code&gt;gh&lt;/code&gt;&lt;/a&gt; R package which provides an R interface to the &lt;a href=&#34;https://developer.github.com/v3/&#34;&gt;GitHub API&lt;/a&gt;. This post will walk through how to get all of the commits for your personal repos (so your results will look different from mine). The &lt;code&gt;gh&lt;/code&gt; package will use the &lt;code&gt;GITHUB_PAT&lt;/code&gt; environment variable to access any personal access token you have previously set up. If you do not have that configured, than you can provide your token with the &lt;code&gt;.token&lt;/code&gt; argument.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+library(gh)
+library(lubridate)
+library(glue)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We will also define a custom color palette based on the &lt;a href=&#34;https://primer.style/css/utilities/colors&#34;&gt;GitHub Style Guide&lt;/a&gt; to stick with the post’s theme.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;gh_pal &amp;lt;- c(blue = &amp;quot;#0366d6&amp;quot;, yellow = &amp;quot;#ffd33d&amp;quot;, red = &amp;quot;#d73a49&amp;quot;, green = &amp;quot;#28a745&amp;quot;, purple = &amp;quot;#6f42c1&amp;quot;, light_green = &amp;quot;#dcffe4&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;getting-repos&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Getting Repos&lt;/h1&gt;
+&lt;p&gt;First, we want to get a listing of all of the repos that are associated with my GitHub account. We can do this using the &lt;code&gt;/user/repos&lt;/code&gt; API endpoint.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;repos &amp;lt;- gh(&amp;quot;/user/repos&amp;quot;, .limit = Inf)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can extract the desired information from the &lt;code&gt;repos&lt;/code&gt; using the &lt;code&gt;map_chr&lt;/code&gt; and &lt;code&gt;map_lgl&lt;/code&gt; functions in the &lt;code&gt;purrr&lt;/code&gt; package.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;repo_info &amp;lt;- tibble(
+  owner = map_chr(repos, c(&amp;quot;owner&amp;quot;, &amp;quot;login&amp;quot;)),
+  name = map_chr(repos, &amp;quot;name&amp;quot;),
+  full_name = map_chr(repos, &amp;quot;full_name&amp;quot;),
+  private = map_lgl(repos, &amp;quot;private&amp;quot;)
+)
+
+# showing the first few non-private repos
+filter(repo_info, !private)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 35 x 4
+##    owner      name                  full_name                       private
+##    &amp;lt;chr&amp;gt;      &amp;lt;chr&amp;gt;                 &amp;lt;chr&amp;gt;                           &amp;lt;lgl&amp;gt;  
+##  1 saleslab   DWC                   saleslab/DWC                    FALSE  
+##  2 saleslab   ParsingLabSolutionsA~ saleslab/ParsingLabSolutionsAS~ FALSE  
+##  3 tbradley1~ adv-r                 tbradley1013/adv-r              FALSE  
+##  4 tbradley1~ aob-power             tbradley1013/aob-power          FALSE  
+##  5 tbradley1~ blog                  tbradley1013/blog               FALSE  
+##  6 tbradley1~ connectapi            tbradley1013/connectapi         FALSE  
+##  7 tbradley1~ critical-thinking-ev~ tbradley1013/critical-thinking~ FALSE  
+##  8 tbradley1~ dbp-calculator        tbradley1013/dbp-calculator     FALSE  
+##  9 tbradley1~ dragondown            tbradley1013/dragondown         FALSE  
+## 10 tbradley1~ dragondown_book       tbradley1013/dragondown_book    FALSE  
+## # ... with 25 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;There is a lot of other information contained within the &lt;code&gt;repos&lt;/code&gt; API response. However, since I will be focusing mainly on my commits, I don’t need most of it for this purpose.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;get-and-parse-commits&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Get and Parse Commits&lt;/h1&gt;
+&lt;p&gt;In order to get all of the commits for each of these repos, we will use the &lt;code&gt;map_dfr&lt;/code&gt; to append all of the commit information for each repo into a single dataset. Before we do that, we need to define a few helper functions that can parse the output of the API endpoint response.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;null_list &amp;lt;- function(x){
+  map_chr(x, ~{ifelse(is.null(.x), NA, .x)})
+}
+
+parse_commit &amp;lt;- function(commits, repo){
+  # browser()
+  commit_by &amp;lt;- map(commits, c(&amp;quot;commit&amp;quot;, &amp;quot;author&amp;quot;, &amp;quot;name&amp;quot;))
+  username &amp;lt;- map(commits, c(&amp;quot;committer&amp;quot;, &amp;quot;login&amp;quot;))
+  commit_time &amp;lt;- map(commits, c(&amp;quot;commit&amp;quot;, &amp;quot;author&amp;quot;, &amp;quot;date&amp;quot;))
+  message &amp;lt;- map(commits, c(&amp;quot;commit&amp;quot;, &amp;quot;message&amp;quot;))
+  
+  out &amp;lt;- tibble(
+    repo = repo,
+    commit_by = null_list(commit_by),
+    username = null_list(username),
+    commit_time = null_list(commit_time),
+    message = null_list(message)
+  )
+  
+  out &amp;lt;- mutate(out, commit_time = as.POSIXct(commit_time, format = &amp;quot;%Y-%m-%dT%H:%M:%SZ&amp;quot;))
+  return(out)
+}
+
+gh_safe &amp;lt;- purrr::possibly(gh, otherwise = NULL)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The &lt;code&gt;parse_commit&lt;/code&gt; function will extract the desired information from each API response. The &lt;code&gt;null_list&lt;/code&gt; function is a simple helper to convert any NULL values in the response to NA, so that the &lt;code&gt;map&lt;/code&gt; functions don’t throw errors. Finally, the &lt;code&gt;gh_safe&lt;/code&gt; function is a safe version of the &lt;code&gt;gh&lt;/code&gt; function. This is defined in case any of the individual responses fail, it doesn’t cause the entire loop to fail.&lt;/p&gt;
+&lt;p&gt;Now we can query all of the commits from each of these repos and filter the output to include only commits that I made.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;all_commits &amp;lt;- map_dfr(repo_info$full_name, function(z){
+  name_split &amp;lt;- str_split(z, &amp;quot;/&amp;quot;)
+  owner &amp;lt;- name_split[[1]][1]
+  repo &amp;lt;- name_split[[1]][2]
+  
+  repo_commits &amp;lt;- gh_safe(&amp;quot;/repos/:owner/:repo/commits&amp;quot;, owner = owner, repo = repo, .limit = Inf)
+  
+  out &amp;lt;- parse_commit(repo_commits, repo = z)
+  
+  return(out)
+})
+
+
+my_commits &amp;lt;- all_commits %&amp;gt;% 
+  filter(commit_by == &amp;quot;Tyler Bradley&amp;quot;) %&amp;gt;% 
+  mutate(commit_time = commit_time - hours(5))
+
+my_commits&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 3,550 x 5
+##    repo     commit_by  username  commit_time         message               
+##    &amp;lt;chr&amp;gt;    &amp;lt;chr&amp;gt;      &amp;lt;chr&amp;gt;     &amp;lt;dttm&amp;gt;              &amp;lt;chr&amp;gt;                 
+##  1 nmanna/~ Tyler Bra~ tbradley~ 2019-10-25 07:16:50 rendering changes     
+##  2 nmanna/~ Tyler Bra~ tbradley~ 2019-10-25 07:08:12 Merge branch &amp;#39;master&amp;#39;~
+##  3 nmanna/~ Tyler Bra~ tbradley~ 2019-10-25 07:08:03 changes from rendering
+##  4 nmanna/~ Tyler Bra~ tbradley~ 2019-10-25 07:07:23 force style change    
+##  5 nmanna/~ Tyler Bra~ tbradley~ 2019-10-25 06:45:06 adding public back to~
+##  6 nmanna/~ Tyler Bra~ tbradley~ 2019-10-25 06:44:44 removing public       
+##  7 nmanna/~ Tyler Bra~ tbradley~ 2019-10-25 06:37:32 Merge branch &amp;#39;master&amp;#39;~
+##  8 nmanna/~ Tyler Bra~ tbradley~ 2019-10-25 06:37:12 rendered on server    
+##  9 nmanna/~ Tyler Bra~ tbradley~ 2019-10-25 06:35:46 removed public        
+## 10 nmanna/~ Tyler Bra~ tbradley~ 2019-10-25 06:33:36 added post for settin~
+## # ... with 3,540 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;analyzing-the-results&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Analyzing the results&lt;/h1&gt;
+&lt;p&gt;First, we can look at the overall number of commits I have made per year since I started using GitHub in 2017. Before we do that, we will add a few columns to the &lt;code&gt;my_commits&lt;/code&gt; dataset to include grouping variables based on the commit date and time. We will also join the &lt;code&gt;repo_info&lt;/code&gt; dataset to the &lt;code&gt;my_commits&lt;/code&gt; dataset.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;my_commits &amp;lt;- my_commits %&amp;gt;% 
+  mutate(
+    date = date(commit_time),
+    wday = wday(date, label = TRUE),
+    year = year(date),
+    week = week(date)
+  ) %&amp;gt;% 
+  left_join(
+    repo_info, 
+    by = c(&amp;quot;repo&amp;quot; = &amp;quot;full_name&amp;quot;)
+  ) %&amp;gt;% 
+  filter(year &amp;lt;= 2019)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;my_commits %&amp;gt;% 
+  count(year) %&amp;gt;% 
+  ggplot(aes(as.character(year), n)) + 
+  geom_col(fill = gh_pal[&amp;quot;green&amp;quot;]) + 
+  geom_text(aes(y = (n-35), label = paste(n, &amp;quot;commits&amp;quot;)), color = &amp;quot;white&amp;quot;, fontface = &amp;quot;bold&amp;quot;) + 
+  theme_bw() + 
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 2050)) + 
+  scale_x_discrete(expand = c(0.17, 0.17)) + 
+  labs(
+    title = &amp;quot;Commits by Tyler Bradley (tbradley1013) since joining GitHub by Year&amp;quot;,
+    y = &amp;quot;Number of Commits&amp;quot;
+  ) + 
+  theme(
+    axis.title.x = element_blank(),
+    panel.grid.minor.x = element_blank()
+  )&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-01-02-analyzing-my-2019-github-usage-in-r_files/figure-html/commits-per-year-1.png&#34; width=&#34;960&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;We can see that I have used GitHub more and more over the last three years, with my highest number of commits coming in 2019 (n = 1988). The same trend is true when looking at my commits to public and private repos.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;my_commits  %&amp;gt;% 
+  count(year, private) %&amp;gt;% 
+  mutate(private = ifelse(private, &amp;quot;Private&amp;quot;, &amp;quot;Public&amp;quot;),
+         year = factor(year, levels = unique(year)),
+         text_x = ifelse(private == &amp;quot;Private&amp;quot;, as.numeric(year) - 0.22, as.numeric(year) + 0.22)) %&amp;gt;% 
+  ggplot(aes(year, n, fill = private)) + 
+  geom_col(position = &amp;quot;dodge&amp;quot;) + 
+  geom_text(aes(text_x, n-20, label = paste(n, &amp;quot;commits&amp;quot;)), color = &amp;quot;white&amp;quot;, fontface = &amp;quot;bold&amp;quot;) +
+  theme_bw() + 
+  # ggsci::scale_f
+  scale_fill_manual(values = c(unname(gh_pal[&amp;quot;blue&amp;quot;]), unname(gh_pal[&amp;quot;green&amp;quot;]))) + 
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 1550)) + 
+  scale_x_discrete(expand = c(0.17, 0.17)) +
+  labs(
+    title = &amp;quot;Number of GitHub Commits by Tyler Bradley (tbradley1013) to Public and Private Repos by Year&amp;quot;,
+    y = &amp;quot;Number of Commits&amp;quot;
+  ) + 
+  theme(
+    axis.title.x = element_blank(),
+    legend.title = element_blank()
+  )&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-01-02-analyzing-my-2019-github-usage-in-r_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;960&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;We can also use &lt;code&gt;ggplot2&lt;/code&gt; to recreate the GitHub contribution heatmap. There is a minor bit of hacking to get the axes in the desired format showing the start to the month, but it can be done like this.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;my_commits %&amp;gt;% 
+  count(date, wday, year, week) %&amp;gt;% 
+  mutate(
+    week = factor(week),
+    wday = fct_rev(wday)
+  ) %&amp;gt;% 
+  group_by(year, week) %&amp;gt;% 
+  mutate(
+    min_date = floor_date(date, &amp;quot;week&amp;quot;), 
+    min_date = if_else(
+      year(min_date) &amp;lt; year, 
+      as.Date(str_replace(min_date, as.character(year-1), &amp;quot;1998&amp;quot;)),
+      as.Date(str_replace(min_date, as.character(year), &amp;quot;1999&amp;quot;))
+    )
+    
+  ) %&amp;gt;% 
+  ungroup() %&amp;gt;% 
+  ggplot(aes(min_date, wday, fill = n)) + 
+  facet_wrap(~year, ncol = 1) +
+  geom_tile(width = 5, height = 0.9, color = &amp;quot;black&amp;quot;) + 
+  theme_bw() + 
+  scale_y_discrete(expand = c(0,0)) + 
+  scale_x_date(date_breaks = &amp;quot;1 month&amp;quot;, date_labels = &amp;quot;%b&amp;quot;, expand = c(0, 0)) +
+  labs(
+    title = &amp;quot;Tyler Bradley&amp;#39;s (tbradley1013) GitHub contributions heat map by year&amp;quot;
+  ) +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    axis.title = element_blank(),
+    legend.title = element_blank()
+  ) + 
+  scale_fill_gradient(low = gh_pal[&amp;quot;light_green&amp;quot;], high = gh_pal[&amp;quot;green&amp;quot;])&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-01-02-analyzing-my-2019-github-usage-in-r_files/figure-html/contributions-heat-1.png&#34; width=&#34;960&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Now we can look just at the last year and see when I am the most productive according to commits. We can group the commits by the day of the week and the time of day to see if any patterns can be seen.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;my_commits %&amp;gt;% 
+  filter(year == 2019) %&amp;gt;% 
+  mutate(
+    hour = hour(commit_time)
+  ) %&amp;gt;% 
+  count(hour) %&amp;gt;% 
+  mutate(
+    text_y = ifelse(n &amp;lt; 50, n+5, n-5),
+    text_color = ifelse(n &amp;lt; 50, &amp;quot;black&amp;quot;, &amp;quot;white&amp;quot;)
+  ) %&amp;gt;% 
+  ggplot(aes(hour, n)) + 
+  geom_col(fill = gh_pal[&amp;quot;green&amp;quot;]) + 
+  geom_text(aes(y = text_y, color = text_color, label = paste(&amp;quot;n =&amp;quot;, n)), show.legend = FALSE, size = 3) + 
+  theme_bw() + 
+  scale_x_continuous(breaks = seq(0, 23, 2), labels = seq(0, 23, 2)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 310)) +
+  scale_color_manual(values = c(&amp;quot;black&amp;quot;, &amp;quot;white&amp;quot;)) + 
+  labs(
+    title = &amp;quot;Commits by Tyler Bradley (tbradley1013) in 2019 by time of day&amp;quot;,
+    y = &amp;quot;Number of Commits&amp;quot;,
+    x = &amp;quot;Time of Day (Hour)&amp;quot;
+  )&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-01-02-analyzing-my-2019-github-usage-in-r_files/figure-html/commits-by-hour-1.png&#34; width=&#34;960&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;My most productive time periods are clearly between 9 am and 2 pm. Over the course of that time it appears that I am fairly consistent in my productivity. This period of productivity corresponds to the time when I am in the office at work. The time periods right outside of that window (7am-8am and 3pm-4pm) are typically the beginning and end of my work day so I am either getting my day started or wrapping things up at that point. It is clear from this figure that I don’t tend to do any work from 10pm-5am which conforms as expected with my sleep schedule.&lt;/p&gt;
+&lt;p&gt;Similarly, my commits by day of the week conforms with an expected pattern that my most productive periods are when I am at work in the office Monday-Friday.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;my_commits %&amp;gt;% 
+  filter(year == 2019) %&amp;gt;% 
+  count(wday) %&amp;gt;% 
+  ggplot(aes(wday, n)) + 
+  geom_col(fill = gh_pal[&amp;quot;green&amp;quot;]) + 
+  geom_text(aes(y = n-10, label = paste(&amp;quot;n =&amp;quot;, n)), color = &amp;quot;white&amp;quot;, show.legend = FALSE) + 
+  theme_bw() +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 475)) +
+  scale_color_manual(values = c(&amp;quot;black&amp;quot;, &amp;quot;white&amp;quot;)) + 
+  labs(
+    title = &amp;quot;Commits by Tyler Bradley (tbradley1013) in 2019 by day of the week&amp;quot;,
+    y = &amp;quot;Number of Commits&amp;quot;,
+    x = &amp;quot;Day of the week&amp;quot;
+  )&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-01-02-analyzing-my-2019-github-usage-in-r_files/figure-html/commits-by-wday-1.png&#34; width=&#34;960&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;conclusion&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;Overall, 2019 was a very productive year for me in terms of GitHub commits! At this point, I am very committed to the git/GitHub workflow and expect that my commits will continue to either follow an upward trend or reach a plateau as I continue to take on new and exciting projects at work and in school!&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;gh&lt;/code&gt; package allows R users to easily interact with the GitHub API and analyze how they are utilizing the tools available through GitHub.&lt;/p&gt;
+&lt;/div&gt;
+</description>
+  </item>
+  
+<item>
+  <title>dragondown: A bookdown template for writing your thesis/dissertation at Drexel University in R</title>
+  <link>/2019/07/13/dragondown-thesis-dissertation-template-drexel-university/</link>
+  <pubDate>Sat, 13 Jul 2019 00:00:00 +0000</pubDate>
+  
+<guid>/2019/07/13/dragondown-thesis-dissertation-template-drexel-university/</guid>
+  <description>
+
+&lt;p&gt;I am happy to introduce the &lt;a href=&#34;https://github.com/tbradley1013/dragondown&#34;&gt;&lt;code&gt;dragondown&lt;/code&gt;&lt;/a&gt; R package. This package will allow for you to write your Drexel University Master&amp;rsquo;s or PhD Thesis/Dissertation entirely in Rmarkdown without having to write it in LaTeX. This package is inspired by the &lt;a href=&#34;https://github.com/ismayc/thesisdown&#34;&gt;&lt;code&gt;thesisdown&lt;/code&gt;&lt;/a&gt; package.&lt;/p&gt;
+
+&lt;h2 id=&#34;how-it-works&#34;&gt;How it works&lt;/h2&gt;
+
+&lt;p&gt;Using &lt;code&gt;dragondown&lt;/code&gt; is fairly straightforward. &lt;code&gt;dragondown&lt;/code&gt; (along with other Rmarkdown projects) are typically best when done in RStudio, so your first step is to install RStudio and R. You can find the latest version of R &lt;a href=&#34;https://www.r-project.org/&#34;&gt;here&lt;/a&gt; and RStudio &lt;a href=&#34;https://www.rstudio.com/products/rstudio/download/&#34;&gt;here&lt;/a&gt;. Once you have R and RStudio installed, you will need to install a LaTeX distribution. Luckily for you, Yihui Xie has created the &lt;a href=&#34;https://yihui.name/tinytex/&#34;&gt;&lt;code&gt;tinytex&lt;/code&gt;&lt;/a&gt; distribution which can be easily installed for using with R. You can install it as follows:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;install.packages(&#39;tinytex&#39;)
+tinytex::install_tinytex()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Once you have these prerequisites installed, you can now install the &lt;code&gt;bookdown&lt;/code&gt; and the &lt;code&gt;dragondown&lt;/code&gt; packages from GitHub. You can do this with the following code:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;if (!require(&amp;quot;remotes&amp;quot;)) install.packages(&amp;quot;remotes&amp;quot;, repos = &amp;quot;http://cran.rstudio.org&amp;quot;)
+remotes::install_github(&amp;quot;rstudio/bookdown&amp;quot;)
+remotes::install_github(&amp;quot;tbradley1013/dragondown&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now you can create a thesis project easily from RStudio. Select &lt;code&gt;File -&amp;gt; New File -&amp;gt; R Markdown&lt;/code&gt; from the menu. When the pop-up opens, select &amp;ldquo;From Template&amp;rdquo; from the left hand side and then find the &amp;ldquo;Drexel Thesis&amp;rdquo; option from the list, as shown here:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;/images/dragondown/thesis_rmd.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Please note, that your must use the name &amp;ldquo;index&amp;rdquo; so that your &lt;code&gt;index.Rmd&lt;/code&gt; file is created correctly. One you select &amp;ldquo;OK&amp;rdquo;, a new folder (also named index) will be created wherever you specify in the Location input. All of the template files will be created within the index folder that is created. Note that once the folder is created, you can rename the folder, as long as you do not rename the &lt;code&gt;index.Rmd&lt;/code&gt; file within the folder.&lt;/p&gt;
+
+&lt;p&gt;Now you are ready to get to work! You create a new Rmarkdown document for each chapter within your dissertation as shown in the example files that are generated when you create the project. If you add more chapters, or rename the existing ones, you will have to update your &lt;code&gt;_bookdown.yml&lt;/code&gt; file to indicate the correct order for your files.&lt;/p&gt;
+
+&lt;p&gt;Whenever you want to see what your current work looks like in the final format, you can open your &lt;code&gt;index.Rmd&lt;/code&gt; file and select the &amp;ldquo;Knit&amp;rdquo; option at the top of the script. This will create the book from all of the files listed in the &lt;code&gt;_bookdown.yml&lt;/code&gt; file.&lt;/p&gt;
+
+&lt;p&gt;I recommend you look through some of the example chapters, as they demonstrate some of the capabilities of using &lt;code&gt;bookdown&lt;/code&gt; to write your thesis. You can also see more functionality of the &lt;code&gt;bookdown&lt;/code&gt; package &lt;a href=&#34;https://bookdown.org/&#34;&gt;here&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;You can see how other components of the &lt;code&gt;dragondown&lt;/code&gt; template works by reading through the &lt;a href=&#34;https://github.com/tbradley1013/dragondown#components&#34;&gt;Components&lt;/a&gt; section of the GitHub README. You can see what the final product of the &lt;code&gt;dragondown&lt;/code&gt; project looks like for the example thesis used in the template looks like &lt;a href=&#34;/dragondown_book/thesis.pdf&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;thesis-dissertation-approval-form&#34;&gt;Thesis/Dissertation Approval Form&lt;/h3&gt;
+
+&lt;p&gt;One important feature unique to the &lt;code&gt;dragondown&lt;/code&gt; template, is the ability to include the required &lt;a href=&#34;https://drexel.edu/~/media/Files/graduatecollege/forms/Graduate%20Thesis-Dissertation%20Approval%20Form%20and%20Signature%20Page.ashx?la=en&#34;&gt;thesis/dissertation approval form&lt;/a&gt;. This form is for your committee members to sign that they have approved of your thesis. In the original &lt;code&gt;drexel-thesis&lt;/code&gt; LaTeX class, this page was created in pure LaTeX. However, the form as been updated since its implementation and unfortunately, I am not a LaTeX expert. So in this project, the approval form is added using a saved version of the form from the &lt;code&gt;docs&lt;/code&gt; folder of your thesis project. When you create a new thesis project, a blank approval form is used. However, you can replace the existing form with a filled out form if you wish. If you decide to do this, you can use the existing file name or you can specify a new name. Please note, that if you use a different file name, you will need to specify the file location in your &lt;code&gt;index.Rmd&lt;/code&gt; file using the &lt;code&gt;approvalform&lt;/code&gt; YAML parameter:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;approvalform: path/to/form.pdf
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you wish to exlude the approval form from your thesis rendering, you will need to open the &lt;code&gt;template.tex&lt;/code&gt; file and remove the &lt;code&gt;approvalform&lt;/code&gt; option from the &lt;code&gt;\documentclass&lt;/code&gt; option on the first line.&lt;/p&gt;
+
+&lt;h2 id=&#34;why-should-you-use-dragondown&#34;&gt;Why should you use &lt;code&gt;dragondown&lt;/code&gt;?&lt;/h2&gt;
+
+&lt;p&gt;Writing your thesis/dissertation is hard enough, and worrying about the formatting and how to integrate your results with your text can make it that much more difficult. Inspired by other examples, the &lt;code&gt;dragondown&lt;/code&gt; package will allow you to create a Rmarkdown book that conforms to the requirements given in the &lt;a href=&#34;https://drexel.edu/~/media/Files/graduatecollege/forms/Thesis%20Manual.ashx?la=en&#34;&gt;Drexel Thesis Manual&lt;/a&gt;. There are three main reasons why you should want to use this package to create your thesis/dissertation:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Easily integrate your text with your analyses&lt;/li&gt;
+&lt;li&gt;Avoid having to work in raw LaTeX to include tables and figures in a clean format&lt;/li&gt;
+&lt;li&gt;REPRODUCIBILITY!!
+&lt;br /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;1-easily-integrate-your-text-with-your-analyses&#34;&gt;1. Easily integrate your text with your analyses.&lt;/h3&gt;
+
+&lt;p&gt;R and Rmarkdown allows you to easily integrate text and your analyses (in the form of R, python, or SQL code). The &lt;code&gt;dragondown&lt;/code&gt; package then provides the required templates so that when your knit your Rmarkdown (in this case a &lt;a href=&#34;https://bookdown.org/&#34;&gt;&lt;code&gt;bookdown&lt;/code&gt;&lt;/a&gt;) project it will conform to Drexel&amp;rsquo;s various requirements for the formatting of a thesis/dissertation. This is incredibly powerful, and can save you a lot of time when you are trying to put the finishing touches on your project. Instead of having to spend a crazy amount of time making sure that every figure and table meets the right requirements and your front matter and back matter all meet the requirements, the &lt;code&gt;dragondwon&lt;/code&gt; package takes care of that for you. This will allow you to spend your time on what you really care about, your work!&lt;/p&gt;
+
+&lt;p&gt;For example, let&amp;rsquo;s pretend that you have a data set named &lt;code&gt;diamonds.csv&lt;/code&gt; (credit to the &lt;a href=&#34;https://ggplot2.tidyverse.org/&#34;&gt;&lt;code&gt;ggplot2&lt;/code&gt;&lt;/a&gt;) package. You can easily load it in your Rmarkdown file directly with your text in a code chunk like below:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(dplyr)
+library(readr)
+
+diamonds &amp;lt;- read_csv(&amp;quot;dragondown-files/diamonds.csv&amp;quot;)
+
+diamonds
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## # A tibble: 53,940 x 10
+##    carat cut       color clarity depth table price     x     y     z
+##    &amp;lt;dbl&amp;gt; &amp;lt;chr&amp;gt;     &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt;   &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt;
+##  1 0.23  Ideal     E     SI2      61.5    55   326  3.95  3.98  2.43
+##  2 0.21  Premium   E     SI1      59.8    61   326  3.89  3.84  2.31
+##  3 0.23  Good      E     VS1      56.9    65   327  4.05  4.07  2.31
+##  4 0.290 Premium   I     VS2      62.4    58   334  4.2   4.23  2.63
+##  5 0.31  Good      J     SI2      63.3    58   335  4.34  4.35  2.75
+##  6 0.24  Very Good J     VVS2     62.8    57   336  3.94  3.96  2.48
+##  7 0.24  Very Good I     VVS1     62.3    57   336  3.95  3.98  2.47
+##  8 0.26  Very Good H     SI1      61.9    55   337  4.07  4.11  2.53
+##  9 0.22  Fair      E     VS2      65.1    61   337  3.87  3.78  2.49
+## 10 0.23  Very Good H     VS1      59.4    61   338  4     4.05  2.39
+## # ... with 53,930 more rows
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then you can include more code chunks that analyze the data set, create production quality table and figures, or anything else and they are easily integrated with your text.&lt;/p&gt;
+
+&lt;p&gt;Are you a fan of python instead of R? No problem! With newer versions of RStudio and the &lt;a href=&#34;https://rstudio.github.io/reticulate/&#34;&gt;&lt;code&gt;reticulate&lt;/code&gt;&lt;/a&gt; R package, you are able to &lt;a href=&#34;https://rstudio.github.io/reticulate/articles/r_markdown.html&#34;&gt;easily integrate python chunks directly into your Rmarkdown files&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;2-avoid-having-to-work-in-raw-latex&#34;&gt;2. Avoid having to work in raw LaTeX&lt;/h3&gt;
+
+&lt;p&gt;Don&amp;rsquo;t get me wrong, there are some people that LOVE LaTeX&amp;hellip; but if we are honest, those people are likely few and far between. From the people I have spoken too, the knowledge that has been past down for using LaTeX to create the required formatting for Drexel&amp;rsquo;s dissertations is something that gets lost between generations of grad students. Luckily, thanks to the work of several former students in the Physics department (namely &lt;a href=&#34;https://github.com/wking&#34;&gt;W. Trevor King&lt;/a&gt;), there is a &lt;a href=&#34;https://github.com/DrexelPhysics/drexel-thesis&#34;&gt;drexel-thesis LaTeX class&lt;/a&gt;. Now, you could certainly go about building this class on your local machine and writing your thesis in LaTeX, but you will still have to worry about organization and actually using LaTeX. The &lt;code&gt;dragondown&lt;/code&gt; package includes a slightly modified of the &lt;code&gt;.cls&lt;/code&gt; class file from &lt;code&gt;drexel-thesis&lt;/code&gt; and a LaTeX template that allows you to completely avoid LaTeX if you want.&lt;/p&gt;
+
+&lt;p&gt;Just like in any Rmarkdown file being knit to a pdf, you can certainly add your own LaTeX on top of the template, but you only have to do this if you want! You can also modify the template yourself once you create your &lt;code&gt;dragondown&lt;/code&gt; project.&lt;/p&gt;
+
+&lt;h3 id=&#34;3-reproducibility&#34;&gt;3. REPRODUCIBILITY&lt;/h3&gt;
+
+&lt;p&gt;I am including this last, but in all honesty, this is by far the most important reason for why you should switch to using &lt;code&gt;dragondown&lt;/code&gt; for your thesis. Using this package, or more specifically, R (or python) and Rmarkdown, will allow you to create a completely reproducible workflow!&lt;/p&gt;
+
+&lt;p&gt;What does this mean? Simple, you can press one button and your whole dissertation is regenerated with any changes that you may have made.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Did you find a mistake in your data?&lt;/strong&gt; No problem (assuming your conclusions didn&amp;rsquo;t change, of course)! You can make the change and simply re-knit your dissertation and all of your results, tables, and figures will be completely re-rendered without you having to go through the painful process of remaking them all one by one and then copying and pasting them back into your manuscript!&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Did you decide you want to rearrange your chapters?&lt;/strong&gt; No Problem!! Simply edit your &lt;code&gt;_bookdown.yml&lt;/code&gt; file to put them in the order that you want and re-knit!&lt;/p&gt;
+
+&lt;p&gt;In addition to the benefits that reproducibility provides for yourself, it also makes it so that you can easily share your work with others and they will be able to reproduce your results by simply compiling your thesis. This allows for more transparency in science, which is always a good thing!&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;This package was generated to try and make the life of graduate students at Drexel University a little bit easier. While this package will not perform your research or write your thesis, hopefully it will allow you to not worry about the tedious task of meeting formatting guidelines and focus on the work you care about! If you have any questions and you find any issues with the package, feel free to file an issue at the &lt;a href=&#34;https://github.com/tbradley1013/dragondown/issues&#34;&gt;GitHub repo&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I would like to thank both W. Trevor King and his collaborators for their work on the &lt;code&gt;drexel-thesis&lt;/code&gt; LaTeX class, as without that, this project would not have happened. I would also like to thank Yihui Xie for creating &lt;code&gt;Rmarkdown&lt;/code&gt; and &lt;code&gt;bookdown&lt;/code&gt; and Chester Ismay for the creation of &lt;code&gt;thesisdown&lt;/code&gt;, which this package is largely based on. Without all of this work, the &lt;code&gt;dragondown&lt;/code&gt; project would not exist, so thank you!&lt;/p&gt;
+</description>
+  </item>
+  
 <item>
   <title>Get the Office Quotes in R with the dundermifflin Package</title>
   <link>/2019/03/25/office-quotes-in-r-dundermifflin-package/</link>
   <pubDate>Mon, 25 Mar 2019 00:00:00 +0000</pubDate>
   
 <guid>/2019/03/25/office-quotes-in-r-dundermifflin-package/</guid>
-  <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+  <description>
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;I am happy to share a fun project I put together this weekend - a new R package called &lt;a href=&#34;https://github.com/tbradley1013/dundermifflin&#34;&gt;&lt;code&gt;dundermifflin&lt;/code&gt;&lt;/a&gt;. If you can’t guess from the name, it will give you quotes from the Office whenever you want! This package was inspired by the &lt;a href=&#34;https://github.com/adam-gruer/goodshirt&#34;&gt;&lt;code&gt;goodshirt&lt;/code&gt;&lt;/a&gt; package, which gives users quotes from The Good Place, I was able to great a similar package for the Office. By using &lt;a href=&#34;https://github.com/anGie44/theOffice-api&#34;&gt;&lt;code&gt;theOffice-api&lt;/code&gt;&lt;/a&gt;, I created a data set, &lt;code&gt;office_quotes&lt;/code&gt;, that is shipped with the package, that has every line from the Office, with the exception of season 5.&lt;/p&gt;
 &lt;p&gt;I will try to keep this brief, because as in the words of Kevin:&lt;/p&gt;
@@ -148,7 +520,10 @@ joke.&lt;/p&gt;
   <pubDate>Tue, 19 Mar 2019 00:00:00 +0000</pubDate>
   
 <guid>/2019/03/19/using-scoped-dplyr-verbs/</guid>
-  <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+  <description>
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;Over the past several months, I have really started to increase the amount that I have been using scoped &lt;code&gt;dplyr&lt;/code&gt; verbs. For those of you who don’t know about these functions, they are handy variants to the normal &lt;code&gt;dplyr&lt;/code&gt; verbs, such as &lt;code&gt;filter&lt;/code&gt;, &lt;code&gt;mutate&lt;/code&gt;, and &lt;code&gt;summarize&lt;/code&gt;, that allow you to target multiple columns or all of your columns. These functions allow for you to save yourself time and typing when you want to apply either one or multiple functions to more than one column, a group of columns, or to all of your columns. This post will walk through a few of the ones I use on a regular basis and how I use them!&lt;/p&gt;
 &lt;p&gt;These scoped verbs typically come in three different flavors:&lt;/p&gt;
@@ -674,7 +1049,10 @@ iris_tbl&lt;/code&gt;&lt;/pre&gt;
   <pubDate>Wed, 28 Nov 2018 00:00:00 +0000</pubDate>
   
 <guid>/2018/11/28/presentation-at-delaware-watershed-research-conference-2018/</guid>
-  <description>&lt;p&gt;I am pleased to announce that I will presenting at the upcoming &lt;a href=&#34;https://ansp.org/research/environmental-research/projects/watershed-protection-program/delaware-watershed-research-conference/&#34;&gt;Delaware Watershed Reseach Conference 2018&lt;/a&gt; at the Academy of Natural Sciences of Drexel University on Thursday November 29, 2018. My presentation is entitled “Comparing Illumina MiSeq and PacBio Sequel Sequencing of Fecal Samples from Various Animal Sources Potentially Contributing to Microbial Contamination of the Delaware River Watershed”. This presentation will discuss ongoing research within the &lt;a href=&#34;http://microbes.cae.drexel.edu/people/dr-sales&#34;&gt;Sales Laboratory Group&lt;/a&gt; at Drexel University.&lt;/p&gt;
+  <description>
+
+
+&lt;p&gt;I am pleased to announce that I will presenting at the upcoming &lt;a href=&#34;https://ansp.org/research/environmental-research/projects/watershed-protection-program/delaware-watershed-research-conference/&#34;&gt;Delaware Watershed Reseach Conference 2018&lt;/a&gt; at the Academy of Natural Sciences of Drexel University on Thursday November 29, 2018. My presentation is entitled “Comparing Illumina MiSeq and PacBio Sequel Sequencing of Fecal Samples from Various Animal Sources Potentially Contributing to Microbial Contamination of the Delaware River Watershed”. This presentation will discuss ongoing research within the &lt;a href=&#34;http://microbes.cae.drexel.edu/people/dr-sales&#34;&gt;Sales Laboratory Group&lt;/a&gt; at Drexel University.&lt;/p&gt;
 &lt;p&gt;The project is investigating the use of different next generation sequencing techniques and their ability to perform microbial source tracking. The presentation at DWRC 2018 will focus solely on the difference between the two sequencing results for just the fecal samples collected in this study. Specifically, looking at whether sequencing the full length 16S rRNA gene (done using the PacBio Sequel sequencing method) is more effective than targeting specific hyper-variable regions of the 16S rRNA gene (done using the Illumina MiSeq sequencing method). The abstract and a link to the presentation can be found &lt;a href=&#34;https://tbradley1013.github.io/presentations/&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;I will be presenting at 11 AM in the Freshwater Status and Trends track of the conference.&lt;/p&gt;
 &lt;p&gt;Please come and take a look at the research I am working on!&lt;/p&gt;
@@ -687,7 +1065,10 @@ iris_tbl&lt;/code&gt;&lt;/pre&gt;
   <pubDate>Mon, 01 Oct 2018 00:00:00 +0000</pubDate>
   
 <guid>/2018/10/01/calculating-quantiles-for-groups-with-dplyr-summarize-and-purrr-partial/</guid>
-  <description>&lt;p&gt;Recently, I was trying to calculate the percentiles of a set of variables within a data set grouped by another variable. However, I quickly ran into the realization that this is not very straight forward when using &lt;code&gt;dplyr&lt;/code&gt;’s &lt;code&gt;summarize&lt;/code&gt;. Before I demonstrate, let’s load the libraries that we will need.&lt;/p&gt;
+  <description>
+
+
+&lt;p&gt;Recently, I was trying to calculate the percentiles of a set of variables within a data set grouped by another variable. However, I quickly ran into the realization that this is not very straight forward when using &lt;code&gt;dplyr&lt;/code&gt;’s &lt;code&gt;summarize&lt;/code&gt;. Before I demonstrate, let’s load the libraries that we will need.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(dplyr)
 library(purrr)&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;If you don’t believe me when I say that it is not straight forward, go ahead and try to run the following block of code.&lt;/p&gt;
@@ -785,7 +1166,10 @@ p_funs&lt;/code&gt;&lt;/pre&gt;
   <pubDate>Thu, 06 Sep 2018 00:00:00 +0000</pubDate>
   
 <guid>/2018/09/06/tracking-joey-wendle-rookie-season-with-gganimate/</guid>
-  <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+  <description>
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;This past weekend I got the chance to go to the Tampa Bay Rays vs Cleveland Indians game. This game was a ton of fun, made even more exciting for me - and by the end of the game, the people in my section - because my brother-in-law’s brother (does that make him my brother-in-law too? No one ever knows for sure…), Joey Wendle, plays for the Rays! In case you haven’t been paying attention, Joey has been having a &lt;strong&gt;&lt;em&gt;MASSIVE&lt;/em&gt;&lt;/strong&gt; rookie season. Just take a look at some of the tweets from the Ray’s organization in the last few days.&lt;/p&gt;
 &lt;center&gt;
@@ -1134,7 +1518,10 @@ animate(multi_stats, width = 800, height = 1000)&lt;/code&gt;&lt;/pre&gt;
   <pubDate>Fri, 24 Aug 2018 00:00:00 +0000</pubDate>
   
 <guid>/2018/08/24/add-rstudio-community-to-your-blogs-social-links/</guid>
-  <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+  <description>
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;Recently, I switched themes for my blog to the &lt;a href=&#34;https://github.com/yoshiharuyamashita/blackburn&#34;&gt;blackburn&lt;/a&gt; theme and I love it! Luckily, the &lt;a href=&#34;https://github.com/rstudio/blogdown&#34;&gt;&lt;code&gt;blogdown&lt;/code&gt;&lt;/a&gt; package makes this super easy to do within R! If you haven’t used &lt;code&gt;blogdown&lt;/code&gt;, I &lt;strong&gt;&lt;em&gt;highly&lt;/em&gt;&lt;/strong&gt; recommend you take a look at it for setting up your blog. One of the nice features of the blackburn theme, is that it provides easy to add “social” tags that can be configured in your &lt;code&gt;config.toml&lt;/code&gt; file. The built in social tags all come with nice &lt;a href=&#34;https://fontawesome.com/&#34;&gt;font-awesome&lt;/a&gt; icons to their left.&lt;/p&gt;
 &lt;p&gt;However, one of the social media sites that I visit the most is not included on the provided sites, and that is &lt;a href=&#34;https://community.rstudio.com/&#34;&gt;RStudio Community&lt;/a&gt;! RStudio Community is a web-forum that is hosted by RStudio to provide community Q and A for all things related to R, RStudio products, and packages provided by RStudio. If you haven’t been there before, I highly recommend that you check it out! Since this site is not included in blackburn’s social links, I had to add it myself. This post will walk through how to edit the blackburn theme to include custom social links, specifically for RStudio Community.&lt;/p&gt;
@@ -1349,7 +1736,10 @@ the left padding from 2 to 2.5 for .header and .content
   <pubDate>Fri, 10 Aug 2018 00:00:00 +0000</pubDate>
   
 <guid>/2018/08/10/create-a-dynamic-number-of-ui-elements-in-shiny-with-purrr/</guid>
-  <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+  <description>
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;&lt;a href=&#34;https://purrr.tidyverse.org/&#34;&gt;&lt;code&gt;purrr&lt;/code&gt;&lt;/a&gt; is an incredibly powerful package that has greatly enhanced my R programming abilities. &lt;code&gt;purrr&lt;/code&gt; has applications in pretty much any situation. One of the most useful situations, IMHO, is in the creation of a dynamic number of &lt;a href=&#34;https://shiny.rstudio.com/&#34;&gt;&lt;code&gt;shiny&lt;/code&gt;&lt;/a&gt; UI elements. This can be extremely useful if you want to be able to create a dynamic number of ui elements (whether that be inputs or outputs) based on either user selection or the data being used. This post will walk through how to create a dynamic number of plots depending on how many parameters the user selects.&lt;/p&gt;
 &lt;/div&gt;
@@ -1754,11 +2144,14 @@ shinyApp(ui = ui, server = server)&lt;/code&gt;&lt;/pre&gt;
   
 <item>
   <title>Using global input values inside of R Shiny modules</title>
-  <link>/2018/07/20/r-shiny-modules--using-global-inputs/</link>
+  <link>/2018/07/20/r-shiny-modules-using-global-inputs/</link>
   <pubDate>Fri, 20 Jul 2018 00:00:00 +0000</pubDate>
   
-<guid>/2018/07/20/r-shiny-modules--using-global-inputs/</guid>
-  <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+<guid>/2018/07/20/r-shiny-modules-using-global-inputs/</guid>
+  <description>
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;This week, I have been working on a new shiny app. This app allows for similar figures to be rendered based on which summary statistic the user is interested in. There are four different figure types for the user to choose from, each of which are placed into their own &lt;code&gt;tabPanel&lt;/code&gt;. This means copying the server code used to generate the graphs four different times. Following Hadley’s words of wisdom in &lt;a href=&#34;http://r4ds.had.co.nz/functions.html&#34;&gt;R for Data Science&lt;/a&gt;, I wanted to abstract this process into functions. In the world of &lt;a href=&#34;https://shiny.rstudio.com/&#34;&gt;shiny&lt;/a&gt;, this means working with &lt;a href=&#34;https://shiny.rstudio.com/articles/modules.html&#34;&gt;modules&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;I have worked with modules before, but each time I have, the modules have been more overarching (i.e. they were large components of the app that did not share inputs) and I did not use them to repeat a similar process but simply to split up the code of a large app. In this case, I want the user to be able to select their inputs and click a submit button which will result in all of the graphs being updated. Then they will be able to switch between the &lt;code&gt;tabPanel&lt;/code&gt;s without having to click any additional buttons or re-select any inputs. This desired functionality requires using the same &lt;code&gt;actionButton&lt;/code&gt; and the same data set for multiple modules. However, I found out it isn’t as easy as I expected for global inputs to be used within modules!&lt;/p&gt;
@@ -1943,7 +2336,10 @@ shinyApp(ui = ui, server = server)&lt;/code&gt;&lt;/pre&gt;
   <pubDate>Tue, 19 Jun 2018 00:00:00 +0000</pubDate>
   
 <guid>/2018/06/19/subsetting-phylogenetic-trees/</guid>
-  <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+  <description>
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;In the past few months, I have been introduced to and started working with phylogenetic trees. The trees I have been working with contain the entire tree of life for bacteria. Needless to say, they are huge. At first, I was told that I could download a program that would let me view the tree and search for particular species on the tree, but of course, I immediately looked for a better solution using R. As is the case for most things, I was able to find a full suite of packages (&lt;a href=&#34;https://github.com/GuangchuangYu/treeio&#34;&gt;&lt;code&gt;treeio&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;https://github.com/GuangchuangYu/ggtree&#34;&gt;&lt;code&gt;ggtree&lt;/code&gt;&lt;/a&gt;, and &lt;a href=&#34;https://github.com/GuangchuangYu/tidytree&#34;&gt;&lt;code&gt;tidytree&lt;/code&gt;&lt;/a&gt; - all created by &lt;a href=&#34;https://guangchuangyu.github.io&#34;&gt;Guangchuang Yu&lt;/a&gt;) that allowed me to interact with this data.&lt;/p&gt;
 &lt;p&gt;However, since my tree was so large, it was extremely difficult to make legible figures even with the great flexibility of &lt;code&gt;ggtree&lt;/code&gt;. In order to better analyze the tree as I needed to, I needed to come up with a way to look at only the portions of the tree that I wanted while still maintaining the structure of the tree for the subset portion. As a result, I created the &lt;code&gt;tree_subset&lt;/code&gt; function which is now in the development version (1.5.1.002) of &lt;code&gt;treeio&lt;/code&gt; on github. This post will briefly walk through the usage of this function!&lt;/p&gt;
@@ -2017,6 +2413,879 @@ merged_subset %&amp;gt;%
 &lt;h1&gt;Conclusion&lt;/h1&gt;
 &lt;p&gt;This function allows users to explore their phylogenetic trees by looking at specific portions of the overall tree when the full tree is too large to easily interpret. The shiny application allows for users who are not familiar with R to easily use this function so that they can explore the trees in a method that, in my opinion, is more efficient than some of the other phylogentic tree programs. I hope that this function is of use to others!&lt;/p&gt;
 &lt;p&gt;This was my first experience with contributing to an open-source project and Dr. Yu made it extremely easy. I would like to thank him for helping me get my pull request merged and for his great packages!&lt;/p&gt;
+&lt;/div&gt;
+</description>
+  </item>
+  
+<item>
+  <title>PCA in a tidy(verse) framework</title>
+  <link>/2018/02/01/pca-in-a-tidy-verse-framework/</link>
+  <pubDate>Thu, 01 Feb 2018 00:00:00 +0000</pubDate>
+  
+<guid>/2018/02/01/pca-in-a-tidy-verse-framework/</guid>
+  <description>
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;The other day, a &lt;a href=&#34;https://community.rstudio.com/t/tidyverse-solutions-for-factor-analysis-principal-component-analysis/4504&#34;&gt;question&lt;/a&gt; was posted on &lt;a href=&#34;https://community.rstudio.com/&#34;&gt;RStudio Community&lt;/a&gt; about performing Principal Component Analysis (PCA) in a &lt;a href=&#34;https://www.tidyverse.org/&#34;&gt;tidyverse&lt;/a&gt; workflow. Conveniently, I had literally just worked through this process the day before and was able to post an &lt;a href=&#34;https://community.rstudio.com/t/tidyverse-solutions-for-factor-analysis-principal-component-analysis/4504/2&#34;&gt;answer&lt;/a&gt;. While most questions and answers are good as they are on forum sites, I thought this one might be worth exploring a little more since using the tidyverse framework makes PCA much easier, in my opinion.&lt;/p&gt;
+&lt;p&gt;PCA is a multi-variate statistical technique for dimension reduction. Essentially, it allows you to take a data set that has n continuous variables and relate them through n orthogonal dimensions. This is a method of unsupervised learning that allows you to better understand the variability in the data set and how different variables are related. While there are the same number of principal components created as there are variables (assuming you have more observations than variables-but that is another issue), each principal component explains the maximum possible variation in the data conditional on it being orthogonal, or perpendicular, to the previous principal components.&lt;/p&gt;
+&lt;p&gt;In my answer, I used the &lt;code&gt;iris&lt;/code&gt; data set to demonstrate how PCA can be done in the tidyverse workflow. For this post, I will be using the &lt;code&gt;USArrests&lt;/code&gt; data set that was used in &lt;a href=&#34;http://www-bcf.usc.edu/~gareth/ISL/index.html&#34;&gt;An Introduction to Statistical Thinking&lt;/a&gt; by Gareth James et. al. In this book, they work through a PCA and focus on the statistics and explanations behind PCA. This is how I learned how to do PCA and would highly recommend it if you are unfamiliar with the topic. In this blog post, my focus will be more on implementing the PCA in the tidyverse framework. Another nice walkthough of PCA with this dataset that is online can be found at &lt;a href=&#34;http://uc-r.github.io/pca&#34;&gt;University of Cincinnati’s R blog&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;exploring-the-data&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Exploring the data&lt;/h1&gt;
+&lt;p&gt;Before we dive in to the analysis, we want to explore our data set and become familiar with it.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+library(broom)
+library(knitr)
+library(ggfortify)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;USArrests %&amp;gt;% head() %&amp;gt;% knitr::kable()&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Murder&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Assault&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;UrbanPop&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Rape&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td&gt;Alabama&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;13.2&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;236&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;58&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;21.2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td&gt;Alaska&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;10.0&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;263&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;48&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;44.5&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td&gt;Arizona&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;8.1&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;294&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;80&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;31.0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td&gt;Arkansas&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;8.8&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;190&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;50&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;19.5&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td&gt;California&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;9.0&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;276&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;91&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;40.6&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td&gt;Colorado&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;7.9&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;204&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;78&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;38.7&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Looking at the first 6 rows using the &lt;code&gt;head()&lt;/code&gt; function, we can see that each row is a state and and each column is a variable. Looking at &lt;code&gt;?USArrests&lt;/code&gt;, we can see that the column descriptions are as follows:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Murder - the number of murder arrests per 100,000 people in a given state&lt;/li&gt;
+&lt;li&gt;Assault - the number of assault arrests per 100,000 people in a given state&lt;/li&gt;
+&lt;li&gt;UrbanPop - a numeric percentage of the urban population per state (i.e. the percentage of the state’s population that lives in cities)&lt;/li&gt;
+&lt;li&gt;Rape - the number of rape arrests per 100,000 people in a given state&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Now, that we see how the data set is set up, let’s try to visualize the data as it is. Before we do that, let’s convert the data set to a &lt;code&gt;tibble&lt;/code&gt;. Since tibbles do not support rownames, we will have to convert them to their own column with &lt;code&gt;rownames_to_column&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;us_arrests &amp;lt;- USArrests %&amp;gt;% 
+  rownames_to_column(var = &amp;quot;state&amp;quot;) %&amp;gt;% 
+  # I prefer column names to be all lowercase so I am going to change them here
+  rename_all(tolower) %&amp;gt;% 
+  as_tibble()
+
+us_arrests&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 50 x 5
+##    state       murder assault urbanpop  rape
+##    &amp;lt;chr&amp;gt;        &amp;lt;dbl&amp;gt;   &amp;lt;int&amp;gt;    &amp;lt;int&amp;gt; &amp;lt;dbl&amp;gt;
+##  1 Alabama      13.2      236       58  21.2
+##  2 Alaska       10.0      263       48  44.5
+##  3 Arizona       8.10     294       80  31.0
+##  4 Arkansas      8.80     190       50  19.5
+##  5 California    9.00     276       91  40.6
+##  6 Colorado      7.90     204       78  38.7
+##  7 Connecticut   3.30     110       77  11.1
+##  8 Delaware      5.90     238       72  15.8
+##  9 Florida      15.4      335       80  31.9
+## 10 Georgia      17.4      211       60  25.8
+## # ... with 40 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let’s take a look at murder arrest rates in each of the stats.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;us_arrests %&amp;gt;% 
+  mutate(state = factor(state), 
+         state = fct_reorder(state, murder) %&amp;gt;% fct_rev()) %&amp;gt;% 
+  ggplot(aes(state, murder)) + 
+  geom_bar(stat = &amp;quot;identity&amp;quot;) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.4)) +
+  labs(y = &amp;quot;Murder Arrest Rate per 100,000 people&amp;quot;,
+       x = &amp;quot;State&amp;quot;,
+       title = &amp;quot;Murder rate in each state of the USA&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-02-01-pca-in-a-tidy-verse-framework_files/figure-html/murder-bar-plot-1.png&#34; width=&#34;768&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;You can see that Georgia has the highest murder rate, followed by Mississippi, Louisiana, and Florida Let’s try one more.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;us_arrests %&amp;gt;% 
+  gather(key = crime, value = rate, c(murder, assault, rape)) %&amp;gt;% 
+  ggplot(aes(urbanpop, rate, color = crime)) + 
+  facet_wrap(~crime, scales = &amp;quot;free_y&amp;quot;, ncol = 1) +
+  geom_point() + 
+  geom_smooth(se = FALSE, method = &amp;quot;lm&amp;quot;) +
+  theme_bw() + 
+  labs(x = &amp;quot;Percentage Urban Population&amp;quot;,
+       y = &amp;quot;Arrest Rate per 100,000 people&amp;quot;,
+       title = &amp;quot;Arrest rate vs percentage urban population&amp;quot;) +
+  theme(legend.title = element_blank(),
+        legend.position = &amp;quot;bottom&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-02-01-pca-in-a-tidy-verse-framework_files/figure-html/tidy-us-arrests-plot-1.png&#34; width=&#34;768&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;This figure is a slightly more informative than the last one. In this figure, each crime rate is plotted against percentage urban population. Simple linear models are fit for each of the different crime types to see if any pattern can be seen in the data. There appears to be an increase in assault arrests as urban population grows, however, there is &lt;em&gt;a lot&lt;/em&gt; of variability around the line of best fit. Rape arrest rates follow the linear model much closer than the others but there is still a lot of variability. On the other hand, murder arrest rates seem to be unchanged based on urban population.&lt;/p&gt;
+&lt;p&gt;Now we could certainly do correlations, multiple linear regressions, or fit other types of models and would likely gain some useful insights, but instead let’s focus on the PCA.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;pca-in-the-tidyverse-framework&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;PCA in the tidyverse framework&lt;/h1&gt;
+&lt;p&gt;Now, when I first fit PCA models in R, I found myself with an unmanageable number of variables and to track and maintain. This can make the process overwhelming and can make you lose track of information. Luckily, using the &lt;code&gt;tidyverse&lt;/code&gt; and the &lt;code&gt;broom&lt;/code&gt; package, we can solve these issues much more easily. In order to run the model in the tidyverse framework, we will use the &lt;code&gt;nest()&lt;/code&gt; function along with the &lt;code&gt;mutate&lt;/code&gt; and &lt;code&gt;map&lt;/code&gt; combo to operate on the nested columns.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;us_arrests_pca &amp;lt;- us_arrests %&amp;gt;% 
+  nest() %&amp;gt;% 
+  mutate(pca = map(data, ~ prcomp(.x %&amp;gt;% select(-state), 
+                                  center = TRUE, scale = TRUE)),
+         pca_aug = map2(pca, data, ~augment(.x, data = .y)))
+
+us_arrests_pca&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 1 x 3
+##   data              pca          pca_aug               
+##   &amp;lt;list&amp;gt;            &amp;lt;list&amp;gt;       &amp;lt;list&amp;gt;                
+## 1 &amp;lt;tibble [50 x 5]&amp;gt; &amp;lt;S3: prcomp&amp;gt; &amp;lt;data.frame [50 x 10]&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;As you can see, we now have a tibble with one row and three columns. The first is our original data set, the second is the &lt;code&gt;prcomp&lt;/code&gt; object and the third is a data frame containing the principal component values for each observation. Now we have everything we need to evaluate the results of the model. First, it is important to look at how much variance is explained by each principal component. This will tell you how many of the components you need to look at when analyzing the results. To do this, you can use the data in the &lt;code&gt;pca_aug&lt;/code&gt; column of our &lt;code&gt;us_arrests_pca&lt;/code&gt; tibble along with some &lt;code&gt;dplyr&lt;/code&gt; functions.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;var_exp &amp;lt;- us_arrests_pca %&amp;gt;% 
+  unnest(pca_aug) %&amp;gt;% 
+  summarize_at(.vars = vars(contains(&amp;quot;PC&amp;quot;)), .funs = funs(var)) %&amp;gt;% 
+  gather(key = pc, value = variance) %&amp;gt;% 
+  mutate(var_exp = variance/sum(variance),
+         cum_var_exp = cumsum(var_exp),
+         pc = str_replace(pc, &amp;quot;.fitted&amp;quot;, &amp;quot;&amp;quot;))
+
+var_exp&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 4 x 4
+##   pc    variance var_exp cum_var_exp
+##   &amp;lt;chr&amp;gt;    &amp;lt;dbl&amp;gt;   &amp;lt;dbl&amp;gt;       &amp;lt;dbl&amp;gt;
+## 1 PC1      2.48   0.620        0.620
+## 2 PC2      0.990  0.247        0.868
+## 3 PC3      0.357  0.0891       0.957
+## 4 PC4      0.173  0.0434       1.00&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can see that the first principal component explains 62% of the variation and that the second principal component explains 25% of the remaining variation. Together, we can see that they explain 87% of the variance in the data set. As a general rule of thumb, you want to look at enough principal components to explain ~90% of your data’s variability.&lt;/p&gt;
+&lt;p&gt;Another way of assessing this is to plot the variance explained and the cumulative variance explained and look for the “elbow” in the graph. You can do that like this:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;var_exp %&amp;gt;% 
+  rename(
+    `Variance Explained` = var_exp,
+    `Cumulative Variance Explained` = cum_var_exp
+  ) %&amp;gt;% 
+  gather(key = key, value = value, `Variance Explained`:`Cumulative Variance Explained`) %&amp;gt;% 
+  ggplot(aes(pc, value, group = key)) + 
+  geom_point() + 
+  geom_line() + 
+  facet_wrap(~key, scales = &amp;quot;free_y&amp;quot;) +
+  theme_bw() +
+  lims(y = c(0, 1)) +
+  labs(y = &amp;quot;Variance&amp;quot;,
+       title = &amp;quot;Variance explained by each principal component&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-02-01-pca-in-a-tidy-verse-framework_files/figure-html/var-exp-graph-1.png&#34; width=&#34;768&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Since the majority of the variance is explained by the first two principal components, let’s plot them against each other. Luckily, this is made easy by the &lt;code&gt;ggplot2&lt;/code&gt; and &lt;code&gt;ggfortify&lt;/code&gt; packages which gives an &lt;code&gt;autoplot&lt;/code&gt; method for prcomp objects. Conveniently, we still have our &lt;code&gt;prcomp&lt;/code&gt; object stored in the our &lt;code&gt;us_arrests_pca&lt;/code&gt; tibble along with our original data. This is important as the original data is needed to add labels and/or colors to your ggplot based on discrete variables not included in the PCA. Using the same &lt;code&gt;mutate&lt;/code&gt; and &lt;code&gt;map&lt;/code&gt; combo as before, along with the handy &lt;code&gt;dplyr::pull&lt;/code&gt; function, we can plot this graph. &lt;code&gt;autoplot.prcomp()&lt;/code&gt; can take any arguments that can be passed to &lt;code&gt;ggbiplot()&lt;/code&gt;, so to see all of your options use &lt;code&gt;?ggbiplot&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;us_arrests_pca %&amp;gt;%
+  mutate(
+    pca_graph = map2(
+      .x = pca,
+      .y = data,
+      ~ autoplot(.x, loadings = TRUE, loadings.label = TRUE,
+                 loadings.label.repel = TRUE,
+                 data = .y, label = TRUE,
+                 label.label = &amp;quot;state&amp;quot;,
+                 label.repel = TRUE) +
+        theme_bw() +
+        labs(x = &amp;quot;Principal Component 1&amp;quot;,
+             y = &amp;quot;Principal Component 2&amp;quot;,
+             title = &amp;quot;First two principal components of PCA on USArrests dataset&amp;quot;)
+    )
+  ) %&amp;gt;%
+  pull(pca_graph)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [[1]]&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-02-01-pca-in-a-tidy-verse-framework_files/figure-html/pca-plot-1.png&#34; width=&#34;960&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;If you notice the &lt;code&gt;[[1]]&lt;/code&gt; above the graph, this method would automatically print each graph in the &lt;code&gt;pca_graph&lt;/code&gt; column. This means that if you fit multiple pca graphs onto a grouped data set then this would automatically print all of the figures for you in one command. Another important thing to notice is the the &lt;code&gt;autoplot()&lt;/code&gt; function simply returns a &lt;code&gt;gg&lt;/code&gt; object and that can be extended just like any other &lt;code&gt;ggplot&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Looking at this figure, we are getting a lot more information about how these variables are related. For example, we can see that murder, rape, and assault arrest rates all have similar values alone the first principal component, which indicates that they are correlated with one another. We may have been able to figure that out using more basic methods, but this method allows us to see it in one figure. In addition, we are able to see how each of the observations in the data (i.e. states) relates to the variables. For example, California is characterized by high arrest rates (1st principal component) and high urban population (2nd principal component).&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;conclusion&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;PCA can provide an analysis with a lot of information about their data set and can give valuable insights into potentially unseen relationships between the observations and the variables. By performing this analysis in the tidyverse framework, we can easily extend this model by using the modelling capabilities of the tidyverse. You can see some of these &lt;a href=&#34;http://r4ds.had.co.nz/many-models.html&#34;&gt;here&lt;/a&gt; and &lt;a href=&#34;http://www.business-science.io/code-tools/2017/10/24/demo_week_timetk.html&#34;&gt;here&lt;/a&gt;. I believe that this framework allows for much more flexibility in your analysis and how you use the data from the model, which will enable you to gather more from your data in a faster and convenient way.&lt;/p&gt;
+&lt;p&gt;Please let me know what you think of performing PCA in the tidyverse framework!&lt;/p&gt;
+&lt;/div&gt;
+</description>
+  </item>
+  
+<item>
+  <title>Creating, Writing, Querying, and Modifying SQL Database from R using odbc, dbplyr, and DBI</title>
+  <link>/2017/08/26/sql-management-in-r/</link>
+  <pubDate>Sat, 26 Aug 2017 00:00:00 +0000</pubDate>
+  
+<guid>/2017/08/26/sql-management-in-r/</guid>
+  <description>
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;Recently, I have been building shiny apps for work. The app that I am currently working on is an interface to a database for storing information about laboratory samples being collected. In addition to building the shiny app for my coworkers to interact with the database, I also was tasked with creating and building the database. I have never build a SQL database from scratch, but luckily the &lt;a href=&#34;https://github.com/rstats-db/odbc&#34;&gt;odbc&lt;/a&gt; and the &lt;a href=&#34;https://github.com/rstats-db/DBI&#34;&gt;DBI&lt;/a&gt; packages make it fairly straight foreward.&lt;/p&gt;
+&lt;p&gt;Let’s start by loading in the packages that we will need.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(DBI)
+library(odbc)
+library(RSQLite)
+library(tidyverse)
+library(magrittr)
+library(dbplyr)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;connecting-to-the-database&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Connecting to the Database&lt;/h1&gt;
+&lt;p&gt;The &lt;code&gt;dbConnect&lt;/code&gt; function from the &lt;code&gt;DBI&lt;/code&gt; package allows us to create a SQLite database directly from R. SQLite databases are saved as files in the current working directory with this method. As described in the &lt;code&gt;RSQLite&lt;/code&gt; packge vignette, if you simply want to use a temporary database, you can create either an on-disk database or an in-memory database with this same method. For this example, we will create a new SQLite in-memory database&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;con &amp;lt;- dbConnect(RSQLite::SQLite(), &amp;quot;:memory:&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Currently, our database is empty, as can be seen if we use the &lt;code&gt;dbListTables&lt;/code&gt; function.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;dbListTables(con)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## character(0)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;writing-tables-to-database&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Writing Tables to database&lt;/h1&gt;
+&lt;p&gt;To add data to this database we will use the &lt;code&gt;dbWriteTable&lt;/code&gt; function. First, let’s load in two common datasets, &lt;code&gt;mtcars&lt;/code&gt; and &lt;code&gt;diamonds&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;data(&amp;quot;mtcars&amp;quot;)
+data(&amp;quot;diamonds&amp;quot;)
+
+mtcars %&amp;lt;&amp;gt;% 
+  rownames_to_column()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now that we have these two data sets loaded into the session, lets write them into the database.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;dbWriteTable(con, &amp;quot;cars&amp;quot;, mtcars)
+dbWriteTable(con, &amp;quot;diamonds&amp;quot;, diamonds)
+
+dbListTables(con)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;cars&amp;quot;     &amp;quot;diamonds&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;query-the-database&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Query the Database&lt;/h1&gt;
+&lt;p&gt;There are several ways that we can query the tables in this database. We can read in the entire table using the &lt;code&gt;dbReadTable&lt;/code&gt; function.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;dbReadTable(con, &amp;quot;cars&amp;quot;) %&amp;gt;%
+  head(10)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##              rowname  mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+## 1          Mazda RX4 21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+## 2      Mazda RX4 Wag 21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+## 3         Datsun 710 22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+## 4     Hornet 4 Drive 21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+## 5  Hornet Sportabout 18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
+## 6            Valiant 18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+## 7         Duster 360 14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
+## 8          Merc 240D 24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+## 9           Merc 230 22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+## 10          Merc 280 19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Alternatively, we can write out a full sql query using the &lt;code&gt;dbGetQuery&lt;/code&gt; function.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;dbGetQuery(con, &amp;quot;select * from cars&amp;quot;) %&amp;gt;%
+  head(10) &lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##              rowname  mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+## 1          Mazda RX4 21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+## 2      Mazda RX4 Wag 21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+## 3         Datsun 710 22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+## 4     Hornet 4 Drive 21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+## 5  Hornet Sportabout 18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
+## 6            Valiant 18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+## 7         Duster 360 14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
+## 8          Merc 240D 24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+## 9           Merc 230 22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+## 10          Merc 280 19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can use the &lt;code&gt;microbenchmark&lt;/code&gt; package to determine which of these methods is faster. We will measure the time for the diamonds data set as that has nearly 54,000 observations, as opposed to the 32 in the mtcars dataset.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;microbenchmark::microbenchmark(
+  read_table = dbReadTable(con, &amp;quot;diamonds&amp;quot;),
+  query = dbGetQuery(con, &amp;quot;select * from diamonds&amp;quot;)
+)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Unit: milliseconds
+##        expr      min       lq     mean   median       uq      max neval
+##  read_table 91.36283 94.55963 115.4623 98.51866 150.1218 175.2671   100
+##       query 90.61233 93.50576 111.0308 98.11973 113.0769 181.2567   100&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;It looks like the &lt;code&gt;dbReadTable&lt;/code&gt; method is slightly faster than a full query. However, the real benefit to using &lt;code&gt;dbGetQuery&lt;/code&gt; is the ability to write much more complex sql queries. For example, if we want to subset the data, we are able to.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;query &amp;lt;- paste(&amp;quot;select carat, cut, clarity, color, price from diamonds&amp;quot;,
+               &amp;quot;where carat &amp;gt; 1 and cut = &amp;#39;Ideal&amp;#39;&amp;quot;)
+dbGetQuery(con, query) %&amp;gt;%
+  as.tibble()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 5,662 x 5
+##    carat   cut clarity color price
+##    &amp;lt;dbl&amp;gt; &amp;lt;chr&amp;gt;   &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;int&amp;gt;
+##  1  1.01 Ideal      I1     I  2844
+##  2  1.02 Ideal     SI2     H  2856
+##  3  1.02 Ideal      I1     I  2872
+##  4  1.02 Ideal     SI2     J  2879
+##  5  1.01 Ideal      I1     I  2896
+##  6  1.02 Ideal      I1     I  2925
+##  7  1.14 Ideal     SI1     J  3045
+##  8  1.02 Ideal     SI2     H  3142
+##  9  1.06 Ideal     SI2     I  3146
+## 10  1.02 Ideal     VS2     I  3148
+## # ... with 5,652 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This particular query returned just over 10% of the total data with 5,662 rows matching the conditions set. This feature is extremely important when dealing with database that house extremely large amounts of data. Having to query full tables would be extemely unfeasible in most situations.&lt;/p&gt;
+&lt;p&gt;In addition to writing more complex sql queries, the &lt;code&gt;dbplyr&lt;/code&gt; package allows for R users to avoid having to write queries at all. This package allows users to create a reference to the sql table and interact with it using typical &lt;code&gt;dplyr&lt;/code&gt; verbs. We can recreate the query above using this method. First we will use the &lt;code&gt;tbl&lt;/code&gt; function to create the reference to the diamonds table in the database. Then we will be able to use that reference with all of our favorite &lt;code&gt;dplyr&lt;/code&gt; verbs.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;diamonds_tbl &amp;lt;- tbl(con, &amp;quot;diamonds&amp;quot;)
+
+diamonds_tbl %&amp;gt;%
+  select(carat, cut, clarity, color, price) %&amp;gt;%
+  filter(carat &amp;gt; 1, 
+         cut == &amp;quot;Ideal&amp;quot;) %&amp;gt;% 
+  collect() %&amp;gt;%
+  as.tibble()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 5,662 x 5
+##    carat   cut clarity color price
+##    &amp;lt;dbl&amp;gt; &amp;lt;chr&amp;gt;   &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;int&amp;gt;
+##  1  1.01 Ideal      I1     I  2844
+##  2  1.02 Ideal     SI2     H  2856
+##  3  1.02 Ideal      I1     I  2872
+##  4  1.02 Ideal     SI2     J  2879
+##  5  1.01 Ideal      I1     I  2896
+##  6  1.02 Ideal      I1     I  2925
+##  7  1.14 Ideal     SI1     J  3045
+##  8  1.02 Ideal     SI2     H  3142
+##  9  1.06 Ideal     SI2     I  3146
+## 10  1.02 Ideal     VS2     I  3148
+## # ... with 5,652 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The &lt;code&gt;collect&lt;/code&gt; verb is important if you want the full query to be brought into your R session. The &lt;code&gt;dbplyr&lt;/code&gt; package uses lazy evaluation and only brings in a portion of the query into your session.&lt;/p&gt;
+&lt;p&gt;Let’s take a look at how these two methods compare using the &lt;code&gt;microbenchmark&lt;/code&gt; package.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;microbenchmark::microbenchmark(
+  db_query = dbGetQuery(con, query),
+  dbplyr = diamonds_tbl %&amp;gt;%
+             select(carat, cut, clarity, color, price) %&amp;gt;%
+             filter(carat &amp;gt; 1, 
+                    cut == &amp;quot;Ideal&amp;quot;) %&amp;gt;% 
+             collect()
+)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Unit: milliseconds
+##      expr      min       lq     mean   median       uq      max neval
+##  db_query 10.10302 10.30996 10.63014 10.44201 10.60457 15.27123   100
+##    dbplyr 51.23319 52.08525 54.66543 53.53378 54.32673 87.69649   100&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;As we can see, the &lt;code&gt;dbplyr&lt;/code&gt; method, while very familiar and potentially easier if you have no experience writing sql queries, takes nearly 6x as long as the straight sql query.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;modify-tables-in-place&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Modify Tables in Place&lt;/h1&gt;
+&lt;p&gt;While there are a lot of blog posts and some great package vignettes about setting up your tables and querying sql databases, there is not too much (that I have seen) about modifying tables in place in your database. There are a few options that are possible when you want to modify a table in a sql database. The first option is to simply query the entire database, make your desired changes using your prefered R tools and then overwrite the table in the database. However, this approach is not practical if you have a large amount of data in your table.&lt;/p&gt;
+&lt;p&gt;The method that I have found that seems to be fairly straight forward is using the &lt;code&gt;dbSendQuery&lt;/code&gt; function. While knowing this function is important, the more important part of this function is knowing what SQL commmads to include in your query. The blog post on &lt;a href=&#34;http://www.win-vector.com/blog/2016/02/using-postgresql-in-r/&#34;&gt;Win-Vector Blog&lt;/a&gt; concerning using PostgreSqL in R shows how you can drop entire tables from your database, and the &lt;code&gt;RSQLite&lt;/code&gt; vignette by Hadley Wickham shows how to delete rows that meet certain conditions. However, if you want to modify a table in your database, the sql commands needed are “update” “set”, and “where”. You can see below how we can use these commands.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;update_query &amp;lt;- paste(&amp;quot;update cars&amp;quot;,
+                      &amp;quot;set mpg = 20&amp;quot;,
+                      &amp;quot;where cyl = 6&amp;quot;)
+
+dbSendQuery(con, update_query)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## &amp;lt;SQLiteResult&amp;gt;
+##   SQL  update cars set mpg = 20 where cyl = 6
+##   ROWS Fetched: 0 [complete]
+##        Changed: 7&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can see that 7 rows were changed in the database. Let’s now query the database and see how the table now looks.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;dbGetQuery(con, &amp;quot;select * from cars&amp;quot;) %&amp;gt;%
+  as.tibble()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 32 x 12
+##              rowname   mpg   cyl  disp    hp  drat    wt  qsec    vs    am
+##                &amp;lt;chr&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt;
+##  1         Mazda RX4  20.0     6 160.0   110  3.90 2.620 16.46     0     1
+##  2     Mazda RX4 Wag  20.0     6 160.0   110  3.90 2.875 17.02     0     1
+##  3        Datsun 710  22.8     4 108.0    93  3.85 2.320 18.61     1     1
+##  4    Hornet 4 Drive  20.0     6 258.0   110  3.08 3.215 19.44     1     0
+##  5 Hornet Sportabout  18.7     8 360.0   175  3.15 3.440 17.02     0     0
+##  6           Valiant  20.0     6 225.0   105  2.76 3.460 20.22     1     0
+##  7        Duster 360  14.3     8 360.0   245  3.21 3.570 15.84     0     0
+##  8         Merc 240D  24.4     4 146.7    62  3.69 3.190 20.00     1     0
+##  9          Merc 230  22.8     4 140.8    95  3.92 3.150 22.90     1     0
+## 10          Merc 280  20.0     6 167.6   123  3.92 3.440 18.30     1     0
+## # ... with 22 more rows, and 2 more variables: gear &amp;lt;dbl&amp;gt;, carb &amp;lt;dbl&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;It looks like all of the rows where cyl = 6 have had their mpg changed to 20. While this is a somewhat trivial example, as you would most likely not want to change the results for a data set like this, this can be an incredibly useful feature if you are maintaining a database from R.&lt;/p&gt;
+&lt;p&gt;You can modify more rows by adding additional arguments to the “set” command and add more conditions by setting additional arguments to the “where” command. For example, we can edit the diamonds table below.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;update_query &amp;lt;- paste(&amp;quot;update diamonds&amp;quot;,
+                      &amp;quot;set cut = &amp;#39;new Ideal&amp;#39;,&amp;quot;,
+                      &amp;quot;color = &amp;#39;Z&amp;#39;&amp;quot;,
+                      &amp;quot;where cut = &amp;#39;Ideal&amp;#39; and&amp;quot;,
+                      &amp;quot;color = &amp;#39;E&amp;#39;&amp;quot;)
+dbSendQuery(con, update_query)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## &amp;lt;SQLiteResult&amp;gt;
+##   SQL  update diamonds set cut = &amp;#39;new Ideal&amp;#39;, color = &amp;#39;Z&amp;#39; where cut = &amp;#39;Ideal&amp;#39; and color = &amp;#39;E&amp;#39;
+##   ROWS Fetched: 0 [complete]
+##        Changed: 3903&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can see that this changed 3903 rows in the diamonds dataset.&lt;/p&gt;
+&lt;p&gt;Before we finish, it is imprtant to remember to disconnect from the in-memory database using the &lt;code&gt;dbDisconnect&lt;/code&gt; function.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;dbDisconnect(con)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;conclusion&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;The &lt;code&gt;DBI&lt;/code&gt;, &lt;code&gt;odbc&lt;/code&gt;, and &lt;code&gt;dbplyr&lt;/code&gt; packages offer an incredible number of tools for interacting with SQL databases of all different kinds. While you are certainly able to navigate through most SQL query problems with only the functions provided in these packages, you can cartainly increase your capabilites by learning some basic SQL commands and how to use them in conjunction with the R functions provided in these packages.&lt;/p&gt;
+&lt;/div&gt;
+</description>
+  </item>
+  
+<item>
+  <title>Exploring English Premier League Historical Match Results</title>
+  <link>/2017/08/10/epl-opening-weekend/</link>
+  <pubDate>Thu, 10 Aug 2017 00:00:00 +0000</pubDate>
+  
+<guid>/2017/08/10/epl-opening-weekend/</guid>
+  <description>
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;I was listening to &lt;a href=&#34;https://twitter.com/codinghorror&#34;&gt;Jeff Atwood’s&lt;/a&gt; interview on the podcast &lt;a href=&#34;http://developeronfire.com/&#34;&gt;Developer on Fire&lt;/a&gt; and he said something that struck home with me. It was along the lines of, “The best time to start blogging is yesterday.” I have been considering starting a blog about &lt;a href=&#34;https://twitter.com/hashtag/rstats&#34;&gt;#rstats&lt;/a&gt; but had been putting it off because of any number of reasons. But after listening to his interview, I decided now was as good of a time as any. With the help of Yihui Xie’s &lt;a href=&#34;https://github.com/rstudio/blogdown&#34;&gt;blogdown&lt;/a&gt;, I was able to set up the basic webpage pretty easily too.&lt;/p&gt;
+&lt;p&gt;So In honor of the start of a new season for the English Premier League (EPL), I put together this exploratory data analysis of historical EPL data to see how teams typically do to start a season. I would love any feed back and suggestions! Please feel free to follow me on &lt;a href=&#34;twitter%20https://twitter.com/tb_goonR&#34;&gt;twitter&lt;/a&gt; (I just created it this past week to better keep up with #rstats rather than just continually googling it as I have been for the last year.)&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;general-data-analysis&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;General Data Analysis&lt;/h1&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# loading in the required packages
+suppressWarnings(suppressPackageStartupMessages({
+  library(tidyr)
+  library(ggplot2)
+  library(lubridate)
+  library(magrittr)
+  library(tidyquant)
+  library(purrr)
+  library(ggjoy)
+  library(dplyr)
+}))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;First, we will load in the data. All of the data used in this analysis is from &amp;lt;www.football-data.co.uk&amp;gt;, and can be found on &lt;a href=&#34;https://github.com/tbradley1013/epl&#34;&gt;my github page&lt;/a&gt; under the epl repository.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;files &amp;lt;- list.files(path = &amp;quot;epl_results&amp;quot;, full.names = TRUE)
+
+raw_data &amp;lt;- map(files, read.csv)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Below is the column information provided by the website:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;* Div = League Division
+* Date = Match Date (dd/mm/yy)
+* HomeTeam = Home Team
+* AwayTeam = Away Team
+* FTHG = Full Time Home Team Goals
+* FTAG = Full Time Away Team Goals
+* FTR = Full Time Result (H=Home Win, D=Draw, A=Away Win) 
+* HTHG = Half Time Home Team Goals 
+* HTAG = Half Time Away Team Goals 
+* HTR = Half Time Result (H=Home Win, D=Draw, A=Away Win)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Match Statistics (where available):&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;* Attendance = Crowd Attendance
+* Referee = Match Referee
+* HS = Home Team Shots
+* AS = Away Team Shots
+* HST = Home Team Shots on Target
+* AST = Away Team Shots on Target
+* HHW = Home Team Hit Woodwork
+* AHW = Away Team Hit Woodwork
+* HC = Home Team Corners
+* AC = Away Team Corners
+* HF = Home Team Fouls Committed
+* AF = Away Team Fouls Committed
+* HO = Home Team Offsides
+* AO = Away Team Offsides
+* HY = Home Team Yellow Cards
+* AY = Away Team Yellow Cards
+* HR = Home Team Red Cards
+* AR = Away Team Red Cards&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;There are more columns provided in the raw data set that have to do with betting odds, however, we will remove them as they are not going to be used in this analysis. Additionally, only two seasons data has attendance recorded, so this will be removed. Looking through the data, all of the data sets for the 2000/2001 through the 2016/2017 seasons have all of the match statistics listed above. The data sets prior to the 2000/2001 data set only have the general data and none of the match statistics. Because of these differences in available data we will only use the general statistics for the first part of this analysis.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;data_general &amp;lt;- map(raw_data, function(x){
+  output &amp;lt;- x %&amp;gt;%
+    filter(Date != &amp;quot;&amp;quot;) %&amp;gt;%  #the csv files pulled in some extra rows, this line removes them
+    mutate(Date = dmy(Date)) %&amp;gt;% #converting the Date column from a factor to date object
+    select(Div:HTR) %&amp;gt;%
+    mutate(season = ifelse(month(Date) &amp;gt; 7,
+                                   year(Date) + 1,
+                                    year(Date)))  #creating a reference date 
+  return(output)
+})
+
+data &amp;lt;- do.call(rbind, data_general) %&amp;gt;% as.tibble()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;data &lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 8,360 x 11
+##       Div       Date    HomeTeam       AwayTeam  FTHG  FTAG    FTR  HTHG
+##    &amp;lt;fctr&amp;gt;     &amp;lt;date&amp;gt;      &amp;lt;fctr&amp;gt;         &amp;lt;fctr&amp;gt; &amp;lt;int&amp;gt; &amp;lt;int&amp;gt; &amp;lt;fctr&amp;gt; &amp;lt;int&amp;gt;
+##  1     E0 1995-08-19 Aston Villa     Man United     3     1      H     3
+##  2     E0 1995-08-19   Blackburn            QPR     1     0      H     1
+##  3     E0 1995-08-19     Chelsea        Everton     0     0      D     0
+##  4     E0 1995-08-19   Liverpool Sheffield Weds     1     0      H     0
+##  5     E0 1995-08-19    Man City      Tottenham     1     1      D     0
+##  6     E0 1995-08-19   Newcastle       Coventry     3     0      H     1
+##  7     E0 1995-08-19 Southampton  Nott&amp;#39;m Forest     3     4      A     1
+##  8     E0 1995-08-19    West Ham          Leeds     1     2      A     1
+##  9     E0 1995-08-19   Wimbledon         Bolton     3     2      H     2
+## 10     E0 1995-08-20     Arsenal  Middlesbrough     1     1      D     1
+## # ... with 8,350 more rows, and 3 more variables: HTAG &amp;lt;int&amp;gt;, HTR &amp;lt;fctr&amp;gt;,
+## #   season &amp;lt;dbl&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now that the data from the csv files is all in one data frame, we can do some manipulation to get it into a more tidy format.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;data_tidy &amp;lt;- data %&amp;gt;%
+  gather(key = &amp;quot;venue&amp;quot;, value = team, HomeTeam:AwayTeam) %&amp;gt;% 
+  arrange(Date) %&amp;gt;%
+  mutate_if(is.factor, as.character) %&amp;gt;%
+  mutate(venue = ifelse(venue == &amp;quot;HomeTeam&amp;quot;,
+                        &amp;quot;Home&amp;quot;,
+                        &amp;quot;Away&amp;quot;),
+         FTR = case_when(venue == &amp;quot;Home&amp;quot; &amp;amp; FTR == &amp;quot;H&amp;quot; ~ &amp;quot;W&amp;quot;,
+                         venue == &amp;quot;Home&amp;quot; &amp;amp; FTR == &amp;quot;A&amp;quot; ~ &amp;quot;L&amp;quot;,
+                         venue == &amp;quot;Away&amp;quot; &amp;amp; FTR == &amp;quot;H&amp;quot; ~ &amp;quot;L&amp;quot;,
+                         venue == &amp;quot;Away&amp;quot; &amp;amp; FTR == &amp;quot;A&amp;quot; ~ &amp;quot;W&amp;quot;,
+                         TRUE ~ FTR),
+         HTR = case_when(venue == &amp;quot;Home&amp;quot; &amp;amp; HTR == &amp;quot;H&amp;quot; ~ &amp;quot;W&amp;quot;,
+                         venue == &amp;quot;Home&amp;quot; &amp;amp; HTR == &amp;quot;A&amp;quot; ~ &amp;quot;L&amp;quot;,
+                         venue == &amp;quot;Away&amp;quot; &amp;amp; HTR == &amp;quot;H&amp;quot; ~ &amp;quot;L&amp;quot;,
+                         venue == &amp;quot;Away&amp;quot; &amp;amp; HTR == &amp;quot;A&amp;quot; ~ &amp;quot;W&amp;quot;,
+                         TRUE ~ HTR),
+         FTGF = ifelse(venue == &amp;quot;Home&amp;quot;, FTHG, FTAG),  #Full Time Goals For
+         FTGA = ifelse(venue == &amp;quot;Home&amp;quot;, FTAG, FTHG),  #Full Time Goals Against
+         HTGF = ifelse(venue == &amp;quot;Home&amp;quot;, HTHG, HTAG),  #Half Time Goals For
+         HTGA = ifelse(venue == &amp;quot;Home&amp;quot;, HTAG, HTHG),  #Half Time Goals Against
+         goal_diff = FTGF - FTGA,                    #goal difference
+         points_earned = case_when(FTR == &amp;quot;W&amp;quot; ~ 3,           #adding points
+                                   FTR == &amp;quot;D&amp;quot; ~ 1,
+                                   FTR == &amp;quot;L&amp;quot; ~ 0)) %&amp;gt;% 
+  select(Div, season, Date, team, venue, FTR, FTGF, 
+         FTGA, HTR, HTGF, HTGA, goal_diff, points_earned) %&amp;gt;%
+  group_by(season, team) %&amp;gt;%
+  mutate(points = cumsum(points_earned),
+         goal_diff_tot = cumsum(goal_diff)) %&amp;gt;% #calculating the number of points each team has through out the season
+  ungroup()
+
+data_tidy&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 16,720 x 15
+##      Div season       Date        team venue   FTR  FTGF  FTGA   HTR  HTGF
+##    &amp;lt;chr&amp;gt;  &amp;lt;dbl&amp;gt;     &amp;lt;date&amp;gt;       &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;int&amp;gt; &amp;lt;int&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;int&amp;gt;
+##  1    E0   1996 1995-08-19 Aston Villa  Home     W     3     1     W     3
+##  2    E0   1996 1995-08-19   Blackburn  Home     W     1     0     W     1
+##  3    E0   1996 1995-08-19     Chelsea  Home     D     0     0     D     0
+##  4    E0   1996 1995-08-19   Liverpool  Home     W     1     0     D     0
+##  5    E0   1996 1995-08-19    Man City  Home     D     1     1     L     0
+##  6    E0   1996 1995-08-19   Newcastle  Home     W     3     0     W     1
+##  7    E0   1996 1995-08-19 Southampton  Home     L     3     4     L     1
+##  8    E0   1996 1995-08-19    West Ham  Home     L     1     2     W     1
+##  9    E0   1996 1995-08-19   Wimbledon  Home     W     3     2     D     2
+## 10    E0   1996 1995-08-19  Man United  Away     L     1     3     L     0
+## # ... with 16,710 more rows, and 5 more variables: HTGA &amp;lt;int&amp;gt;,
+## #   goal_diff &amp;lt;int&amp;gt;, points_earned &amp;lt;dbl&amp;gt;, points &amp;lt;dbl&amp;gt;,
+## #   goal_diff_tot &amp;lt;int&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To ensure that our tidying did not create any missing values, we can use the &lt;code&gt;summarise_all()&lt;/code&gt; function.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;data_tidy %&amp;gt;% 
+  summarise_all(function(x) sum(is.na(x)))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 1 x 15
+##     Div season  Date  team venue   FTR  FTGF  FTGA   HTR  HTGF  HTGA
+##   &amp;lt;int&amp;gt;  &amp;lt;int&amp;gt; &amp;lt;int&amp;gt; &amp;lt;int&amp;gt; &amp;lt;int&amp;gt; &amp;lt;int&amp;gt; &amp;lt;int&amp;gt; &amp;lt;int&amp;gt; &amp;lt;int&amp;gt; &amp;lt;int&amp;gt; &amp;lt;int&amp;gt;
+## 1     0      0     0     0     0     0     0     0     0     0     0
+## # ... with 4 more variables: goal_diff &amp;lt;int&amp;gt;, points_earned &amp;lt;int&amp;gt;,
+## #   points &amp;lt;int&amp;gt;, goal_diff_tot &amp;lt;int&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now that we know that the data is in a tidy format, we can begin exploring the data. As an Arsenal fan, I think we should start by looking at how Arsenal has done each year.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;data_tidy %&amp;gt;%
+  filter(team == &amp;quot;Arsenal&amp;quot;,
+         season &amp;lt; 2007) %&amp;gt;%
+  ggplot(aes(Date, points)) +
+  facet_wrap(~season, scales = &amp;quot;free&amp;quot;) +
+  geom_line() +
+  theme_tq() +
+  scale_x_date(date_breaks = &amp;quot;2 month&amp;quot;, date_labels = &amp;quot;%m/%d&amp;quot;) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, 
+                                   vjust = 0.5, size = 12),
+        axis.text.y = element_text(size = 12),
+        strip.text = element_text(size = 12),
+        axis.title = element_text(size = 12)) +
+  labs(x = &amp;quot;&amp;quot;, 
+       y = &amp;quot;Point Tally&amp;quot;,
+       title = &amp;quot;Arsenal Point Tally over the course of each season from\nthe 1995/1996 season to the 2005/2006 season&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2017-08-09-exploring-english-premier-league-historical-match-results_files/figure-html/arsenal-points-graph-1-1.png&#34; width=&#34;800px&#34; height=&#34;600px&#34; /&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;data_tidy %&amp;gt;%
+  filter(team == &amp;quot;Arsenal&amp;quot;,
+         season &amp;gt;= 2007) %&amp;gt;%
+  ggplot(aes(Date, points)) +
+  facet_wrap(~season, scales = &amp;quot;free&amp;quot;) +
+  geom_line() +
+  theme_tq() +
+  scale_x_date(date_breaks = &amp;quot;2 month&amp;quot;, 
+               date_labels = &amp;quot;%m/%d&amp;quot;) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, 
+                                   vjust = 0.5, size = 12),
+        axis.text.y = element_text(size = 12),
+        strip.text = element_text(size = 12),
+        axis.title = element_text(size = 12))+
+  labs(x = &amp;quot;&amp;quot;, 
+       y = &amp;quot;Point Tally&amp;quot;,
+       title = &amp;quot;Arsenal Point Tally over the course of each season from\nthe 2006/2007 season to the 2016/2017 season&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2017-08-09-exploring-english-premier-league-historical-match-results_files/figure-html/arsenal-points-graph-2-1.png&#34; width=&#34;800px&#34; height=&#34;600px&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;From these graphs, it looks like Arsenal follow a similar pattern every year, which is not surprising since the 2017 season was the first in Arsene Wenger’s tenure that they have not finished in the top 4. Looking at the plot for the 2017 season, it is clear that the period of the season that killed their chances of finishing in the top 4 was the stretch of games between February and March where their point increase flat lined. Let’s now take a look at team’s average finishing point total.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;season_ending &amp;lt;- data_tidy %&amp;gt;%
+  group_by(season, team) %&amp;gt;%
+  summarise(final_points = max(points), 
+            final_goals_for = sum(FTGF), 
+            final_goals_against = sum(FTGA),
+            final_goal_diff = sum(goal_diff)) %&amp;gt;%
+  ungroup() %&amp;gt;%
+  group_by(season) %&amp;gt;%
+  mutate(table_position = 20 - rank(final_points, ties.method = &amp;quot;min&amp;quot;)) %&amp;gt;%
+  ungroup()
+  
+season_ending&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 440 x 7
+##    season        team final_points final_goals_for final_goals_against
+##     &amp;lt;dbl&amp;gt;       &amp;lt;chr&amp;gt;        &amp;lt;dbl&amp;gt;           &amp;lt;int&amp;gt;               &amp;lt;int&amp;gt;
+##  1   1996     Arsenal           63              49                  32
+##  2   1996 Aston Villa           63              52                  35
+##  3   1996   Blackburn           61              61                  47
+##  4   1996      Bolton           29              39                  71
+##  5   1996     Chelsea           50              46                  44
+##  6   1996    Coventry           38              42                  60
+##  7   1996     Everton           61              64                  44
+##  8   1996       Leeds           43              40                  57
+##  9   1996   Liverpool           71              70                  34
+## 10   1996    Man City           38              33                  58
+## # ... with 430 more rows, and 2 more variables: final_goal_diff &amp;lt;int&amp;gt;,
+## #   table_position &amp;lt;dbl&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;From this output, right away we can see that point ties result in the rank function returning a tie. The EPL determines ties first by highest goal difference, and then goals for. Looking at this first example of the tie between Arsenal and Aston Villa, we can see that they both had a +17 overall goal difference but Aston Villa had 3 more goals for, meaning they finished 4th and Arsenal finished 5th. For now, we won’t worry about fixing these ties.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;season_ending_stats &amp;lt;- season_ending %&amp;gt;%
+  group_by(team) %&amp;gt;%
+  summarise(avg_final_points = round(mean(final_points), 0), 
+            sd_final_points = round(sd(final_points), 0), 
+            avg_final_goals_for = round(mean(final_goals_for), 0), 
+            sd_final_goals_for = round(sd(final_goals_for), 0),
+            avg_final_goals_against = round(mean(final_goals_against), 0), 
+            sd_final_goals_against = round(sd(final_goals_against), 0),
+            avg_table_position = round(mean(table_position), 0),
+            sd_table_poisiton = round(sd(table_position), 0),
+            num_seasons = n())
+
+season_ending_stats&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 46 x 10
+##           team avg_final_points sd_final_points avg_final_goals_for
+##          &amp;lt;chr&amp;gt;            &amp;lt;dbl&amp;gt;           &amp;lt;dbl&amp;gt;               &amp;lt;dbl&amp;gt;
+##  1     Arsenal               75               7                  71
+##  2 Aston Villa               50              11                  46
+##  3    Barnsley               35             NaN                  37
+##  4  Birmingham               43               7                  39
+##  5   Blackburn               48              10                  48
+##  6   Blackpool               39             NaN                  55
+##  7      Bolton               44               9                  44
+##  8 Bournemouth               44               3                  50
+##  9    Bradford               31               7                  34
+## 10     Burnley               34               5                  36
+## # ... with 36 more rows, and 6 more variables: sd_final_goals_for &amp;lt;dbl&amp;gt;,
+## #   avg_final_goals_against &amp;lt;dbl&amp;gt;, sd_final_goals_against &amp;lt;dbl&amp;gt;,
+## #   avg_table_position &amp;lt;dbl&amp;gt;, sd_table_poisiton &amp;lt;dbl&amp;gt;, num_seasons &amp;lt;int&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;As we can see from the tibble summary, there are several teams that have only been in the premier league for a single year, resulting in NaN values for the standard deviation columns. To avoid cluttering the next graph, we will remove any teams that have not been in the premier league for at least 10 of the 22 seasons being analyzed.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;season_ending_stats %&amp;gt;%
+  filter(num_seasons &amp;gt;= 10) %&amp;gt;%
+  arrange(-avg_final_points) %&amp;gt;%
+  mutate(team = factor(team, team)) %&amp;gt;%
+  ggplot(aes(team, avg_final_points)) +
+  geom_bar(stat = &amp;quot;identity&amp;quot;, fill = &amp;quot;red&amp;quot;) +
+  geom_point(color = &amp;quot;navy&amp;quot;) +
+  geom_errorbar(aes(ymin = avg_final_points - 2*sd_final_points, 
+                    ymax = avg_final_points + 2*sd_final_points), 
+                color = &amp;quot;navy&amp;quot;, size = 1) +
+  theme_tq() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, 
+                                   vjust = 0.5, size = 12),
+        axis.text.y = element_text(size = 12),
+        axis.title = element_text(size = 12)) +
+  labs(x = &amp;quot;Team&amp;quot;,
+       y = &amp;quot;Final Points&amp;quot;,
+       title = &amp;quot;Average Final Points from 1995/1996 season to 2016/2017 season&amp;quot;,
+       subtitle = &amp;quot;Only teams with 10 or more seasons in the EPL were included&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2017-08-09-exploring-english-premier-league-historical-match-results_files/figure-html/bar-graph-season-stats-1.png&#34; width=&#34;800px&#34; height=&#34;600px&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;It looks like Manchester United have the highest average final points per season. They are followed closely by Arsenal and Chelsea, who are then closely followed by Liverpool, Manchester City, and Tottenham. It is worth noting that Chelsea and Manchester City both have much higher error associated with their mean value, indicating they have much more fluctuation in the final point tallies. Another interesting take away from this figure is that the lowest average final point tally for teams that have been in the premier league for at least 10 of the previous 22 seasons is 39 points. 39 points typically guarantees a season that is safe from relegation. However, for the teams with the lower average finally point tally, such as Sunderland and West Brom, see the lower tails of their error bars treading dangerously close to relegation zone.&lt;/p&gt;
+&lt;p&gt;Now, it will be interesting to see how these teams final point tallies will look on the new joyplots from the &lt;code&gt;ggjoy&lt;/code&gt; package.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;season_ending %&amp;gt;%
+  group_by(team) %&amp;gt;%
+  mutate(num_seasons = n(),
+         avg_final_points = round(mean(final_points), 0)) %&amp;gt;% #add these columns for filtering and factoring respectively
+  ungroup() %&amp;gt;%
+  filter(num_seasons &amp;gt;= 10) %&amp;gt;%
+  arrange(avg_final_points) %&amp;gt;%
+  mutate(team = factor(team, unique(team))) %&amp;gt;%
+  ggplot(aes(final_points, team)) +
+  geom_joy(scale = 0.9, rel_min_height = 0.01, 
+           fill = &amp;quot;red&amp;quot;, color = &amp;quot;black&amp;quot;, size = 1) +
+  theme_tq()+
+  theme(axis.text = element_text(size = 12),
+        axis.title = element_text(size = 12)) +
+  labs(x = &amp;quot;Final Points&amp;quot;,
+       y = &amp;quot;Team&amp;quot;,
+       title = &amp;quot;Joyplot showing EPL teams&amp;#39; individual season final point tally distribution&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2017-08-09-exploring-english-premier-league-historical-match-results_files/figure-html/final-points-joyplot-1.png&#34; width=&#34;800px&#34; height=&#34;600px&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The joyplot confirms the conclusions drawn from the bar chart. Manchester United and Arsenal have the highest final point distribution and both have close to a bell curve. However, Chelsea and Manchester City both have much wider distributions as they have much more ups and downs over the past 22 years.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;looking-at-opening-weekend-results&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Looking at opening weekend results&lt;/h1&gt;
+&lt;p&gt;Since this weekend marks the start of the 2017/2018 season, it will be interesting to see how teams have fared over the last 22 seasons. First, we will start by filtering for the first game of the season.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;opening_games &amp;lt;- data_tidy %&amp;gt;%
+  group_by(season, team) %&amp;gt;%
+  mutate(final_points = max(points), 
+            final_goals_for = sum(FTGF), 
+            final_goals_against = sum(FTGA),
+         game = rank(Date)) %&amp;gt;%
+  ungroup() %&amp;gt;%
+  group_by(season, game) %&amp;gt;%
+  mutate(table_position = 21 - min_rank(final_points)) %&amp;gt;%
+  ungroup() %&amp;gt;%
+  filter(game == 1) %&amp;gt;%
+  group_by(team) %&amp;gt;%
+  mutate(final_points_last = lag(final_points),
+         final_goals_for_last = lag(final_goals_for),
+         final_goals_against_last = lag(final_goals_against),
+         final_table_position_last = lag(table_position)) %&amp;gt;%
+  ungroup()
+
+opening_games&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 440 x 24
+##      Div season       Date        team venue   FTR  FTGF  FTGA   HTR  HTGF
+##    &amp;lt;chr&amp;gt;  &amp;lt;dbl&amp;gt;     &amp;lt;date&amp;gt;       &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;int&amp;gt; &amp;lt;int&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;int&amp;gt;
+##  1    E0   1996 1995-08-19 Aston Villa  Home     W     3     1     W     3
+##  2    E0   1996 1995-08-19   Blackburn  Home     W     1     0     W     1
+##  3    E0   1996 1995-08-19     Chelsea  Home     D     0     0     D     0
+##  4    E0   1996 1995-08-19   Liverpool  Home     W     1     0     D     0
+##  5    E0   1996 1995-08-19    Man City  Home     D     1     1     L     0
+##  6    E0   1996 1995-08-19   Newcastle  Home     W     3     0     W     1
+##  7    E0   1996 1995-08-19 Southampton  Home     L     3     4     L     1
+##  8    E0   1996 1995-08-19    West Ham  Home     L     1     2     W     1
+##  9    E0   1996 1995-08-19   Wimbledon  Home     W     3     2     D     2
+## 10    E0   1996 1995-08-19  Man United  Away     L     1     3     L     0
+## # ... with 430 more rows, and 14 more variables: HTGA &amp;lt;int&amp;gt;,
+## #   goal_diff &amp;lt;int&amp;gt;, points_earned &amp;lt;dbl&amp;gt;, points &amp;lt;dbl&amp;gt;,
+## #   goal_diff_tot &amp;lt;int&amp;gt;, final_points &amp;lt;dbl&amp;gt;, final_goals_for &amp;lt;int&amp;gt;,
+## #   final_goals_against &amp;lt;int&amp;gt;, game &amp;lt;dbl&amp;gt;, table_position &amp;lt;dbl&amp;gt;,
+## #   final_points_last &amp;lt;dbl&amp;gt;, final_goals_for_last &amp;lt;int&amp;gt;,
+## #   final_goals_against_last &amp;lt;int&amp;gt;, final_table_position_last &amp;lt;dbl&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now that we have a data set with all of the teams opening games results, we can look at some of the factors that could influence opening weekend results. First let’s look at how home field advantage helps teams on opening weekend&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;opening_home_adv &amp;lt;- opening_games %&amp;gt;%
+  group_by(venue) %&amp;gt;%
+  summarise(perc_W = round((sum(FTR == &amp;quot;W&amp;quot;)/n()) * 100, 1), 
+            perc_L = round((sum(FTR == &amp;quot;L&amp;quot;)/n()) * 100, 1),
+            perc_D = round((sum(FTR == &amp;quot;D&amp;quot;)/n()) * 100, 1))
+
+opening_home_adv&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 2 x 4
+##   venue perc_W perc_L perc_D
+##   &amp;lt;chr&amp;gt;  &amp;lt;dbl&amp;gt;  &amp;lt;dbl&amp;gt;  &amp;lt;dbl&amp;gt;
+## 1  Away   30.5   42.3   27.3
+## 2  Home   41.8   30.9   27.3&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;It looks like the home teams have better luck on the first weekend of the season than the away team. Let’s look at home this compares with the home field advantage of all games to see if there is any difference for the first week.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;home_adv &amp;lt;- data_tidy %&amp;gt;%
+  group_by(venue) %&amp;gt;%
+  summarise(perc_W = round((sum(FTR == &amp;quot;W&amp;quot;)/n()) * 100, 1), 
+            perc_L = round((sum(FTR == &amp;quot;L&amp;quot;)/n()) * 100, 1),
+            perc_D = round((sum(FTR == &amp;quot;D&amp;quot;)/n()) * 100, 1))
+
+home_adv&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 2 x 4
+##   venue perc_W perc_L perc_D
+##   &amp;lt;chr&amp;gt;  &amp;lt;dbl&amp;gt;  &amp;lt;dbl&amp;gt;  &amp;lt;dbl&amp;gt;
+## 1  Away   27.5   46.5     26
+## 2  Home   46.5   27.5     26&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;It looks like the away team actually fairs slightly better on opening weekend than during the rest of the season. Let’s now take a look at the winning percentage by year for the home teams and the away teams.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;opening_games %&amp;gt;%
+  group_by(season, venue) %&amp;gt;%
+  summarise(perc_W = round((sum(FTR == &amp;quot;W&amp;quot;)/n()) * 100, 1), 
+            perc_L = round((sum(FTR == &amp;quot;L&amp;quot;)/n()) * 100, 1),
+            perc_D = round((sum(FTR == &amp;quot;D&amp;quot;)/n()) * 100, 1)) %&amp;gt;%
+  gather(key = &amp;quot;result&amp;quot;, value = &amp;quot;percentage&amp;quot;, perc_W:perc_D) %&amp;gt;%
+  mutate(result = case_when(result == &amp;quot;perc_W&amp;quot; ~ &amp;quot;Winning Percentage&amp;quot;,
+                            result == &amp;quot;perc_L&amp;quot; ~ &amp;quot;Losing Percentage&amp;quot;,
+                            TRUE ~ &amp;quot;Percent Draws&amp;quot;)) %&amp;gt;%
+  filter(venue == &amp;quot;Home&amp;quot;) %&amp;gt;%
+  ggplot(aes(season, percentage, color = result)) +
+  geom_point() +
+  geom_line(size = 1) +
+  theme_tq() +
+  scale_color_tq() +
+  theme(axis.text.x = element_text(angle = 90, 
+                                   vjust = 0.5, 
+                                   hjust = 1, 
+                                   size = 12),
+        axis.text.y = element_text(size = 12),
+        legend.title = element_blank()) +
+  labs(x = &amp;quot;Year&amp;quot;,
+       y = &amp;quot;Percentage of Results by Year&amp;quot;,
+       title = &amp;quot;The Percent of Results (Win, Draw, Loss) per Season\nfor Home Teams on Opening Weekend&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2017-08-09-exploring-english-premier-league-historical-match-results_files/figure-html/home-adv-graph-1.png&#34; width=&#34;800px&#34; height=&#34;600px&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;It looks like the winning percentage for home teams fluctuates and there is no clear trend as to whether being home on opening weekend provides any benefit. Since 2014, the home teams have a higher losing percentage than winning percentage. Perhaps, in recent years, there has been some shift that has made playing away from home more desirable on opening weekend. Likely this is just random, however, and there is no overall benefit to being home or away. While there does not appear to be any overall inferences that can be made from playing home or away on opening weekend, looking at the winning percentage for home and away opening games for the individual teams may provide some interesting results.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;home_adv_team &amp;lt;- opening_games %&amp;gt;%
+  group_by(team) %&amp;gt;%
+  #removing teams that have not played at least ten seasons in the premier league
+  mutate(num_seasons = n()) %&amp;gt;%
+  filter(num_seasons &amp;gt;= 10) %&amp;gt;% 
+  select(-num_seasons) %&amp;gt;%
+  ungroup() %&amp;gt;%
+  group_by(team, venue) %&amp;gt;%
+  summarise(winning_percentage = round((sum(FTR == &amp;quot;W&amp;quot;)/n()) * 100, 0), 
+            num_games_total = n()) %&amp;gt;%
+  ungroup()
+
+home_adv_team&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 36 x 4
+##           team venue winning_percentage num_games_total
+##          &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt;              &amp;lt;dbl&amp;gt;           &amp;lt;int&amp;gt;
+##  1     Arsenal  Away                 43               7
+##  2     Arsenal  Home                 60              15
+##  3 Aston Villa  Away                 31              13
+##  4 Aston Villa  Home                 50               8
+##  5   Blackburn  Away                 40               5
+##  6   Blackburn  Home                 40              10
+##  7      Bolton  Away                 43               7
+##  8      Bolton  Home                 50               6
+##  9     Chelsea  Away                 56               9
+## 10     Chelsea  Home                 77              13
+## # ... with 26 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;home_adv_team %&amp;gt;%
+  arrange(-winning_percentage) %&amp;gt;%
+  mutate(team = factor(team, unique(team)),
+         venue = factor(venue, levels = c(&amp;quot;Home&amp;quot;, &amp;quot;Away&amp;quot;))) %&amp;gt;%
+  ggplot(aes(team, winning_percentage, fill = venue)) +
+  facet_wrap(~venue, scales = &amp;quot;fixed&amp;quot;, ncol = 1) +
+  geom_bar(stat = &amp;quot;identity&amp;quot;) +
+  theme_tq() +
+  scale_fill_tq() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size = 12),
+        axis.text.y = element_text(size = 12),
+        strip.text = element_text(size = 12),
+        legend.position = &amp;quot;none&amp;quot;) +
+  geom_text(aes(x = team, y = winning_percentage + 5, label = paste0(&amp;quot;n=&amp;quot;, as.character(num_games_total)))) +
+  labs(x = &amp;quot;&amp;quot;,
+       y = &amp;quot;Winning Percentage&amp;quot;,
+       title = &amp;quot;Winning Percentage for Teams on Opening Weekend both Home and Away&amp;quot;,
+       subtitle = &amp;quot;Only teams with more than 10 seasons in the premier league were included&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2017-08-09-exploring-english-premier-league-historical-match-results_files/figure-html/unnamed-chunk-2-1.png&#34; width=&#34;800px&#34; height=&#34;600px&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;This figure seems to provide much more insight into how home field advantage can impact teams. For example, Arsenal have a 60% winning percentage at home on opening weekend, and their opponent this weekend, Leicester City, have not won a opening game away from home in the premier league since 1996. This is a very positive sign for the gunners as their match is being played at the Emirates Stadium (Arsenal’s Home Field). Chelsea have a winning percentage in the high 70s when they play their opening game at home, as they do this year. That fact seems promising (unfortunately) for the blues, as their opening match this year is at home. Other noticeable impacts of home field advantage are New Castle United and Sunderland. New Castle have a home winning percentage of 50% on opening weekend, but only have a 10% winning percentage for away games on opening weekend. Fortunately for them, they are also playing at home this year. Unfortunately for them, they are matched up with West Ham who don’t have much issue playing on the road opening weekend, with a 40% winning percentage when away from home. Sunderland, similarly has an average home winning percentage of just under 40% for opening weekend, but have a winning percentage of only just north of 10% when playing away from home. However, Sunderland were relegated last season, so maybe they will have better luck in the Championship. Several teams seem not to be impacted by whether or not they play at home on opening weekend. Manchester United and Manchester City both only see a slight dip in winning percentage when away from home, and Blackburn has a 40% winning percentage when both home and away on opening weekend.&lt;/p&gt;
+&lt;p&gt;Let’s take a look at each team’s overall winning percentage on opening weekend.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;opening_games %&amp;gt;%
+  group_by(team) %&amp;gt;%
+  #removing teams that have not played at least ten seasons in the premier league
+  mutate(num_seasons = n()) %&amp;gt;%
+  filter(num_seasons &amp;gt;= 10) %&amp;gt;% 
+  select(-num_seasons) %&amp;gt;%
+  ungroup() %&amp;gt;%
+  group_by(team) %&amp;gt;%
+  summarise(winning_percentage = round((sum(FTR == &amp;quot;W&amp;quot;)/n()) * 100, 0), 
+            num_games_total = n()) %&amp;gt;%
+  ungroup() %&amp;gt;%
+  arrange(-winning_percentage) %&amp;gt;%
+  mutate(team = factor(team, unique(team))) %&amp;gt;%
+  ggplot(aes(team, winning_percentage)) +
+  geom_bar(stat = &amp;quot;identity&amp;quot;, fill = &amp;quot;red&amp;quot;, color = &amp;quot;black&amp;quot;) +
+  theme_tq() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size = 12),
+        axis.text.y = element_text(size = 12),
+        strip.text = element_text(size = 12),
+        legend.position = &amp;quot;none&amp;quot;) +
+  geom_text(aes(x = team, y = winning_percentage + 5, label = paste0(&amp;quot;n=&amp;quot;, as.character(num_games_total)))) +
+  labs(x = &amp;quot;&amp;quot;,
+       y = &amp;quot;Winning Percentage&amp;quot;,
+       title = &amp;quot;Winning Percentage for Teams on Opening Weekend&amp;quot;,
+       subtitle = &amp;quot;Only teams with more than 10 seasons in the premier league were included&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2017-08-09-exploring-english-premier-league-historical-match-results_files/figure-html/opening-win-perc-1.png&#34; width=&#34;800px&#34; height=&#34;600px&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;It looks like the results follow a similar pattern to the previous figure, as expected. Chelsea and Manchester United have the best winning percentages (&amp;gt;60%) on opening weekend, with Arsenal, Liverpool, Manchester City, and West Ham all close behind in the 50% range.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;conclusions&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Conclusions&lt;/h1&gt;
+&lt;p&gt;It looks like the odds are in favor of several of the typical powerhouse teams to perform well this weekend, if history has anything to say about it. There is much more that can be done with this data set and I hope to revisit it at a later date. I hope you all enjoyed reading this, I hope to put out more blog posts in the future!&lt;/p&gt;
+&lt;p&gt;And of course, COYG!!&lt;/p&gt;
 &lt;/div&gt;
 </description>
   </item>

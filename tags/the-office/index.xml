@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-  <title>The Office on goonR blog</title>
+  <title>the-office on goonR blog</title>
   <link>/tags/the-office/</link>
-  <description>Recent content in The Office on goonR blog</description>
+  <description>Recent content in the-office on goonR blog</description>
   <generator>Hugo -- gohugo.io</generator>
 <language>en-us</language>
 <lastBuildDate>Mon, 25 Mar 2019 00:00:00 +0000</lastBuildDate>
@@ -17,7 +16,10 @@
   <pubDate>Mon, 25 Mar 2019 00:00:00 +0000</pubDate>
   
 <guid>/2019/03/25/office-quotes-in-r-dundermifflin-package/</guid>
-  <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+  <description>
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;I am happy to share a fun project I put together this weekend - a new R package called &lt;a href=&#34;https://github.com/tbradley1013/dundermifflin&#34;&gt;&lt;code&gt;dundermifflin&lt;/code&gt;&lt;/a&gt;. If you can’t guess from the name, it will give you quotes from the Office whenever you want! This package was inspired by the &lt;a href=&#34;https://github.com/adam-gruer/goodshirt&#34;&gt;&lt;code&gt;goodshirt&lt;/code&gt;&lt;/a&gt; package, which gives users quotes from The Good Place, I was able to great a similar package for the Office. By using &lt;a href=&#34;https://github.com/anGie44/theOffice-api&#34;&gt;&lt;code&gt;theOffice-api&lt;/code&gt;&lt;/a&gt;, I created a data set, &lt;code&gt;office_quotes&lt;/code&gt;, that is shipped with the package, that has every line from the Office, with the exception of season 5.&lt;/p&gt;
 &lt;p&gt;I will try to keep this brief, because as in the words of Kevin:&lt;/p&gt;

@@ -1,0 +1,133 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+  <title>gradschool on goonR blog</title>
+  <link>/tags/gradschool/</link>
+  <description>Recent content in gradschool on goonR blog</description>
+  <generator>Hugo -- gohugo.io</generator>
+<language>en-us</language>
+<lastBuildDate>Sat, 13 Jul 2019 00:00:00 +0000</lastBuildDate>
+
+<atom:link href="/tags/gradschool/index.xml" rel="self" type="application/rss+xml" />
+
+
+<item>
+  <title>dragondown: A bookdown template for writing your thesis/dissertation at Drexel University in R</title>
+  <link>/2019/07/13/dragondown-thesis-dissertation-template-drexel-university/</link>
+  <pubDate>Sat, 13 Jul 2019 00:00:00 +0000</pubDate>
+  
+<guid>/2019/07/13/dragondown-thesis-dissertation-template-drexel-university/</guid>
+  <description>
+
+&lt;p&gt;I am happy to introduce the &lt;a href=&#34;https://github.com/tbradley1013/dragondown&#34;&gt;&lt;code&gt;dragondown&lt;/code&gt;&lt;/a&gt; R package. This package will allow for you to write your Drexel University Master&amp;rsquo;s or PhD Thesis/Dissertation entirely in Rmarkdown without having to write it in LaTeX. This package is inspired by the &lt;a href=&#34;https://github.com/ismayc/thesisdown&#34;&gt;&lt;code&gt;thesisdown&lt;/code&gt;&lt;/a&gt; package.&lt;/p&gt;
+
+&lt;h2 id=&#34;how-it-works&#34;&gt;How it works&lt;/h2&gt;
+
+&lt;p&gt;Using &lt;code&gt;dragondown&lt;/code&gt; is fairly straightforward. &lt;code&gt;dragondown&lt;/code&gt; (along with other Rmarkdown projects) are typically best when done in RStudio, so your first step is to install RStudio and R. You can find the latest version of R &lt;a href=&#34;https://www.r-project.org/&#34;&gt;here&lt;/a&gt; and RStudio &lt;a href=&#34;https://www.rstudio.com/products/rstudio/download/&#34;&gt;here&lt;/a&gt;. Once you have R and RStudio installed, you will need to install a LaTeX distribution. Luckily for you, Yihui Xie has created the &lt;a href=&#34;https://yihui.name/tinytex/&#34;&gt;&lt;code&gt;tinytex&lt;/code&gt;&lt;/a&gt; distribution which can be easily installed for using with R. You can install it as follows:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;install.packages(&#39;tinytex&#39;)
+tinytex::install_tinytex()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Once you have these prerequisites installed, you can now install the &lt;code&gt;bookdown&lt;/code&gt; and the &lt;code&gt;dragondown&lt;/code&gt; packages from GitHub. You can do this with the following code:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;if (!require(&amp;quot;remotes&amp;quot;)) install.packages(&amp;quot;remotes&amp;quot;, repos = &amp;quot;http://cran.rstudio.org&amp;quot;)
+remotes::install_github(&amp;quot;rstudio/bookdown&amp;quot;)
+remotes::install_github(&amp;quot;tbradley1013/dragondown&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now you can create a thesis project easily from RStudio. Select &lt;code&gt;File -&amp;gt; New File -&amp;gt; R Markdown&lt;/code&gt; from the menu. When the pop-up opens, select &amp;ldquo;From Template&amp;rdquo; from the left hand side and then find the &amp;ldquo;Drexel Thesis&amp;rdquo; option from the list, as shown here:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;/images/dragondown/thesis_rmd.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Please note, that your must use the name &amp;ldquo;index&amp;rdquo; so that your &lt;code&gt;index.Rmd&lt;/code&gt; file is created correctly. One you select &amp;ldquo;OK&amp;rdquo;, a new folder (also named index) will be created wherever you specify in the Location input. All of the template files will be created within the index folder that is created. Note that once the folder is created, you can rename the folder, as long as you do not rename the &lt;code&gt;index.Rmd&lt;/code&gt; file within the folder.&lt;/p&gt;
+
+&lt;p&gt;Now you are ready to get to work! You create a new Rmarkdown document for each chapter within your dissertation as shown in the example files that are generated when you create the project. If you add more chapters, or rename the existing ones, you will have to update your &lt;code&gt;_bookdown.yml&lt;/code&gt; file to indicate the correct order for your files.&lt;/p&gt;
+
+&lt;p&gt;Whenever you want to see what your current work looks like in the final format, you can open your &lt;code&gt;index.Rmd&lt;/code&gt; file and select the &amp;ldquo;Knit&amp;rdquo; option at the top of the script. This will create the book from all of the files listed in the &lt;code&gt;_bookdown.yml&lt;/code&gt; file.&lt;/p&gt;
+
+&lt;p&gt;I recommend you look through some of the example chapters, as they demonstrate some of the capabilities of using &lt;code&gt;bookdown&lt;/code&gt; to write your thesis. You can also see more functionality of the &lt;code&gt;bookdown&lt;/code&gt; package &lt;a href=&#34;https://bookdown.org/&#34;&gt;here&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;You can see how other components of the &lt;code&gt;dragondown&lt;/code&gt; template works by reading through the &lt;a href=&#34;https://github.com/tbradley1013/dragondown#components&#34;&gt;Components&lt;/a&gt; section of the GitHub README. You can see what the final product of the &lt;code&gt;dragondown&lt;/code&gt; project looks like for the example thesis used in the template looks like &lt;a href=&#34;/dragondown_book/thesis.pdf&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;thesis-dissertation-approval-form&#34;&gt;Thesis/Dissertation Approval Form&lt;/h3&gt;
+
+&lt;p&gt;One important feature unique to the &lt;code&gt;dragondown&lt;/code&gt; template, is the ability to include the required &lt;a href=&#34;https://drexel.edu/~/media/Files/graduatecollege/forms/Graduate%20Thesis-Dissertation%20Approval%20Form%20and%20Signature%20Page.ashx?la=en&#34;&gt;thesis/dissertation approval form&lt;/a&gt;. This form is for your committee members to sign that they have approved of your thesis. In the original &lt;code&gt;drexel-thesis&lt;/code&gt; LaTeX class, this page was created in pure LaTeX. However, the form as been updated since its implementation and unfortunately, I am not a LaTeX expert. So in this project, the approval form is added using a saved version of the form from the &lt;code&gt;docs&lt;/code&gt; folder of your thesis project. When you create a new thesis project, a blank approval form is used. However, you can replace the existing form with a filled out form if you wish. If you decide to do this, you can use the existing file name or you can specify a new name. Please note, that if you use a different file name, you will need to specify the file location in your &lt;code&gt;index.Rmd&lt;/code&gt; file using the &lt;code&gt;approvalform&lt;/code&gt; YAML parameter:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;approvalform: path/to/form.pdf
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you wish to exlude the approval form from your thesis rendering, you will need to open the &lt;code&gt;template.tex&lt;/code&gt; file and remove the &lt;code&gt;approvalform&lt;/code&gt; option from the &lt;code&gt;\documentclass&lt;/code&gt; option on the first line.&lt;/p&gt;
+
+&lt;h2 id=&#34;why-should-you-use-dragondown&#34;&gt;Why should you use &lt;code&gt;dragondown&lt;/code&gt;?&lt;/h2&gt;
+
+&lt;p&gt;Writing your thesis/dissertation is hard enough, and worrying about the formatting and how to integrate your results with your text can make it that much more difficult. Inspired by other examples, the &lt;code&gt;dragondown&lt;/code&gt; package will allow you to create a Rmarkdown book that conforms to the requirements given in the &lt;a href=&#34;https://drexel.edu/~/media/Files/graduatecollege/forms/Thesis%20Manual.ashx?la=en&#34;&gt;Drexel Thesis Manual&lt;/a&gt;. There are three main reasons why you should want to use this package to create your thesis/dissertation:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Easily integrate your text with your analyses&lt;/li&gt;
+&lt;li&gt;Avoid having to work in raw LaTeX to include tables and figures in a clean format&lt;/li&gt;
+&lt;li&gt;REPRODUCIBILITY!!
+&lt;br /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;1-easily-integrate-your-text-with-your-analyses&#34;&gt;1. Easily integrate your text with your analyses.&lt;/h3&gt;
+
+&lt;p&gt;R and Rmarkdown allows you to easily integrate text and your analyses (in the form of R, python, or SQL code). The &lt;code&gt;dragondown&lt;/code&gt; package then provides the required templates so that when your knit your Rmarkdown (in this case a &lt;a href=&#34;https://bookdown.org/&#34;&gt;&lt;code&gt;bookdown&lt;/code&gt;&lt;/a&gt;) project it will conform to Drexel&amp;rsquo;s various requirements for the formatting of a thesis/dissertation. This is incredibly powerful, and can save you a lot of time when you are trying to put the finishing touches on your project. Instead of having to spend a crazy amount of time making sure that every figure and table meets the right requirements and your front matter and back matter all meet the requirements, the &lt;code&gt;dragondwon&lt;/code&gt; package takes care of that for you. This will allow you to spend your time on what you really care about, your work!&lt;/p&gt;
+
+&lt;p&gt;For example, let&amp;rsquo;s pretend that you have a data set named &lt;code&gt;diamonds.csv&lt;/code&gt; (credit to the &lt;a href=&#34;https://ggplot2.tidyverse.org/&#34;&gt;&lt;code&gt;ggplot2&lt;/code&gt;&lt;/a&gt;) package. You can easily load it in your Rmarkdown file directly with your text in a code chunk like below:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(dplyr)
+library(readr)
+
+diamonds &amp;lt;- read_csv(&amp;quot;dragondown-files/diamonds.csv&amp;quot;)
+
+diamonds
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;## # A tibble: 53,940 x 10
+##    carat cut       color clarity depth table price     x     y     z
+##    &amp;lt;dbl&amp;gt; &amp;lt;chr&amp;gt;     &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt;   &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt;
+##  1 0.23  Ideal     E     SI2      61.5    55   326  3.95  3.98  2.43
+##  2 0.21  Premium   E     SI1      59.8    61   326  3.89  3.84  2.31
+##  3 0.23  Good      E     VS1      56.9    65   327  4.05  4.07  2.31
+##  4 0.290 Premium   I     VS2      62.4    58   334  4.2   4.23  2.63
+##  5 0.31  Good      J     SI2      63.3    58   335  4.34  4.35  2.75
+##  6 0.24  Very Good J     VVS2     62.8    57   336  3.94  3.96  2.48
+##  7 0.24  Very Good I     VVS1     62.3    57   336  3.95  3.98  2.47
+##  8 0.26  Very Good H     SI1      61.9    55   337  4.07  4.11  2.53
+##  9 0.22  Fair      E     VS2      65.1    61   337  3.87  3.78  2.49
+## 10 0.23  Very Good H     VS1      59.4    61   338  4     4.05  2.39
+## # ... with 53,930 more rows
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then you can include more code chunks that analyze the data set, create production quality table and figures, or anything else and they are easily integrated with your text.&lt;/p&gt;
+
+&lt;p&gt;Are you a fan of python instead of R? No problem! With newer versions of RStudio and the &lt;a href=&#34;https://rstudio.github.io/reticulate/&#34;&gt;&lt;code&gt;reticulate&lt;/code&gt;&lt;/a&gt; R package, you are able to &lt;a href=&#34;https://rstudio.github.io/reticulate/articles/r_markdown.html&#34;&gt;easily integrate python chunks directly into your Rmarkdown files&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;2-avoid-having-to-work-in-raw-latex&#34;&gt;2. Avoid having to work in raw LaTeX&lt;/h3&gt;
+
+&lt;p&gt;Don&amp;rsquo;t get me wrong, there are some people that LOVE LaTeX&amp;hellip; but if we are honest, those people are likely few and far between. From the people I have spoken too, the knowledge that has been past down for using LaTeX to create the required formatting for Drexel&amp;rsquo;s dissertations is something that gets lost between generations of grad students. Luckily, thanks to the work of several former students in the Physics department (namely &lt;a href=&#34;https://github.com/wking&#34;&gt;W. Trevor King&lt;/a&gt;), there is a &lt;a href=&#34;https://github.com/DrexelPhysics/drexel-thesis&#34;&gt;drexel-thesis LaTeX class&lt;/a&gt;. Now, you could certainly go about building this class on your local machine and writing your thesis in LaTeX, but you will still have to worry about organization and actually using LaTeX. The &lt;code&gt;dragondown&lt;/code&gt; package includes a slightly modified of the &lt;code&gt;.cls&lt;/code&gt; class file from &lt;code&gt;drexel-thesis&lt;/code&gt; and a LaTeX template that allows you to completely avoid LaTeX if you want.&lt;/p&gt;
+
+&lt;p&gt;Just like in any Rmarkdown file being knit to a pdf, you can certainly add your own LaTeX on top of the template, but you only have to do this if you want! You can also modify the template yourself once you create your &lt;code&gt;dragondown&lt;/code&gt; project.&lt;/p&gt;
+
+&lt;h3 id=&#34;3-reproducibility&#34;&gt;3. REPRODUCIBILITY&lt;/h3&gt;
+
+&lt;p&gt;I am including this last, but in all honesty, this is by far the most important reason for why you should switch to using &lt;code&gt;dragondown&lt;/code&gt; for your thesis. Using this package, or more specifically, R (or python) and Rmarkdown, will allow you to create a completely reproducible workflow!&lt;/p&gt;
+
+&lt;p&gt;What does this mean? Simple, you can press one button and your whole dissertation is regenerated with any changes that you may have made.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Did you find a mistake in your data?&lt;/strong&gt; No problem (assuming your conclusions didn&amp;rsquo;t change, of course)! You can make the change and simply re-knit your dissertation and all of your results, tables, and figures will be completely re-rendered without you having to go through the painful process of remaking them all one by one and then copying and pasting them back into your manuscript!&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Did you decide you want to rearrange your chapters?&lt;/strong&gt; No Problem!! Simply edit your &lt;code&gt;_bookdown.yml&lt;/code&gt; file to put them in the order that you want and re-knit!&lt;/p&gt;
+
+&lt;p&gt;In addition to the benefits that reproducibility provides for yourself, it also makes it so that you can easily share your work with others and they will be able to reproduce your results by simply compiling your thesis. This allows for more transparency in science, which is always a good thing!&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;This package was generated to try and make the life of graduate students at Drexel University a little bit easier. While this package will not perform your research or write your thesis, hopefully it will allow you to not worry about the tedious task of meeting formatting guidelines and focus on the work you care about! If you have any questions and you find any issues with the package, feel free to file an issue at the &lt;a href=&#34;https://github.com/tbradley1013/dragondown/issues&#34;&gt;GitHub repo&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I would like to thank both W. Trevor King and his collaborators for their work on the &lt;code&gt;drexel-thesis&lt;/code&gt; LaTeX class, as without that, this project would not have happened. I would also like to thank Yihui Xie for creating &lt;code&gt;Rmarkdown&lt;/code&gt; and &lt;code&gt;bookdown&lt;/code&gt; and Chester Ismay for the creation of &lt;code&gt;thesisdown&lt;/code&gt;, which this package is largely based on. Without all of this work, the &lt;code&gt;dragondown&lt;/code&gt; project would not exist, so thank you!&lt;/p&gt;
+</description>
+  </item>
+  
+</channel>
+  </rss>

@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-  <title>Odbc on goonR blog</title>
+  <title>odbc on goonR blog</title>
   <link>/tags/odbc/</link>
-  <description>Recent content in Odbc on goonR blog</description>
+  <description>Recent content in odbc on goonR blog</description>
   <generator>Hugo -- gohugo.io</generator>
 <language>en-us</language>
 <lastBuildDate>Sat, 26 Aug 2017 00:00:00 +0000</lastBuildDate>
@@ -17,7 +16,10 @@
   <pubDate>Sat, 26 Aug 2017 00:00:00 +0000</pubDate>
   
 <guid>/2017/08/26/sql-management-in-r/</guid>
-  <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+  <description>
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;Recently, I have been building shiny apps for work. The app that I am currently working on is an interface to a database for storing information about laboratory samples being collected. In addition to building the shiny app for my coworkers to interact with the database, I also was tasked with creating and building the database. I have never build a SQL database from scratch, but luckily the &lt;a href=&#34;https://github.com/rstats-db/odbc&#34;&gt;odbc&lt;/a&gt; and the &lt;a href=&#34;https://github.com/rstats-db/DBI&#34;&gt;DBI&lt;/a&gt; packages make it fairly straight foreward.&lt;/p&gt;
 &lt;p&gt;Let’s start by loading in the packages that we will need.&lt;/p&gt;

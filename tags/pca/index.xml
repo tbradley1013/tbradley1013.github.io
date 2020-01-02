@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-  <title>Pca on goonR blog</title>
+  <title>PCA on goonR blog</title>
   <link>/tags/pca/</link>
-  <description>Recent content in Pca on goonR blog</description>
+  <description>Recent content in PCA on goonR blog</description>
   <generator>Hugo -- gohugo.io</generator>
 <language>en-us</language>
 <lastBuildDate>Thu, 01 Feb 2018 00:00:00 +0000</lastBuildDate>
@@ -17,7 +16,10 @@
   <pubDate>Thu, 01 Feb 2018 00:00:00 +0000</pubDate>
   
 <guid>/2018/02/01/pca-in-a-tidy-verse-framework/</guid>
-  <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+  <description>
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;The other day, a &lt;a href=&#34;https://community.rstudio.com/t/tidyverse-solutions-for-factor-analysis-principal-component-analysis/4504&#34;&gt;question&lt;/a&gt; was posted on &lt;a href=&#34;https://community.rstudio.com/&#34;&gt;RStudio Community&lt;/a&gt; about performing Principal Component Analysis (PCA) in a &lt;a href=&#34;https://www.tidyverse.org/&#34;&gt;tidyverse&lt;/a&gt; workflow. Conveniently, I had literally just worked through this process the day before and was able to post an &lt;a href=&#34;https://community.rstudio.com/t/tidyverse-solutions-for-factor-analysis-principal-component-analysis/4504/2&#34;&gt;answer&lt;/a&gt;. While most questions and answers are good as they are on forum sites, I thought this one might be worth exploring a little more since using the tidyverse framework makes PCA much easier, in my opinion.&lt;/p&gt;
 &lt;p&gt;PCA is a multi-variate statistical technique for dimension reduction. Essentially, it allows you to take a data set that has n continuous variables and relate them through n orthogonal dimensions. This is a method of unsupervised learning that allows you to better understand the variability in the data set and how different variables are related. While there are the same number of principal components created as there are variables (assuming you have more observations than variables-but that is another issue), each principal component explains the maximum possible variation in the data conditional on it being orthogonal, or perpendicular, to the previous principal components.&lt;/p&gt;

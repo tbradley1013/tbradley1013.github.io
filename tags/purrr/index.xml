@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-  <title>Purrr on goonR blog</title>
+  <title>purrr on goonR blog</title>
   <link>/tags/purrr/</link>
-  <description>Recent content in Purrr on goonR blog</description>
+  <description>Recent content in purrr on goonR blog</description>
   <generator>Hugo -- gohugo.io</generator>
 <language>en-us</language>
 <lastBuildDate>Mon, 01 Oct 2018 00:00:00 +0000</lastBuildDate>
@@ -17,7 +16,10 @@
   <pubDate>Mon, 01 Oct 2018 00:00:00 +0000</pubDate>
   
 <guid>/2018/10/01/calculating-quantiles-for-groups-with-dplyr-summarize-and-purrr-partial/</guid>
-  <description>&lt;p&gt;Recently, I was trying to calculate the percentiles of a set of variables within a data set grouped by another variable. However, I quickly ran into the realization that this is not very straight forward when using &lt;code&gt;dplyr&lt;/code&gt;’s &lt;code&gt;summarize&lt;/code&gt;. Before I demonstrate, let’s load the libraries that we will need.&lt;/p&gt;
+  <description>
+
+
+&lt;p&gt;Recently, I was trying to calculate the percentiles of a set of variables within a data set grouped by another variable. However, I quickly ran into the realization that this is not very straight forward when using &lt;code&gt;dplyr&lt;/code&gt;’s &lt;code&gt;summarize&lt;/code&gt;. Before I demonstrate, let’s load the libraries that we will need.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(dplyr)
 library(purrr)&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;If you don’t believe me when I say that it is not straight forward, go ahead and try to run the following block of code.&lt;/p&gt;
@@ -83,7 +85,10 @@ p_funs&lt;/code&gt;&lt;/pre&gt;
   <pubDate>Fri, 10 Aug 2018 00:00:00 +0000</pubDate>
   
 <guid>/2018/08/10/create-a-dynamic-number-of-ui-elements-in-shiny-with-purrr/</guid>
-  <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+  <description>
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;&lt;a href=&#34;https://purrr.tidyverse.org/&#34;&gt;&lt;code&gt;purrr&lt;/code&gt;&lt;/a&gt; is an incredibly powerful package that has greatly enhanced my R programming abilities. &lt;code&gt;purrr&lt;/code&gt; has applications in pretty much any situation. One of the most useful situations, IMHO, is in the creation of a dynamic number of &lt;a href=&#34;https://shiny.rstudio.com/&#34;&gt;&lt;code&gt;shiny&lt;/code&gt;&lt;/a&gt; UI elements. This can be extremely useful if you want to be able to create a dynamic number of ui elements (whether that be inputs or outputs) based on either user selection or the data being used. This post will walk through how to create a dynamic number of plots depending on how many parameters the user selects.&lt;/p&gt;
 &lt;/div&gt;
@@ -492,7 +497,10 @@ shinyApp(ui = ui, server = server)&lt;/code&gt;&lt;/pre&gt;
   <pubDate>Thu, 01 Feb 2018 00:00:00 +0000</pubDate>
   
 <guid>/2018/02/01/pca-in-a-tidy-verse-framework/</guid>
-  <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+  <description>
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;The other day, a &lt;a href=&#34;https://community.rstudio.com/t/tidyverse-solutions-for-factor-analysis-principal-component-analysis/4504&#34;&gt;question&lt;/a&gt; was posted on &lt;a href=&#34;https://community.rstudio.com/&#34;&gt;RStudio Community&lt;/a&gt; about performing Principal Component Analysis (PCA) in a &lt;a href=&#34;https://www.tidyverse.org/&#34;&gt;tidyverse&lt;/a&gt; workflow. Conveniently, I had literally just worked through this process the day before and was able to post an &lt;a href=&#34;https://community.rstudio.com/t/tidyverse-solutions-for-factor-analysis-principal-component-analysis/4504/2&#34;&gt;answer&lt;/a&gt;. While most questions and answers are good as they are on forum sites, I thought this one might be worth exploring a little more since using the tidyverse framework makes PCA much easier, in my opinion.&lt;/p&gt;
 &lt;p&gt;PCA is a multi-variate statistical technique for dimension reduction. Essentially, it allows you to take a data set that has n continuous variables and relate them through n orthogonal dimensions. This is a method of unsupervised learning that allows you to better understand the variability in the data set and how different variables are related. While there are the same number of principal components created as there are variables (assuming you have more observations than variables-but that is another issue), each principal component explains the maximum possible variation in the data conditional on it being orthogonal, or perpendicular, to the previous principal components.&lt;/p&gt;

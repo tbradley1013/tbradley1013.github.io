@@ -5,7 +5,7 @@
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Principal Component Analysis in the tidyverse">
-  <meta name="generator" content="Hugo 0.46" />
+  <meta name="generator" content="Hugo 0.55.5" />
 
   <title>PCA in a tidy(verse) framework &middot; goonR blog</title>
   
@@ -305,7 +305,10 @@
 
 </div>
 
-  <div id="introduction" class="section level1">
+  
+
+
+<div id="introduction" class="section level1">
 <h1>Introduction</h1>
 <p>The other day, a <a href="https://community.rstudio.com/t/tidyverse-solutions-for-factor-analysis-principal-component-analysis/4504">question</a> was posted on <a href="https://community.rstudio.com/">RStudio Community</a> about performing Principal Component Analysis (PCA) in a <a href="https://www.tidyverse.org/">tidyverse</a> workflow. Conveniently, I had literally just worked through this process the day before and was able to post an <a href="https://community.rstudio.com/t/tidyverse-solutions-for-factor-analysis-principal-component-analysis/4504/2">answer</a>. While most questions and answers are good as they are on forum sites, I thought this one might be worth exploring a little more since using the tidyverse framework makes PCA much easier, in my opinion.</p>
 <p>PCA is a multi-variate statistical technique for dimension reduction. Essentially, it allows you to take a data set that has n continuous variables and relate them through n orthogonal dimensions. This is a method of unsupervised learning that allows you to better understand the variability in the data set and how different variables are related. While there are the same number of principal components created as there are variables (assuming you have more observations than variables-but that is another issue), each principal component explains the maximum possible variation in the data conditional on it being orthogonal, or perpendicular, to the previous principal components.</p>

@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-  <title>Treeio on goonR blog</title>
+  <title>treeio on goonR blog</title>
   <link>/tags/treeio/</link>
-  <description>Recent content in Treeio on goonR blog</description>
+  <description>Recent content in treeio on goonR blog</description>
   <generator>Hugo -- gohugo.io</generator>
 <language>en-us</language>
 <lastBuildDate>Tue, 19 Jun 2018 00:00:00 +0000</lastBuildDate>
@@ -17,7 +16,10 @@
   <pubDate>Tue, 19 Jun 2018 00:00:00 +0000</pubDate>
   
 <guid>/2018/06/19/subsetting-phylogenetic-trees/</guid>
-  <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+  <description>
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;In the past few months, I have been introduced to and started working with phylogenetic trees. The trees I have been working with contain the entire tree of life for bacteria. Needless to say, they are huge. At first, I was told that I could download a program that would let me view the tree and search for particular species on the tree, but of course, I immediately looked for a better solution using R. As is the case for most things, I was able to find a full suite of packages (&lt;a href=&#34;https://github.com/GuangchuangYu/treeio&#34;&gt;&lt;code&gt;treeio&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;https://github.com/GuangchuangYu/ggtree&#34;&gt;&lt;code&gt;ggtree&lt;/code&gt;&lt;/a&gt;, and &lt;a href=&#34;https://github.com/GuangchuangYu/tidytree&#34;&gt;&lt;code&gt;tidytree&lt;/code&gt;&lt;/a&gt; - all created by &lt;a href=&#34;https://guangchuangyu.github.io&#34;&gt;Guangchuang Yu&lt;/a&gt;) that allowed me to interact with this data.&lt;/p&gt;
 &lt;p&gt;However, since my tree was so large, it was extremely difficult to make legible figures even with the great flexibility of &lt;code&gt;ggtree&lt;/code&gt;. In order to better analyze the tree as I needed to, I needed to come up with a way to look at only the portions of the tree that I wanted while still maintaining the structure of the tree for the subset portion. As a result, I created the &lt;code&gt;tree_subset&lt;/code&gt; function which is now in the development version (1.5.1.002) of &lt;code&gt;treeio&lt;/code&gt; on github. This post will briefly walk through the usage of this function!&lt;/p&gt;

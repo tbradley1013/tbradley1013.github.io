@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="generator" content="Hugo 0.55.5" />
+
+  <title>dragondown: A bookdown template for writing your thesis/dissertation at Drexel University in R &middot; goonR blog</title>
+  
+  
+  <meta property="og:title" content="dragondown: A bookdown template for writing your thesis/dissertation at Drexel University in R - goonR blog">
+  <meta property="og:type" content="article">
+
+    
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:image" content="http://xvrdm.github.io/images/headshot-tyler-bradley-small.jpg" >
+    
+  
+  
+  <meta property="description" content="Article posted by Tyler Bradley, on Saturday, July 13nd, 2019">
+  <meta property="og:description" content="Article posted by Tyler Bradley, on Saturday, July 13nd, 2019">
+  
+
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css">
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-old-ie-min.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-min.css">
+  <!--<![endif]-->
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="/css/side-menu-old-ie.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="/css/side-menu.css">
+  <!--<![endif]-->
+
+  <link rel="stylesheet" href="/css/blackburn.css">
+
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+ 
+  
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/androidstudio.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+  <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon" />
+
+  
+  
+
+</head>
+
+
+<body>
+<div id="layout">
+
+  
+<a href="#menu" id="menuLink" class="menu-link">
+  
+  <span></span>
+</a>
+<div id="menu">
+
+  
+
+  <div class="pure-menu">
+    <ul class="pure-menu-list">
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="/"><i class='fa fa-home fa-fw'></i>Home</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="/post/"><i class='fa fa-list fa-fw'></i>Posts</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="/tags/rstats/"><i class='fa fa-tags fa-fw'></i>R</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="/tags/"><i class='fa fa-tags fa-fw'></i>Tags</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="/publications/"><i class='fa fa-book fa-fw'></i>Publications</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="/presentations/"><i class='fa fa-laptop fa-fw'></i>Presentations</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="/resources/"><i class='fa fa-bookmark fa-fw'></i>Resources</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="/about/"><i class='fa fa-user fa-fw'></i>About</a>
+      
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="pure-menu social">
+  <ul class="pure-menu-list">
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://twitter.com/tycbrad" target="_blank"><i class="fa fa-twitter-square fa-fw"></i>Twitter</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://linkedin.com/in/tyler-bradley-68707292/" target="_blank"><i class="fa fa-linkedin-square fa-fw"></i>LinkedIn</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://github.com/tbradley1013" target="_blank"><i class="fa fa-github-square fa-fw"></i>GitHub</a>
+    </li>
+    
+
+    
+
+    
+    
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://community.rstudio.com/u/tbradley/summary" target="_blank"><img src = "/images/community-icon.png" id = "community-icon">RStudio Community</a>
+    </li>
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://stackoverflow.com/users/7133355" target="_blank"><i class="fa fa-stack-overflow fa-fw"></i>Stack Overflow</a>
+    </li>
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://www.r-bloggers.com/"><i class="fa fa-rss fa-fw"></i>R-Bloggers</a>
+    </li>
+    
+
+  </ul>
+</div>
+
+
+  <div>
+  <div class="small-print">
+    <small></small>
+  </div>
+  <div class="small-print">
+    <small>Built with&nbsp;<a href="https://gohugo.io/" target="_blank">Hugo</a></small>
+    <small>Theme&nbsp;<a href="https://github.com/yoshiharuyamashita/blackburn" target="_blank">Blackburn</a></small>
+  </div>
+</div>
+
+</div>
+
+
+  <div id="main">
+
+
+<div class="header">
+  <h1>dragondown: A bookdown template for writing your thesis/dissertation at Drexel University in R</h1>
+  <h2></h2>
+</div>
+<div class="content">
+
+  <div class="post-meta">
+
+  <div>
+    <i class="fa fa-calendar fa-fw"></i>
+    <time>13 Jul 2019</time>
+  </div>
+
+  
+
+  
+  
+  
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-tags fa-fw"></i>
+    
+      <a class="post-taxonomy-tag" href="/tags/bookdown">bookdown</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="/tags/thesisdown">thesisdown</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="/tags/gradschool">gradschool</a>
+    
+  </div>
+  
+  
+
+</div>
+
+  
+
+<p>I am happy to introduce the <a href="https://github.com/tbradley1013/dragondown"><code>dragondown</code></a> R package. This package will allow for you to write your Drexel University Master&rsquo;s or PhD Thesis/Dissertation entirely in Rmarkdown without having to write it in LaTeX. This package is inspired by the <a href="https://github.com/ismayc/thesisdown"><code>thesisdown</code></a> package.</p>
+
+<h2 id="how-it-works">How it works</h2>
+
+<p>Using <code>dragondown</code> is fairly straightforward. <code>dragondown</code> (along with other Rmarkdown projects) are typically best when done in RStudio, so your first step is to install RStudio and R. You can find the latest version of R <a href="https://www.r-project.org/">here</a> and RStudio <a href="https://www.rstudio.com/products/rstudio/download/">here</a>. Once you have R and RStudio installed, you will need to install a LaTeX distribution. Luckily for you, Yihui Xie has created the <a href="https://yihui.name/tinytex/"><code>tinytex</code></a> distribution which can be easily installed for using with R. You can install it as follows:</p>
+
+<pre><code>install.packages('tinytex')
+tinytex::install_tinytex()
+</code></pre>
+
+<p>Once you have these prerequisites installed, you can now install the <code>bookdown</code> and the <code>dragondown</code> packages from GitHub. You can do this with the following code:</p>
+
+<pre><code>if (!require(&quot;remotes&quot;)) install.packages(&quot;remotes&quot;, repos = &quot;http://cran.rstudio.org&quot;)
+remotes::install_github(&quot;rstudio/bookdown&quot;)
+remotes::install_github(&quot;tbradley1013/dragondown&quot;)
+</code></pre>
+
+<p>Now you can create a thesis project easily from RStudio. Select <code>File -&gt; New File -&gt; R Markdown</code> from the menu. When the pop-up opens, select &ldquo;From Template&rdquo; from the left hand side and then find the &ldquo;Drexel Thesis&rdquo; option from the list, as shown here:</p>
+
+<p><img src="/images/dragondown/thesis_rmd.png" alt="" /></p>
+
+<p>Please note, that your must use the name &ldquo;index&rdquo; so that your <code>index.Rmd</code> file is created correctly. One you select &ldquo;OK&rdquo;, a new folder (also named index) will be created wherever you specify in the Location input. All of the template files will be created within the index folder that is created. Note that once the folder is created, you can rename the folder, as long as you do not rename the <code>index.Rmd</code> file within the folder.</p>
+
+<p>Now you are ready to get to work! You create a new Rmarkdown document for each chapter within your dissertation as shown in the example files that are generated when you create the project. If you add more chapters, or rename the existing ones, you will have to update your <code>_bookdown.yml</code> file to indicate the correct order for your files.</p>
+
+<p>Whenever you want to see what your current work looks like in the final format, you can open your <code>index.Rmd</code> file and select the &ldquo;Knit&rdquo; option at the top of the script. This will create the book from all of the files listed in the <code>_bookdown.yml</code> file.</p>
+
+<p>I recommend you look through some of the example chapters, as they demonstrate some of the capabilities of using <code>bookdown</code> to write your thesis. You can also see more functionality of the <code>bookdown</code> package <a href="https://bookdown.org/">here</a></p>
+
+<p>You can see how other components of the <code>dragondown</code> template works by reading through the <a href="https://github.com/tbradley1013/dragondown#components">Components</a> section of the GitHub README. You can see what the final product of the <code>dragondown</code> project looks like for the example thesis used in the template looks like <a href="/dragondown_book/thesis.pdf">here</a>.</p>
+
+<h3 id="thesis-dissertation-approval-form">Thesis/Dissertation Approval Form</h3>
+
+<p>One important feature unique to the <code>dragondown</code> template, is the ability to include the required <a href="https://drexel.edu/~/media/Files/graduatecollege/forms/Graduate%20Thesis-Dissertation%20Approval%20Form%20and%20Signature%20Page.ashx?la=en">thesis/dissertation approval form</a>. This form is for your committee members to sign that they have approved of your thesis. In the original <code>drexel-thesis</code> LaTeX class, this page was created in pure LaTeX. However, the form as been updated since its implementation and unfortunately, I am not a LaTeX expert. So in this project, the approval form is added using a saved version of the form from the <code>docs</code> folder of your thesis project. When you create a new thesis project, a blank approval form is used. However, you can replace the existing form with a filled out form if you wish. If you decide to do this, you can use the existing file name or you can specify a new name. Please note, that if you use a different file name, you will need to specify the file location in your <code>index.Rmd</code> file using the <code>approvalform</code> YAML parameter:</p>
+
+<pre><code>approvalform: path/to/form.pdf
+</code></pre>
+
+<p>If you wish to exlude the approval form from your thesis rendering, you will need to open the <code>template.tex</code> file and remove the <code>approvalform</code> option from the <code>\documentclass</code> option on the first line.</p>
+
+<h2 id="why-should-you-use-dragondown">Why should you use <code>dragondown</code>?</h2>
+
+<p>Writing your thesis/dissertation is hard enough, and worrying about the formatting and how to integrate your results with your text can make it that much more difficult. Inspired by other examples, the <code>dragondown</code> package will allow you to create a Rmarkdown book that conforms to the requirements given in the <a href="https://drexel.edu/~/media/Files/graduatecollege/forms/Thesis%20Manual.ashx?la=en">Drexel Thesis Manual</a>. There are three main reasons why you should want to use this package to create your thesis/dissertation:</p>
+
+<ol>
+<li>Easily integrate your text with your analyses</li>
+<li>Avoid having to work in raw LaTeX to include tables and figures in a clean format</li>
+<li>REPRODUCIBILITY!!
+<br /></li>
+</ol>
+
+<h3 id="1-easily-integrate-your-text-with-your-analyses">1. Easily integrate your text with your analyses.</h3>
+
+<p>R and Rmarkdown allows you to easily integrate text and your analyses (in the form of R, python, or SQL code). The <code>dragondown</code> package then provides the required templates so that when your knit your Rmarkdown (in this case a <a href="https://bookdown.org/"><code>bookdown</code></a>) project it will conform to Drexel&rsquo;s various requirements for the formatting of a thesis/dissertation. This is incredibly powerful, and can save you a lot of time when you are trying to put the finishing touches on your project. Instead of having to spend a crazy amount of time making sure that every figure and table meets the right requirements and your front matter and back matter all meet the requirements, the <code>dragondwon</code> package takes care of that for you. This will allow you to spend your time on what you really care about, your work!</p>
+
+<p>For example, let&rsquo;s pretend that you have a data set named <code>diamonds.csv</code> (credit to the <a href="https://ggplot2.tidyverse.org/"><code>ggplot2</code></a>) package. You can easily load it in your Rmarkdown file directly with your text in a code chunk like below:</p>
+
+<pre><code class="language-r">library(dplyr)
+library(readr)
+
+diamonds &lt;- read_csv(&quot;dragondown-files/diamonds.csv&quot;)
+
+diamonds
+</code></pre>
+
+<pre><code>## # A tibble: 53,940 x 10
+##    carat cut       color clarity depth table price     x     y     z
+##    &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 0.23  Ideal     E     SI2      61.5    55   326  3.95  3.98  2.43
+##  2 0.21  Premium   E     SI1      59.8    61   326  3.89  3.84  2.31
+##  3 0.23  Good      E     VS1      56.9    65   327  4.05  4.07  2.31
+##  4 0.290 Premium   I     VS2      62.4    58   334  4.2   4.23  2.63
+##  5 0.31  Good      J     SI2      63.3    58   335  4.34  4.35  2.75
+##  6 0.24  Very Good J     VVS2     62.8    57   336  3.94  3.96  2.48
+##  7 0.24  Very Good I     VVS1     62.3    57   336  3.95  3.98  2.47
+##  8 0.26  Very Good H     SI1      61.9    55   337  4.07  4.11  2.53
+##  9 0.22  Fair      E     VS2      65.1    61   337  3.87  3.78  2.49
+## 10 0.23  Very Good H     VS1      59.4    61   338  4     4.05  2.39
+## # ... with 53,930 more rows
+</code></pre>
+
+<p>Then you can include more code chunks that analyze the data set, create production quality table and figures, or anything else and they are easily integrated with your text.</p>
+
+<p>Are you a fan of python instead of R? No problem! With newer versions of RStudio and the <a href="https://rstudio.github.io/reticulate/"><code>reticulate</code></a> R package, you are able to <a href="https://rstudio.github.io/reticulate/articles/r_markdown.html">easily integrate python chunks directly into your Rmarkdown files</a>.</p>
+
+<h3 id="2-avoid-having-to-work-in-raw-latex">2. Avoid having to work in raw LaTeX</h3>
+
+<p>Don&rsquo;t get me wrong, there are some people that LOVE LaTeX&hellip; but if we are honest, those people are likely few and far between. From the people I have spoken too, the knowledge that has been past down for using LaTeX to create the required formatting for Drexel&rsquo;s dissertations is something that gets lost between generations of grad students. Luckily, thanks to the work of several former students in the Physics department (namely <a href="https://github.com/wking">W. Trevor King</a>), there is a <a href="https://github.com/DrexelPhysics/drexel-thesis">drexel-thesis LaTeX class</a>. Now, you could certainly go about building this class on your local machine and writing your thesis in LaTeX, but you will still have to worry about organization and actually using LaTeX. The <code>dragondown</code> package includes a slightly modified of the <code>.cls</code> class file from <code>drexel-thesis</code> and a LaTeX template that allows you to completely avoid LaTeX if you want.</p>
+
+<p>Just like in any Rmarkdown file being knit to a pdf, you can certainly add your own LaTeX on top of the template, but you only have to do this if you want! You can also modify the template yourself once you create your <code>dragondown</code> project.</p>
+
+<h3 id="3-reproducibility">3. REPRODUCIBILITY</h3>
+
+<p>I am including this last, but in all honesty, this is by far the most important reason for why you should switch to using <code>dragondown</code> for your thesis. Using this package, or more specifically, R (or python) and Rmarkdown, will allow you to create a completely reproducible workflow!</p>
+
+<p>What does this mean? Simple, you can press one button and your whole dissertation is regenerated with any changes that you may have made.</p>
+
+<p><strong>Did you find a mistake in your data?</strong> No problem (assuming your conclusions didn&rsquo;t change, of course)! You can make the change and simply re-knit your dissertation and all of your results, tables, and figures will be completely re-rendered without you having to go through the painful process of remaking them all one by one and then copying and pasting them back into your manuscript!</p>
+
+<p><strong>Did you decide you want to rearrange your chapters?</strong> No Problem!! Simply edit your <code>_bookdown.yml</code> file to put them in the order that you want and re-knit!</p>
+
+<p>In addition to the benefits that reproducibility provides for yourself, it also makes it so that you can easily share your work with others and they will be able to reproduce your results by simply compiling your thesis. This allows for more transparency in science, which is always a good thing!</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>This package was generated to try and make the life of graduate students at Drexel University a little bit easier. While this package will not perform your research or write your thesis, hopefully it will allow you to not worry about the tedious task of meeting formatting guidelines and focus on the work you care about! If you have any questions and you find any issues with the package, feel free to file an issue at the <a href="https://github.com/tbradley1013/dragondown/issues">GitHub repo</a>.</p>
+
+<p>I would like to thank both W. Trevor King and his collaborators for their work on the <code>drexel-thesis</code> LaTeX class, as without that, this project would not have happened. I would also like to thank Yihui Xie for creating <code>Rmarkdown</code> and <code>bookdown</code> and Chester Ismay for the creation of <code>thesisdown</code>, which this package is largely based on. Without all of this work, the <code>dragondown</code> project would not exist, so thank you!</p>
+
+
+  
+<div class="prev-next-post pure-g">
+  <div class="pure-u-1-24" style="text-align: left;">
+    
+    <a href="/2019/03/25/office-quotes-in-r-dundermifflin-package/"><i class="fa fa-chevron-left"></i></a>
+    
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="prev">
+      <a href="/2019/03/25/office-quotes-in-r-dundermifflin-package/">Get the Office Quotes in R with the dundermifflin Package</a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-2-24">
+    &nbsp;
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="next">
+      <a href="/2020/01/02/analyzing-my-2019-github-usage-in-r/">Analyzing My 2019 GitHub Usage in R</a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-1-24" style="text-align: right;">
+    
+    <a href="/2020/01/02/analyzing-my-2019-github-usage-in-r/"><i class="fa fa-chevron-right"></i></a>
+    
+  </div>
+</div>
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'goonR-blog';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+</div>
+
+</div>
+</div>
+<script src="/js/ui.js"></script>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-115670447-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+
+
+</body>
+</html>
+

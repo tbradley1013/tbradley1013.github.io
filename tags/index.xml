@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
   <title>Tags on goonR blog</title>
@@ -6,49 +5,85 @@
   <description>Recent content in Tags on goonR blog</description>
   <generator>Hugo -- gohugo.io</generator>
 <language>en-us</language>
-<lastBuildDate>Thu, 06 Sep 2018 00:00:00 +0000</lastBuildDate>
+<lastBuildDate>Thu, 02 Jan 2020 00:00:00 +0000</lastBuildDate>
 
 <atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
 
 
 <item>
-  <title>Baseballr</title>
-  <link>/tags/baseballr/</link>
-  <pubDate>Thu, 06 Sep 2018 00:00:00 +0000</pubDate>
+  <title>gh</title>
+  <link>/tags/gh/</link>
+  <pubDate>Thu, 02 Jan 2020 00:00:00 +0000</pubDate>
   
-<guid>/tags/baseballr/</guid>
+<guid>/tags/gh/</guid>
   <description></description>
   </item>
   
 <item>
-  <title>Blackburn</title>
-  <link>/tags/blackburn/</link>
-  <pubDate>Fri, 24 Aug 2018 00:00:00 +0000</pubDate>
+  <title>github</title>
+  <link>/tags/github/</link>
+  <pubDate>Thu, 02 Jan 2020 00:00:00 +0000</pubDate>
   
-<guid>/tags/blackburn/</guid>
+<guid>/tags/github/</guid>
   <description></description>
   </item>
   
 <item>
-  <title>Blogdown</title>
-  <link>/tags/blogdown/</link>
-  <pubDate>Fri, 24 Aug 2018 00:00:00 +0000</pubDate>
+  <title>rstats</title>
+  <link>/tags/rstats/</link>
+  <pubDate>Thu, 02 Jan 2020 00:00:00 +0000</pubDate>
   
-<guid>/tags/blogdown/</guid>
+<guid>/tags/rstats/</guid>
   <description></description>
   </item>
   
 <item>
-  <title>Dbi</title>
-  <link>/tags/dbi/</link>
-  <pubDate>Sat, 26 Aug 2017 00:00:00 +0000</pubDate>
+  <title>bookdown</title>
+  <link>/tags/bookdown/</link>
+  <pubDate>Sat, 13 Jul 2019 00:00:00 +0000</pubDate>
   
-<guid>/tags/dbi/</guid>
+<guid>/tags/bookdown/</guid>
   <description></description>
   </item>
   
 <item>
-  <title>Dplyr</title>
+  <title>gradschool</title>
+  <link>/tags/gradschool/</link>
+  <pubDate>Sat, 13 Jul 2019 00:00:00 +0000</pubDate>
+  
+<guid>/tags/gradschool/</guid>
+  <description></description>
+  </item>
+  
+<item>
+  <title>thesisdown</title>
+  <link>/tags/thesisdown/</link>
+  <pubDate>Sat, 13 Jul 2019 00:00:00 +0000</pubDate>
+  
+<guid>/tags/thesisdown/</guid>
+  <description></description>
+  </item>
+  
+<item>
+  <title>rpackage</title>
+  <link>/tags/rpackage/</link>
+  <pubDate>Mon, 25 Mar 2019 00:00:00 +0000</pubDate>
+  
+<guid>/tags/rpackage/</guid>
+  <description></description>
+  </item>
+  
+<item>
+  <title>the-office</title>
+  <link>/tags/the-office/</link>
+  <pubDate>Mon, 25 Mar 2019 00:00:00 +0000</pubDate>
+  
+<guid>/tags/the-office/</guid>
+  <description></description>
+  </item>
+  
+<item>
+  <title>dplyr</title>
   <link>/tags/dplyr/</link>
   <pubDate>Tue, 19 Mar 2019 00:00:00 +0000</pubDate>
   
@@ -57,16 +92,97 @@
   </item>
   
 <item>
-  <title>Epl</title>
-  <link>/tags/epl/</link>
-  <pubDate>Thu, 10 Aug 2017 00:00:00 +0000</pubDate>
+  <title>tidyverse</title>
+  <link>/tags/tidyverse/</link>
+  <pubDate>Tue, 19 Mar 2019 00:00:00 +0000</pubDate>
   
-<guid>/tags/epl/</guid>
+<guid>/tags/tidyverse/</guid>
   <description></description>
   </item>
   
 <item>
-  <title>Gganimate</title>
+  <title>MST</title>
+  <link>/tags/mst/</link>
+  <pubDate>Wed, 28 Nov 2018 00:00:00 +0000</pubDate>
+  
+<guid>/tags/mst/</guid>
+  <description></description>
+  </item>
+  
+<item>
+  <title>illumina</title>
+  <link>/tags/illumina/</link>
+  <pubDate>Wed, 28 Nov 2018 00:00:00 +0000</pubDate>
+  
+<guid>/tags/illumina/</guid>
+  <description></description>
+  </item>
+  
+<item>
+  <title>ngs</title>
+  <link>/tags/ngs/</link>
+  <pubDate>Wed, 28 Nov 2018 00:00:00 +0000</pubDate>
+  
+<guid>/tags/ngs/</guid>
+  <description></description>
+  </item>
+  
+<item>
+  <title>pacbio</title>
+  <link>/tags/pacbio/</link>
+  <pubDate>Wed, 28 Nov 2018 00:00:00 +0000</pubDate>
+  
+<guid>/tags/pacbio/</guid>
+  <description></description>
+  </item>
+  
+<item>
+  <title>purrr</title>
+  <link>/tags/purrr/</link>
+  <pubDate>Mon, 01 Oct 2018 00:00:00 +0000</pubDate>
+  
+<guid>/tags/purrr/</guid>
+  <description></description>
+  </item>
+  
+<item>
+  <title>LCR</title>
+  <link>/tags/lcr/</link>
+  <pubDate>Sun, 23 Sep 2018 00:00:00 +0000</pubDate>
+  
+<guid>/tags/lcr/</guid>
+  <description></description>
+  </item>
+  
+<item>
+  <title>OCCT</title>
+  <link>/tags/occt/</link>
+  <pubDate>Sun, 23 Sep 2018 00:00:00 +0000</pubDate>
+  
+<guid>/tags/occt/</guid>
+  <description></description>
+  </item>
+  
+<item>
+  <title>water-quality</title>
+  <link>/tags/water-quality/</link>
+  <pubDate>Sun, 23 Sep 2018 00:00:00 +0000</pubDate>
+  
+<guid>/tags/water-quality/</guid>
+  <description></description>
+  </item>
+  
+<item>
+  <title>baseballr</title>
+  <link>/tags/baseballr/</link>
+  <pubDate>Thu, 06 Sep 2018 00:00:00 +0000</pubDate>
+  
+<guid>/tags/baseballr/</guid>
+  <description></description>
+  </item>
+  
+<item>
+  <title>gganimate</title>
   <link>/tags/gganimate/</link>
   <pubDate>Thu, 06 Sep 2018 00:00:00 +0000</pubDate>
   
@@ -75,16 +191,34 @@
   </item>
   
 <item>
-  <title>Ggtree</title>
-  <link>/tags/ggtree/</link>
-  <pubDate>Tue, 19 Jun 2018 00:00:00 +0000</pubDate>
+  <title>mlb</title>
+  <link>/tags/mlb/</link>
+  <pubDate>Thu, 06 Sep 2018 00:00:00 +0000</pubDate>
   
-<guid>/tags/ggtree/</guid>
+<guid>/tags/mlb/</guid>
   <description></description>
   </item>
   
 <item>
-  <title>Hugo</title>
+  <title>blackburn</title>
+  <link>/tags/blackburn/</link>
+  <pubDate>Fri, 24 Aug 2018 00:00:00 +0000</pubDate>
+  
+<guid>/tags/blackburn/</guid>
+  <description></description>
+  </item>
+  
+<item>
+  <title>blogdown</title>
+  <link>/tags/blogdown/</link>
+  <pubDate>Fri, 24 Aug 2018 00:00:00 +0000</pubDate>
+  
+<guid>/tags/blogdown/</guid>
+  <description></description>
+  </item>
+  
+<item>
+  <title>hugo</title>
   <link>/tags/hugo/</link>
   <pubDate>Fri, 24 Aug 2018 00:00:00 +0000</pubDate>
   
@@ -93,11 +227,101 @@
   </item>
   
 <item>
-  <title>Illumina</title>
-  <link>/tags/illumina/</link>
-  <pubDate>Wed, 28 Nov 2018 00:00:00 +0000</pubDate>
+  <title>magick</title>
+  <link>/tags/magick/</link>
+  <pubDate>Fri, 24 Aug 2018 00:00:00 +0000</pubDate>
   
-<guid>/tags/illumina/</guid>
+<guid>/tags/magick/</guid>
+  <description></description>
+  </item>
+  
+<item>
+  <title>rstudio-community</title>
+  <link>/tags/rstudio-community/</link>
+  <pubDate>Fri, 24 Aug 2018 00:00:00 +0000</pubDate>
+  
+<guid>/tags/rstudio-community/</guid>
+  <description></description>
+  </item>
+  
+<item>
+  <title>shiny</title>
+  <link>/tags/shiny/</link>
+  <pubDate>Fri, 10 Aug 2018 00:00:00 +0000</pubDate>
+  
+<guid>/tags/shiny/</guid>
+  <description></description>
+  </item>
+  
+<item>
+  <title>modules</title>
+  <link>/tags/modules/</link>
+  <pubDate>Fri, 20 Jul 2018 00:00:00 +0000</pubDate>
+  
+<guid>/tags/modules/</guid>
+  <description></description>
+  </item>
+  
+<item>
+  <title>ggtree</title>
+  <link>/tags/ggtree/</link>
+  <pubDate>Tue, 19 Jun 2018 00:00:00 +0000</pubDate>
+  
+<guid>/tags/ggtree/</guid>
+  <description></description>
+  </item>
+  
+<item>
+  <title>treeio</title>
+  <link>/tags/treeio/</link>
+  <pubDate>Tue, 19 Jun 2018 00:00:00 +0000</pubDate>
+  
+<guid>/tags/treeio/</guid>
+  <description></description>
+  </item>
+  
+<item>
+  <title>PCA</title>
+  <link>/tags/pca/</link>
+  <pubDate>Thu, 01 Feb 2018 00:00:00 +0000</pubDate>
+  
+<guid>/tags/pca/</guid>
+  <description></description>
+  </item>
+  
+<item>
+  <title>DBI</title>
+  <link>/tags/dbi/</link>
+  <pubDate>Sat, 26 Aug 2017 00:00:00 +0000</pubDate>
+  
+<guid>/tags/dbi/</guid>
+  <description></description>
+  </item>
+  
+<item>
+  <title>SQLite</title>
+  <link>/tags/sqlite/</link>
+  <pubDate>Sat, 26 Aug 2017 00:00:00 +0000</pubDate>
+  
+<guid>/tags/sqlite/</guid>
+  <description></description>
+  </item>
+  
+<item>
+  <title>odbc</title>
+  <link>/tags/odbc/</link>
+  <pubDate>Sat, 26 Aug 2017 00:00:00 +0000</pubDate>
+  
+<guid>/tags/odbc/</guid>
+  <description></description>
+  </item>
+  
+<item>
+  <title>EPL</title>
+  <link>/tags/epl/</link>
+  <pubDate>Thu, 10 Aug 2017 00:00:00 +0000</pubDate>
+  
+<guid>/tags/epl/</guid>
   <description></description>
   </item>
   

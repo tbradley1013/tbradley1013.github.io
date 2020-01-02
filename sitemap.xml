@@ -3,8 +3,84 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/2020/01/02/analyzing-my-2019-github-usage-in-r/</loc>
+    <lastmod>2020-01-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/</loc>
+    <lastmod>2020-01-02T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2020-01-02T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/gh/</loc>
+    <lastmod>2020-01-02T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/github/</loc>
+    <lastmod>2020-01-02T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/</loc>
+    <lastmod>2020-01-02T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/rstats/</loc>
+    <lastmod>2020-01-02T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/bookdown/</loc>
+    <lastmod>2019-07-13T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/2019/07/13/dragondown-thesis-dissertation-template-drexel-university/</loc>
+    <lastmod>2019-07-13T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/gradschool/</loc>
+    <lastmod>2019-07-13T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/thesisdown/</loc>
+    <lastmod>2019-07-13T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/2019/03/25/office-quotes-in-r-dundermifflin-package/</loc>
     <lastmod>2019-03-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/rpackage/</loc>
+    <lastmod>2019-03-25T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/the-office/</loc>
+    <lastmod>2019-03-25T00:00:00+00:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>
@@ -13,8 +89,44 @@
   </url>
   
   <url>
+    <loc>/tags/dplyr/</loc>
+    <lastmod>2019-03-19T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/tidyverse/</loc>
+    <lastmod>2019-03-19T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/mst/</loc>
+    <lastmod>2018-11-28T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/2018/11/28/presentation-at-delaware-watershed-research-conference-2018/</loc>
     <lastmod>2018-11-28T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/illumina/</loc>
+    <lastmod>2018-11-28T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/ngs/</loc>
+    <lastmod>2018-11-28T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/pacbio/</loc>
+    <lastmod>2018-11-28T00:00:00+00:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>
@@ -23,8 +135,32 @@
   </url>
   
   <url>
+    <loc>/tags/purrr/</loc>
+    <lastmod>2018-10-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/lcr/</loc>
+    <lastmod>2018-09-23T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/occt/</loc>
+    <lastmod>2018-09-23T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/2018/09/23/paper-published-using-historical-lcr-and-water-quality-data-to-evaluate-corrosion-control-treatment-in-jawwa/</loc>
     <lastmod>2018-09-23T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/water-quality/</loc>
+    <lastmod>2018-09-23T00:00:00+00:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>
@@ -33,49 +169,26 @@
   </url>
   
   <url>
-    <loc>/2018/08/24/add-rstudio-community-to-your-blogs-social-links/</loc>
-    <lastmod>2018-08-24T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/about/</loc>
-    <lastmod>2018-08-21T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/2018/08/10/create-a-dynamic-number-of-ui-elements-in-shiny-with-purrr/</loc>
-    <lastmod>2018-08-10T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/2018/07/20/r-shiny-modules--using-global-inputs/</loc>
-    <lastmod>2018-07-20T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/2018/06/19/subsetting-phylogenetic-trees/</loc>
-    <lastmod>2018-06-19T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/2018/02/01/pca-in-a-tidy-verse-framework/</loc>
-    <lastmod>2018-02-01T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/2017/08/26/sql-management-in-r/</loc>
-    <lastmod>2017-08-26T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/2017/08/10/epl-opening-weekend/</loc>
-    <lastmod>2017-08-10T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/tags/baseballr/</loc>
     <lastmod>2018-09-06T00:00:00+00:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/gganimate/</loc>
+    <lastmod>2018-09-06T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/mlb/</loc>
+    <lastmod>2018-09-06T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/2018/08/24/add-rstudio-community-to-your-blogs-social-links/</loc>
+    <lastmod>2018-08-24T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -91,50 +204,8 @@
   </url>
   
   <url>
-    <loc>/tags/dbi/</loc>
-    <lastmod>2017-08-26T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/dplyr/</loc>
-    <lastmod>2019-03-19T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/epl/</loc>
-    <lastmod>2017-08-10T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/gganimate/</loc>
-    <lastmod>2018-09-06T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/ggtree/</loc>
-    <lastmod>2018-06-19T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>/tags/hugo/</loc>
     <lastmod>2018-08-24T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/illumina/</loc>
-    <lastmod>2018-11-28T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/lcr/</loc>
-    <lastmod>2018-09-23T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -145,9 +216,30 @@
   </url>
   
   <url>
-    <loc>/tags/mlb/</loc>
-    <lastmod>2018-09-06T00:00:00+00:00</lastmod>
+    <loc>/tags/rstudio-community/</loc>
+    <lastmod>2018-08-24T00:00:00+00:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/about/</loc>
+    <lastmod>2018-08-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/2018/08/10/create-a-dynamic-number-of-ui-elements-in-shiny-with-purrr/</loc>
+    <lastmod>2018-08-10T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/shiny/</loc>
+    <lastmod>2018-08-10T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/2018/07/20/r-shiny-modules-using-global-inputs/</loc>
+    <lastmod>2018-07-20T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -157,32 +249,19 @@
   </url>
   
   <url>
-    <loc>/tags/mst/</loc>
-    <lastmod>2018-11-28T00:00:00+00:00</lastmod>
+    <loc>/2018/06/19/subsetting-phylogenetic-trees/</loc>
+    <lastmod>2018-06-19T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/ggtree/</loc>
+    <lastmod>2018-06-19T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/tags/ngs/</loc>
-    <lastmod>2018-11-28T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/occt/</loc>
-    <lastmod>2018-09-23T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/odbc/</loc>
-    <lastmod>2017-08-26T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/pacbio/</loc>
-    <lastmod>2018-11-28T00:00:00+00:00</lastmod>
+    <loc>/tags/treeio/</loc>
+    <lastmod>2018-06-19T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -193,9 +272,42 @@
   </url>
   
   <url>
-    <loc>/post/</loc>
-    <lastmod>2019-03-25T00:00:00+00:00</lastmod>
+    <loc>/2018/02/01/pca-in-a-tidy-verse-framework/</loc>
+    <lastmod>2018-02-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/2017/08/26/sql-management-in-r/</loc>
+    <lastmod>2017-08-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/dbi/</loc>
+    <lastmod>2017-08-26T00:00:00+00:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/sqlite/</loc>
+    <lastmod>2017-08-26T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/odbc/</loc>
+    <lastmod>2017-08-26T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/epl/</loc>
+    <lastmod>2017-08-10T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/2017/08/10/epl-opening-weekend/</loc>
+    <lastmod>2017-08-10T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -207,83 +319,11 @@
   </url>
   
   <url>
-    <loc>/tags/purrr/</loc>
-    <lastmod>2018-10-01T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>/resources/</loc>
   </url>
   
   <url>
-    <loc>/tags/rpackage/</loc>
-    <lastmod>2019-03-25T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/rstats/</loc>
-    <lastmod>2019-03-25T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/rstudio-community/</loc>
-    <lastmod>2018-08-24T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/shiny/</loc>
-    <lastmod>2018-08-10T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/sqlite/</loc>
-    <lastmod>2017-08-26T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/</loc>
-    <lastmod>2018-09-06T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/the-office/</loc>
-    <lastmod>2019-03-25T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/tidyverse/</loc>
-    <lastmod>2019-03-19T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>/topics/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/treeio/</loc>
-    <lastmod>2018-06-19T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/water-quality/</loc>
-    <lastmod>2018-09-23T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/</loc>
-    <lastmod>2019-03-25T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
